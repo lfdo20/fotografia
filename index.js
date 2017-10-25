@@ -63,10 +63,10 @@ function checkpage(){
 }
 
 $.i18n().load( {
-  'en': '/js/i18n/en.json',
-  'de': '/js/i18n/de.json',
-  'pt': '/js/i18n/pt.json',
-  'es': '/js/i18n/es.json'
+  'en': './js/i18n/en.json',
+  'de': './js/i18n/de.json',
+  'pt': './js/i18n/pt.json',
+  'es': './js/i18n/es.json'
 } ).done( function() {
      checkloc();
      checkpage();
