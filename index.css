@@ -1,11 +1,11 @@
 body{
-  background-color: gray;
+  background-color: white;
   margin: 0 0 ;
 }
 
 .wrap{
   display: flex;
-  background-color: gray;
+  background-color: white;
   width: 100%;
   height: 100%;
   align-items: center;
@@ -250,8 +250,6 @@ a:hover {
   background: rgba(255, 255, 255, 0.90);
   z-index: 1;
   visibility: hidden;
-
-
 }
 
 .biocontent{
