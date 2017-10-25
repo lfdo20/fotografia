@@ -13,7 +13,6 @@ body{
 
 }
 
-
 .fullpage{
   display: flex;
   flex: 1;
@@ -50,7 +49,7 @@ body{
 
 }
 
- a {
+a {
   color: white;
   cursor: pointer;
   text-decoration: none;
@@ -161,7 +160,7 @@ a:hover {
 .menubtnx .aa:hover {
   font-family: 'Roboto', sans-serif;
   font-size: 110px;
-  font-weight: 600;
+  text-shadow: 1px 1px 10px black;
   line-height: 80px;
   margin: 0 0;
   color: black;
@@ -212,7 +211,7 @@ a:hover {
   text-decoration: none;
   line-height: 90px;
   font-family: 'Convergence', sans-serif;
-  color: blue;
+  color: black;
 }
 
 .menu > ul > li:hover {
@@ -262,14 +261,23 @@ a:hover {
   padding: 15px 65px 15px 25px;;
   border: 1px solid;
   margin: auto;
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 19px;
   text-decoration: none;
   line-height: 30px;
   font-family: 'Roboto', sans-serif;
   color: blue;
 }
-
+.biocontent >h1{
+  font-weight: 600;
+  margin-bottom:5px;
+}
+.biocontent >h2{
+  font-size: 25px;
+  margin-top: 6px;
+  font-weight: 500;
+}.biocontent >p{
+  font-weight: 400;
+}
 /* Projetos page style */
 
 .projetos{
