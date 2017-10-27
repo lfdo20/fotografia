@@ -20,6 +20,7 @@
     <script src="js/lib/jquery.i18n/jquery.i18n.emitter.bidi.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,500" rel="stylesheet">
+    <script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
     <script src="index.js"></script>
   </head>
   <body>
@@ -40,7 +41,6 @@
           <i class="fa fa-bars fa-2x"></i>
         </div>
       </div>
-
 
       <!-- Enter Page -->
     <div class="enterpage js-vis" >
@@ -84,9 +84,10 @@
       <!-- Cleções Page -->
     <div class="colecoes js-colecoesbtn js-vis">
       <div class="logo">
-      <h1 data-i18n="mcol"> Leandro Coleções</h1>
+      <h1 data-i18n="mcol"> Leandro Coleções </h1>
       </div>
     </div>
+</div>
 
       <!-- Insta Page -->
     <div class="insta js-instabtn js-vis">
@@ -115,6 +116,51 @@
       <p data-i18n='biotextc'> Olar texto</p>
       </div>
     </div>
+
+    <!-- Photo Page -->
+    <div class="fotopage js-vis">
+      <section class="mainfoto displaytoggle js-vis">
+        <div class="foto">
+          <span data-i18n=""> Photo Page </span>
+          <img src="" alt="" class="photo">
+        </div>
+        <div class="caption_container">
+          <span data-i18n="photocaption"> Photo Page </span>
+          <span class="caption"></span>
+        </div>
+      </section>
+      <section class="maingrid displaytoggle js-vis">
+        <div class="foto">
+          <span data-i18n=""> GRIDPAGE </span>
+        </div>
+      </section>
+      <div class="footer">
+        <div class="fotomenu">
+          <i class="icon-grid iga js-gridbtn backbtn"></i>
+          <i class="icon-grid igb js-gridbtn"></i>
+          <i class="icon-chevron-thin-left js-photobackbtn photobackbtn"></i>
+          <span data-i18n="proj">Projeto</span>
+          <i class="icon-chevrons-right"></i>
+          <span data-i18n="projname"> Photo Page </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Page -->
+
+    <!-- <div class="fotopage js-vis"> -->
+
+    <!--   <div class="footer">
+        <div class="fotomenu">
+          <i class="icon-grid iga js-gridbtn backbtn"></i>
+          <i class="icon-grid igb"></i>
+          <i class="icon-chevron-thin-left js-photobackbtn photobackbtn"></i>
+          <span data-i18n="proj">Projeto</span>
+          <i class="icon-chevrons-right"></i>
+          <span data-i18n="projname"> Photo Page </span>
+        </div>
+      </div>
+    </div> -->
 
     <!-- </div>-->
   </body>

@@ -1,3 +1,20 @@
+var dbx = new Dropbox({ accessToken: 'KDvGvrJ5lu4AAAAAAAAOWbMIm3cJ0_Ox9JzMMEzJ6WF1IteaLItcfvcjTf2gIZgL' });
+  dbx.filesListFolder({path: '/myself/'})
+    .then(function(response) {
+      console.log(response);
+      console.log(dbx.usersGetCurrentAccount());
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
+    function displayFiles(files) {
+         var filesList = document.getElementById('files');
+         console.log(filesList);
+
+       }
+
+
 $(document).ready(function(){
 
 // Languages Handling
@@ -48,6 +65,9 @@ function checkpage(){
     case 'bio':
       bio();
     break;
+    case 'photo':
+      photo();
+    break;
     default:
     enterpage();
 }
@@ -63,6 +83,7 @@ $.i18n().load( {
      checkloc();
      checkpage();
      console.log('done!', local, url());
+     displayFiles();
      $('body').i18n();
   });
 
@@ -117,23 +138,33 @@ function lightbox() {
   History.pushState({state:5, plate:'.lightbox',rand:Math.random()}, "Lightbox", "?locale=" + $.i18n().locale + "&page=lightbox");
   showPlate(".lightbox");
 }
- //bio function
+
 function bio() {
   History.pushState({state:6, plate:'.bio',rand:Math.random()}, "Biografia", "?locale=" + $.i18n().locale + "&page=bio");
-  showPlate(".bio");
+  $('.menupage').css('visibility', 'hidden');
+  $('.js-vis').css('visibility', 'hidden');
+  $('.topbar').css('visibility', 'hidden');
+  $('.bio').css('visibility', 'visible');
 }
+
+function photo() {
+  History.pushState({state:7, plate:'.photo',rand:Math.random()}, "Photo", "?locale=" + $.i18n().locale + "&page=photo");
+  showPlate(".fotopage");
+}
+
 
 
 function showPlate(name) {
   $('.menupage').css('visibility', 'hidden');
-
-  if (name !== '.bio'){
+  if (name === '.fotopage') {
     $('.topbar').css('visibility', 'visible');
     $('.js-vis').css('visibility', 'hidden');
     $(name).css('visibility', 'visible');
+    $('.displaytoggle').css('visibility', 'visible');
   }
   else {
-    $('.topbar').css('visibility', 'hidden');
+    console.log('texte geral');
+    $('.topbar').css('visibility', 'visible');
     $('.js-vis').css('visibility', 'hidden');
     $(name).css('visibility', 'visible');
   }
@@ -172,10 +203,6 @@ function showPlate(name) {
 // bio click
   $('.js-biobtn').click(function(){
     bio();
-  /*  $('.topbar').css('visibility', 'hidden');
-    $('.js-vis').css('visibility', 'hidden');
-    $('.bio').css('visibility', 'visible');
-    $('.menupage').css('visibility', 'hidden');*/
   });
 //bio back
 $('.js-biobtnx').click(function(){
@@ -186,12 +213,21 @@ $('.js-biobtnx').click(function(){
   $('.bio').css('z-index', '-10');*/
 });
 
+// photo page Buttons
+$('.igb').hover(function(){
+  $('.iga').css({
+    'color':'white',
+    'border': '1px solid white'});
+  }, function(){
+  $('.iga').css({
+    'color':'black',
+    'border': '1px solid black'});
+  });
 
-// Bio Back
-/*  $('.js-biobtnxi').click(function(){
-    $('.menupage').css('visibility', 'visible');
-    $('.bio').css('visibility', 'hidden');
-    $('.topbar').css('visibility', 'hidden');
-    $('.enterpage').css('visibility', 'visible');
-  }); */
+$('.js-gridbtn').click(function(){
+  $('.displaytoggle').toggle();
+});
+$('.js-photobackbtn').click(function(){
+  History.back(2);
+});
 });
