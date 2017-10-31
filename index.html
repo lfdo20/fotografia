@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Leando LFdO Photos</title>
     <link rel="stylesheet" type="text/css" href="index.css"/>
+    <script src="js/gapiload.js"></script>
     <script>if ( typeof window.JSON === 'undefined' ) { document.write('<script src="../js/json2.js"><\/script>'); }</script>
     <link href="https://fonts.googleapis.com/css?family=Convergence" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
@@ -20,8 +21,11 @@
     <script src="js/lib/jquery.i18n/jquery.i18n.emitter.bidi.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,500" rel="stylesheet">
-    <script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
     <script src="index.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
   </head>
   <body>
     <div class="wrap">
@@ -70,20 +74,22 @@
           <li class="facebook"><a target="_blank" href="https://web.facebook.com/lfdo20"><i class="fa fa-facebook-official fa-2x"></i></a></li>
           <li class="instagram"><a target="_blank" href="https://www.instagram.com/lfdo20/"><i class="fa fa-instagram fa-2x"></i></a></li>
           <li class="twitter"><a target="_blank" href="https://www.twitter.com/lfdo/"><i class="fa fa-twitter fa-2x"></i></a></li>
+          <button id="authorize-button" style="display: none;">Authorize</button>
+          <button id="signout-button" style="display: none;">Sign Out</button>
         </ul>
       </div>
     </div>
 
       <!-- Projetos Page -->
     <div class="projetos js-projetos js-vis">
-      <div class="logo">
+      <div class="logo js-photobtn">
       <h1 data-i18n="mproj"> Leandro Projetos </h1>
       </div>
     </div>
 
       <!-- Cleções Page -->
     <div class="colecoes js-colecoesbtn js-vis">
-      <div class="logo">
+      <div class="logo db1">
       <h1 data-i18n="mcol"> Leandro Coleções </h1>
       </div>
     </div>
@@ -121,7 +127,7 @@
     <div class="fotopage js-vis">
       <section class="mainfoto displaytoggle js-vis">
         <div class="foto">
-          <span data-i18n=""> Photo Page </span>
+          <span data-i18n=""></span>
           <img src="" alt="" class="photo">
         </div>
         <div class="caption_container">

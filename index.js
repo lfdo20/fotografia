@@ -1,20 +1,3 @@
-var dbx = new Dropbox({ accessToken: 'KDvGvrJ5lu4AAAAAAAAOWbMIm3cJ0_Ox9JzMMEzJ6WF1IteaLItcfvcjTf2gIZgL' });
-  dbx.filesListFolder({path: '/myself/'})
-    .then(function(response) {
-      console.log(response);
-      console.log(dbx.usersGetCurrentAccount());
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
-
-    function displayFiles(files) {
-         var filesList = document.getElementById('files');
-         console.log(filesList);
-
-       }
-
-
 $(document).ready(function(){
 
 // Languages Handling
@@ -51,10 +34,10 @@ function checkpage(){
   console.log(url('?page'));
   switch (url('?page')) {
     case 'projetos':
-        projetos();
+      projetos();
     break;
     case 'lightbox':
-        lightbox();
+      lightbox();
     break;
     case 'colecoes':
       colecoes();
@@ -83,18 +66,14 @@ $.i18n().load( {
      checkloc();
      checkpage();
      console.log('done!', local, url());
-     displayFiles();
      $('body').i18n();
   });
-
-
 
   $('.switch-locale').on('click', 'a', function(e) {
   e.preventDefault();
     $.i18n().locale = $(this).data('locale');
   $('body').i18n();
 });
-
 
 // history handling
   // Establish Variables
@@ -113,7 +92,6 @@ $.i18n().load( {
 });
 
 // Pages Selection
-
 function enterpage() {
   History.pushState({state:1, plate:'.enterpage', rand:Math.random()}, "Home", "?locale=" + $.i18n().locale + "&page=enterpage");
   showPlate(".enterpage");
@@ -128,6 +106,7 @@ function colecoes() {
   History.pushState({state:3, plate:'.colecoes',rand:Math.random()}, "Coleções", "?locale=" + $.i18n().locale + "&page=colecoes");
     showPlate(".colecoes");
 }
+
 
 function insta() {
   History.pushState({state:4, plate:'.insta',rand:Math.random()}, "Instagram", "?locale=" + $.i18n().locale + "&page=insta");
@@ -149,7 +128,12 @@ function bio() {
 
 function photo() {
   History.pushState({state:7, plate:'.photo',rand:Math.random()}, "Photo", "?locale=" + $.i18n().locale + "&page=photo");
-  showPlate(".fotopage");
+  $.when(listFiles()).done(function(){
+    console.log('test', data1);
+  }).then(function(){
+    $(".foto").append("<img class='projetoimg' src='" + data1[0].webContentLink + "'>");
+
+  showPlate(".fotopage");});
 }
 
 
@@ -163,7 +147,6 @@ function showPlate(name) {
     $('.displaytoggle').css('visibility', 'visible');
   }
   else {
-    console.log('texte geral');
     $('.topbar').css('visibility', 'visible');
     $('.js-vis').css('visibility', 'hidden');
     $(name).css('visibility', 'visible');
@@ -212,6 +195,11 @@ $('.js-biobtnx').click(function(){
   $('.bio').css('visibility', 'hidden');
   $('.bio').css('z-index', '-10');*/
 });
+// temporary photo projectpage
+$('.js-photobtn').click(function(){
+  photo();
+});
+
 
 // photo page Buttons
 $('.igb').hover(function(){
@@ -230,4 +218,29 @@ $('.js-gridbtn').click(function(){
 $('.js-photobackbtn').click(function(){
   History.back(2);
 });
+
+
+
+
+    //List Files
+    var data1 ={};
+    var lfdofotoapp = '"0B-Tee9m48NkROU5mcDczbGttbmM" in parents', montanhas='"0B-Tee9m48NkRZTRzV0tmeUktMmc" in parents', myself='"0B-Tee9m48NkRNkNQZGtOaGFsVjA" in parents';
+    var mimefoto = "mimeType contains 'image/'";
+    function listFiles() {
+
+       return $.Deferred(function(){
+        var self = this;
+        gapi.client.drive.files.list({
+          'pageSize': 10,
+          'fields': "nextPageToken, files(id, name, webContentLink, webViewLink)",
+          "q": mimefoto + 'and' + myself
+        }).then(function(response) {
+            data1 = response.result.files;
+          console.log(data1);
+           self.resolve();
+        });
+
+        });
+      }
+
 });

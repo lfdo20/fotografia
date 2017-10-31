@@ -425,7 +425,7 @@ a:hover {
   width: auto;
   min-width: 70%;
   height: 820px;
-  visibility: visible;
+  visibility: hidden;
   z-index: 1;
 }
 .foto{
@@ -467,7 +467,7 @@ a:hover {
   width: auto;
   width: 92%;
   height: 825px;
-  visibility: visible;
+  visibility: hidden;
   z-index: 2;
 }
 
@@ -554,4 +554,14 @@ a:hover {
 }
 .show{
 
+}
+/*.gapibtn{
+  visibility: hidden;
+}*/
+.foto{
+  text-align: center;
+}
+.projetoimg{
+  width: 780px;
+  height: auto;
 }
