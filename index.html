@@ -9,32 +9,33 @@
     <link href="https://fonts.googleapis.com/css?family=Convergence" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/lib/url.min.js"></script>
     <script src="js/lib/jquery.i18n/jquery.i18n.js"></script>
     <script src="js/lib/jquery.i18n/jquery.i18n.messagestore.js"></script>
     <script src="js/jquery.history.js"></script>
-<!--<script src="js/lib/jquery.i18n/jquery.i18n.fallbacks.js"></script>
-    <script src="js/lib/jquery.i18n/jquery.i18n.language.js"></script>
-    <script src="js/lib/jquery.i18n/jquery.i18n.parser.js"></script>
-    <script src="js/lib/jquery.i18n/jquery.i18n.emitter.js"></script>
-    <script src="js/lib/jquery.i18n/jquery.i18n.emitter.bidi.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,500" rel="stylesheet">
+    <script src="js/modernizr-2.5.3.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <script src="js/masonry.pkgd.min.js"></script>
+    <script type="text/javascript" src="js/instafeed.js"></script>
     <script src="index.js"></script>
     <script async defer src="https://apis.google.com/js/api.js"
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
+    <!-- <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script> -->
+
   </head>
   <body>
     <div class="wrap">
       <div class="langs">
-        <ul class="switch-locale">
-          <li><a data-locale="en">EN</a></li>
-          <li><a data-locale="de">DE</a></li>
-          <li><a data-locale="es">ES</a></li>
-          <li><a data-locale="pt">PT</a></li>
+        <ul class="switch-locale js-locale">
+          <li id='js-locen' class='js-locale'><a data-locale="en">english</a></li>
+          <li id='js-locde' class='js-locale'><a data-locale="de">deutsch</a></li>
+          <li id='js-loces' class='js-locale'><a data-locale="es">español</a></li>
+          <li id='js-locpt' class='js-locale'><a data-locale="pt">português</a></li>
         </ul>
       </div>
       <div class="topbar">
@@ -82,24 +83,25 @@
 
       <!-- Projetos Page -->
     <div class="projetos js-projetos js-vis">
-      <div class="logo js-photobtn">
-      <h1 data-i18n="mproj"> Leandro Projetos </h1>
-      </div>
+      <section class="projetosgrid displaytoggle js-vis">
+        <div id="projetosgrid">
+        </div>
+      </section>
     </div>
 
       <!-- Cleções Page -->
     <div class="colecoes js-colecoesbtn js-vis">
-      <div class="logo db1">
+      <div class="logo">
       <h1 data-i18n="mcol"> Leandro Coleções </h1>
       </div>
     </div>
-</div>
 
       <!-- Insta Page -->
-    <div class="insta js-instabtn js-vis">
-      <div class="logo">
-      <h1 data-i18n="minsta"> Leandro Insta</h1>
-      </div>
+    <div class="insta js-insta js-vis">
+      <section class="instagrid js-vis">
+        <div id='instafeed'>
+        </div>
+      </section>
     </div>
 
       <!-- lightbox Page -->
@@ -136,10 +138,46 @@
         </div>
       </section>
       <section class="maingrid displaytoggle js-vis">
-        <div class="foto">
-          <span data-i18n=""> GRIDPAGE </span>
+        <!-- <div id="content" class="">
+                  <figure class="tempf1 item">
+                    <caption> Olár </caption>
+                  </figure>
+                  <figure class="item">
+                    <img src="img/single-2.jpg" alt="" />
+                    <caption> Olár </caption>
+                  </figure>
+                  <figure class="item">
+                    <img src="img/single-3.jpg" alt="" />
+                    <caption> Olár </caption>
+                  </figure>
+                  <figure class="item">
+                    <img src="img/single-4.jpg" alt="" />
+                    <caption> Olár </caption>
+                  </figure>
+                  <figure class="item">
+                    <img src="img/single-5.jpg" alt="" />
+                    <caption> Olár </caption>
+                  </figure>
+                  <figure class="item">
+                    <img src="img/single-6.jpg" alt="" />
+                    <caption> Olár </caption>
+                  </figure>
+                  <figure class="item">
+                    <img src="img/single-7.jpg" alt="" />
+                    <caption> Olár </caption>
+                  </figure>
+         <div class="page-load-status">
+        <div class="loader-ellips infinite-scroll-request">
+          <span class="loader-ellips__dot"></span>
+          <span class="loader-ellips__dot"></span>
+          <span class="loader-ellips__dot"></span>
+          <span class="loader-ellips__dot"></span>
         </div>
-      </section>
+        <p class="infinite-scroll-last">End of content</p>
+        <p class="infinite-scroll-error">No more pages to load</p>
+      </div>
+    </div> -->
+    </section>
       <div class="footer">
         <div class="fotomenu">
           <i class="icon-grid iga js-gridbtn backbtn"></i>
@@ -168,6 +206,6 @@
       </div>
     </div> -->
 
-    <!-- </div>-->
+    </div>
   </body>
 </html>
