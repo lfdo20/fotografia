@@ -45,7 +45,7 @@ $(document).ready(function() {
 
   //Url handling
   function checkpage() {
-    console.log(url("?page"));
+    //console.log(url("?page"));
     switch (url("?page")) {
       case "projetos":
         projetos();
@@ -348,8 +348,6 @@ $(".instagrid").on("scroll", function() {
     $.when(loadProjImages())
       .done(function() {
         console.log("test", dataprojetos);
-        //$grid.masonry("layout");
-        //$grid.masonry("reloadItems");
         $(".js-vis").css("visibility", "hidden");
         $(".projetosgrid, .topbar, .projetos").css("visibility", "visible");
       })
@@ -463,6 +461,7 @@ $(".instagrid").on("scroll", function() {
   // Projetos Click
   $(".js-projetosbtn").click(function() {
     projetos();
+    ff = ".projetosgrid";
   });
   // Coleções Click
   $(".js-colecoesbtn").click(function() {
@@ -470,8 +469,8 @@ $(".instagrid").on("scroll", function() {
   });
   // Instagram Click
   $(".js-instabtn").click(function() {
-    //feed.run();
     insta();
+    ff = ".gridinsta";
   });
   // Lightbox Click
   $(".js-lightboxbtn").click(function() {
@@ -484,10 +483,9 @@ $(".instagrid").on("scroll", function() {
   //bio back
   $(".js-biobtnx").click(function() {
     History.back(2);
-    /*  $('.bio').css('background', 'gray');
-  $('.menupage').css('visibility', 'visible');
-  $('.bio').css('visibility', 'hidden');
-  $('.bio').css('z-index', '-10');*/
+  //$('.menupage').css('visibility', 'visible');
+//  $('.bio .biocontent .biomenubtnx').css('visibility', 'hidden');
+//  $('.bio').css('z-index', '-10');*/
   });
 
   // temporary photo projectpage
@@ -586,6 +584,7 @@ $(".instagrid").on("scroll", function() {
     //   "https://placeimg.com/640/480/animals/grayscale",
     //   "https://picsum.photos/200/300/?cloud"
     // ];
+    //  console.log('Teste D:', dataprojetos[1].webContentLink);
     let figimg = '<figure class="item"><img src="';
     let capfig =
       '" alt="Teste" /><caption> <h5>Olár</h5> </caption></figure>';
@@ -593,18 +592,43 @@ $(".instagrid").on("scroll", function() {
     let items = "";
     let tproj = dataprojetos.length;
     let fig = $('#projetosgrid figure').length;
-  //  if (fig<tproj){
-    console.log('Teste D:', dataprojetos[1].webContentLink);
+    let loadq= 5;
     console.log(tproj, fig);
-    for ( var i = 0; i <6 ; i++) {
+    let nextitems =loadq;
+      if ((tproj-fig)<=loadq){nextitems=(tproj-fig)};
+      for ( var i = projfeedstat; i <nextitems+projfeedstat ; i++) {
       img1 += figimg + dataprojetos[i].webContentLink + capfig;
 
-    //  console.log(projfeedstat, (i+projfeedstat));
-  }
-    projfeedstat +=5;
-//  } projfeedstat+5 && projfeedstat<tproj
+      }
+      projfeedstat +=5;
     items = img1.toString();
-    console.log('testeF', items);
+
     return $(items);
+  }
+
+
+  // Store Variables
+  if (localStorage){
+    if (localStorage.teste !== 'uau FUNCEONA'){
+    localStorage.setItem("teste", 'uau FUNCEONA')
+    console.log('logstorage', localStorage.getItem('teste'));
+  }else{ console.log('logstorage', localStorage.getItem('teste')); }
+  }else{
+    console.log('nologtorage');
+  }
+
+  
+
+  // Scrollbar Firefox
+  var ff;
+  if (navigator.userAgent.indexOf("Firefox") > 0){
+    $('.ff').css('overflow-y', 'hidden');
+   ff = ".instagrid";
+    var container = document.querySelectorAll(ff)[0];
+container.addEventListener("wheel", function(event) {
+  if (event.deltaY > 0)
+    container.scrollBy({ top: 380, left: 0, behavior: 'smooth' });
+  else
+    container.scrollBy({ top: -380, left: 0, behavior: 'smooth' }); }, false);
   }
 });
