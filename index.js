@@ -112,7 +112,9 @@ $(document).ready(function() {
   function loadProjImages() {
     // when listfiles deferred done
     return $.Deferred(function() {
-      var self = this;
+    var self = this;
+    $.when(listFiles()).done(function(){
+      console.log('Teste C:', dataprojetos);
       let $items = getImages();
       $("#projetosgrid").css("opacity", "0");
       $("#projetosgrid").append($items);
@@ -126,7 +128,8 @@ $(document).ready(function() {
             $("#projetosgrid")
               .delay(200)
               .animate({ opacity: "1" }, "slow");
-          self.resolve();
+    self.resolve();
+        });
         });
     });
   }
@@ -196,14 +199,14 @@ $(document).ready(function() {
         accessToken: "576189084.153df6b.81b8c79b84b94589b597a348a4c45108",
         resolution: "standard_resolution",
         links: true,
-        mock: false,
+        mock: true,
         sortBy: "most-recent",
-        limit: 6,
+        limit: 100,
         template:
           '<figure class="iteminsta"><a href="{{link}}"><img src="{{image}}" /></a><h5>{{caption}}</h5></figure>',
-        after: function(){
-          console.log('testando retorno after instafeed 1');
-        },
+        // after: function(){
+        //   console.log('testando retorno after instafeed 1');
+        // },
         success: function(data) {
           let images = data.data;
           let result;
@@ -219,19 +222,29 @@ $(document).ready(function() {
             });
             instaimgs.push(result);
           }
-          console.log("teste A:", data);
-          return data;
-        }
+          //console.log("teste A:", instaimgs);
+          $.when(loadfeedimage())
+            .done(function() {
+              //console.log("test B:", instaimgs);
+              $gridinsta.masonry("reloadItems");
+              $gridinsta.masonry("layout")
+              .then(function() {
+                console.log("test C:");
+                $(".js-vis").css("visibility", "hidden");
+                $(".instagrid, .topbar, .insta").css("visibility", "visible");
+                $("#instafeed")
+                .delay(300)
+                .animate({ opacity: "1" }, "slow");
+            });
+            });
+        },
       });
-    //   self.resolve();
-    // });
-//  }
-//  feed.run();
 
 
-  // Insta Page Masonry .imagesLoaded(function() {
+  // Insta Page Masonry
 
-let $gridinsta = $("#instafeed").masonry({
+let $gridinsta = $("#instafeed").imagesLoaded(function(){
+    $gridinsta.masonry({
         columnWidth: 370,
         initLayout: false,
         itemSelector: ".iteminsta",
@@ -245,97 +258,41 @@ let $gridinsta = $("#instafeed").masonry({
         visibleStyle: { transform: "translateY(0)", opacity: 1 },
         hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
   });
+});
 
-  // requires itemSelector to be set on Masonry instance
   $.fn.masonryInstaReveal = function($itemsinsta) {
-    console.log('testtt');
     let msnry = this.data("masonry");
-    console.log('teSte', msnry);
     let itemSelector = msnry.options.itemSelector;
-    // hide by default
-    $itemsinsta.hide();
-    // append to container
-    this.append($itemsinsta);
+    $itemsinsta.hide(); // hide by default
+    this.append($itemsinsta); // append to container
     $itemsinsta.imagesLoaded().progress(function(imgLoad, image) {
-    // get item
-    // image is imagesLoaded class, not <img>, <img> is image.img
-    let $iteminsta = $(image.img).parents(itemSelector);
-    // un-hide item
-    $iteminsta.show();
-    // masonry does its thing
-    msnry.appended($iteminsta);
+    let $iteminsta = $(image.img).parents(itemSelector); // get item dom : image is imagesLoaded class, not <img>, <img> is image.img
+    $iteminsta.show(); // un-hide item
+    msnry.appended($iteminsta); // masonry does its thing
     $itemsinsta ='';
   });
   return this;
 };
 
 // load insta feed
-
-function loadinstafeed(){
-  return $.Deferred(function() {
-  var self = this;
-  //feed.run();
-  console.log('tes1');
-  $.when(loadfeedimage())
-  .done(function() {
-    console.log('tes2');
-    $gridinsta.masonry("layout");
-    $gridinsta.masonry("reloadItems");
-  })
-  .then(function() {
-     console.log('tes3');
-    // var $masonryTarget = $('#instafeed'),
-    // $hasMasonry = $masonryTarget.data('masonry') ? true : false;
-    // console.log($hasMasonry);
-
-    $(".js-vis").css("visibility", "hidden");
-    $(".instagrid, .topbar, .insta").css("visibility", "visible");
-    $("#instafeed")
-      .delay(300)
-      .animate({ opacity: "1" }, "slow");
-      self.resolve();
-      });
-  });
-}
-
 function loadfeedimage() {
   return $.Deferred(function() {
   var self = this;
-  $.when(feed.run()).done(function(){
   let $itemsinsta = getInstaImages();
   $("#instafeed").css("opacity", "0");
   $("#instafeed").append($itemsinsta);
-  console.log($itemsinsta);
+  //console.log('Teste A.2');
   $itemsinsta ='';
   $("#instafeed")
     .imagesLoaded()
     .done(function() {
-        console.log('teste loadfeddimage layout 2');
-      let msnry = $("#instafeed").data("masonry");
-      console.log('teSte', msnry);
-      $('#instafeed').masonry("reloadItems");
-      $('#instafeed').masonry("layout");
-      });
-      //$('#instafeed').masonry();
-      // })
-      // .then(function() {
-      //   $('#instafeed')
-      //     .delay(200)
-      //     .animate({opacity: '1'}, 'slow');
-      self.resolve();
-      });
+    //console.log('Teste A.3');
+    $gridinsta.masonry("reloadItems");
+    $gridinsta.masonry("layout");
+    self.resolve();
+    });
   });
 }
-
-// function checkinstafeed(){
-//   return $.Deferred(function() {
-//     var self = this;
-//   do{
-//     console.log('ay');
-//   }while (ifeedloadstat !== 'ok');
-//   self.resolve();
-// });
-// }
 
 // load more insta scroll
 var oldinstafeed;
@@ -343,9 +300,8 @@ $(".instagrid").on("scroll", function() {
   let $ifthis = $(this);
   let ifheight = this.scrollHeight - $ifthis.height(); // Get the height of the div
   let ifscroll = $ifthis.scrollTop(); // Get the vertical scroll position
-  let ifisScrolledToEnd = ifscroll >= ifheight - 250;
+  let ifisScrolledToEnd = ifscroll >= ifheight ;
   oldinstafeed='';
-
   if (ifisScrolledToEnd) {
     console.log(oldinstafeed === itemsinsta);
     if (oldinstafeed !== itemsinsta && instafeedstat <500){
@@ -357,19 +313,18 @@ $(".instagrid").on("scroll", function() {
 
   function imageInstaReveal() {
     let $itemsinsta = getInstaImages();
-    //console.log($itemsinsta);
     $gridinsta.masonryInstaReveal($itemsinsta);
   }
 
   var instafeedstat=0;
   function getInstaImages() {
-    var tempitems =[];
+    let tempitems =[];
     for (var k=instafeedstat; k<(instafeedstat+6); k++){
       tempitems += instaimgs[k];
     }
     instafeedstat +=6;
     itemsinsta = tempitems; //split(',').toString(); .join();
-    console.log('teste1.1', itemsinsta);
+    //console.log('teste A.1', itemsinsta);
     return $(itemsinsta);
   }
 
@@ -392,7 +347,7 @@ $(".instagrid").on("scroll", function() {
 
     $.when(loadProjImages())
       .done(function() {
-        console.log("test", data1);
+        console.log("test", dataprojetos);
         //$grid.masonry("layout");
         //$grid.masonry("reloadItems");
         $(".js-vis").css("visibility", "hidden");
@@ -420,23 +375,22 @@ $(".instagrid").on("scroll", function() {
       "Instagram",
       "?locale=" + $.i18n().locale + "&page=insta"
     );
-    console.log(feed.run().success);
-  //  loadinstafeed();
-    $.when(loadinstafeed())
-      .done(function() {
-        console.log("test B:", instaimgs);
-        $("#instafeed").css("opacity", "0");
-        $gridinsta.masonry("reloadItems");
-        $gridinsta.masonry("layout");
-      })
-      .then(function() {
-        console.log("test C:");
-        $(".js-vis").css("visibility", "hidden");
-        $(".instagrid, .topbar, .insta").css("visibility", "visible");
-        $("#instafeed")
-          .delay(200)
-          .animate({ opacity: "1" }, "slow");
-      });
+    feed.run();
+    // $.when(loadinstafeed())
+    //   .done(function() {
+    //     console.log("test B:", instaimgs);
+    //     $("#instafeed").css("opacity", "0");
+    //     $gridinsta.masonry("reloadItems");
+    //     $gridinsta.masonry("layout");
+    //   })
+    //   .then(function() {
+    //     console.log("test C:");
+    //     $(".js-vis").css("visibility", "hidden");
+    //     $(".instagrid, .topbar, .insta").css("visibility", "visible");
+    //     $("#instafeed")
+    //       .delay(200)
+    //       .animate({ opacity: "1" }, "slow");
+    //   });
   }
 
   function lightbox() {
@@ -467,16 +421,16 @@ $(".instagrid").on("scroll", function() {
       "?locale=" + $.i18n().locale + "&page=photo"
     );
     showPlate(".fotopage");
-    $.when(listFiles())
-      .done(function() {
-        console.log("test", data1);
-      })
-      .then(function() {
-        $(".tempf1").append(
-          "<img class='projetoimg' src='" + data1[0].webContentLink + "'>"
-        );
-      });
-  }
+  //   $.when(listFiles())
+  //     .done(function() {
+  //       console.log("test", dataprojetos);
+  //     })
+  //     .then(function() {
+  //       $(".tempf1").append(
+  //         "<img class='projetoimg' src=''>"
+  //       );
+  //     });
+   }
 
   function showPlate(name) {
     $(".menupage").css("visibility", "hidden");
@@ -535,6 +489,7 @@ $(".instagrid").on("scroll", function() {
   $('.bio').css('visibility', 'hidden');
   $('.bio').css('z-index', '-10');*/
   });
+
   // temporary photo projectpage
   $(".js-photobtn").click(function() {
     photo();
@@ -586,10 +541,10 @@ $(".instagrid").on("scroll", function() {
   //   });
 
   //List Files
-  var data1 = {};
-  var lfdofotoapp = '"0B-Tee9m48NkROU5mcDczbGttbmM" in parents',
-    montanhas = '"0B-Tee9m48NkRZTRzV0tmeUktMmc" in parents',
-    myself = '"0B-Tee9m48NkRNkNQZGtOaGFsVjA" in parents';
+  let dataprojetos =[];
+  var lfdofotoapp = '"0B-Tee9m48NkROU5mcDczbGttbmM" in parents';
+  var montanhas = '"0B-Tee9m48NkRZTRzV0tmeUktMmc" in parents';
+  var myself = '"0B-Tee9m48NkRNkNQZGtOaGFsVjA" in parents';
   var mimefoto = "mimeType contains 'image/'";
   function listFiles() {
     return $.Deferred(function() {
@@ -601,42 +556,55 @@ $(".instagrid").on("scroll", function() {
           q: mimefoto + "and" + montanhas
         })
         .then(function(response) {
-          data1 = response.result.files;
-          console.log(data1);
+          dataprojetos = response.result.files;
+          console.log('Teste A:', response.result.files);
+          console.log('Teste B:', dataprojetos);
           self.resolve();
         });
     });
+
   }
 
+  var projfeedstat =0;
   function getImages() {
-    let imgs = [
-      "https://loremflickr.com/g/320/240/ireland",
-      "https://picsum.photos/600/400/?fruit",
-      "https://placeimg.com/640/480/animals/grayscale",
-      "http://placebear.com/500/800",
-      "https://picsum.photos/200/300/?flower",
-      "https://loremflickr.com/g/320/240/patagonia",
-      "https://picsum.photos/600/400/?paris",
-      "https://placeimg.com/640/480/animals/grayscale",
-      "http://placebear.com/900/400",
-      "https://picsum.photos/200/300/?london",
-      "https://picsum.photos/600/400/?moon",
-      "https://placeimg.com/640/480/animals/grayscale",
-      "https://picsum.photos/200/300/?sun",
-      "https://loremflickr.com/g/320/240/uruguay",
-      "https://picsum.photos/600/400/?chocolate",
-      "https://placeimg.com/640/480/animals/grayscale",
-      "https://picsum.photos/200/300/?cloud"
-    ];
+    // let imgs = [
+    //   "https://loremflickr.com/g/320/240/ireland",
+    //   "https://picsum.photos/600/400/?fruit",
+    //   "https://placeimg.com/640/480/animals/grayscale",
+    //   "http://placebear.com/500/800",
+    //   "https://picsum.photos/200/300/?flower",
+    //   "https://loremflickr.com/g/320/240/patagonia",
+    //   "https://picsum.photos/600/400/?paris",
+    //   "https://placeimg.com/640/480/animals/grayscale",
+    //   "http://placebear.com/900/400",
+    //   "https://picsum.photos/200/300/?london",
+    //   "https://picsum.photos/600/400/?moon",
+    //   "https://placeimg.com/640/480/animals/grayscale",
+    //   "https://picsum.photos/200/300/?sun",
+    //   "https://loremflickr.com/g/320/240/uruguay",
+    //   "https://picsum.photos/600/400/?chocolate",
+    //   "https://placeimg.com/640/480/animals/grayscale",
+    //   "https://picsum.photos/200/300/?cloud"
+    // ];
     let figimg = '<figure class="item"><img src="';
     let capfig =
-      '" alt="Teste" />' + "<caption> <h5>Olár</h5> </caption></figure>";
+      '" alt="Teste" /><caption> <h5>Olár</h5> </caption></figure>';
     let img1 = "";
     let items = "";
-    for (let k = 0; k < 8; k++) {
-      img1 += figimg + imgs[k] + capfig; //data1[k].webContentLink
-    }
+    let tproj = dataprojetos.length;
+    let fig = $('#projetosgrid figure').length;
+  //  if (fig<tproj){
+    console.log('Teste D:', dataprojetos[1].webContentLink);
+    console.log(tproj, fig);
+    for ( var i = 0; i <6 ; i++) {
+      img1 += figimg + dataprojetos[i].webContentLink + capfig;
+
+    //  console.log(projfeedstat, (i+projfeedstat));
+  }
+    projfeedstat +=5;
+//  } projfeedstat+5 && projfeedstat<tproj
     items = img1.toString();
+    console.log('testeF', items);
     return $(items);
   }
 });
