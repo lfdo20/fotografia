@@ -1,6 +1,11 @@
 // Client ID and API key from the Developer Console
-    var CLIENT_ID = '421910158007-eu9gl3csb0taffkr8tbd64pl982glqg7.apps.googleusercontent.com';
+    var CLIENT_ID = 'lfdofotoapp@inductive-actor-184322.iam.gserviceaccount.com';
+    // '421910158007-eu9gl3csb0taffkr8tbd64pl982glqg7.apps.googleusercontent.com';
+    // lfdofotoapp@inductive-actor-184322.iam.gserviceaccount.com
+    //'102819163713543806885'
     var API_KEY = 'AIzaSyBXok7QZPntOzsxhsSlQjWQ15_ip60sTOg';
+    // 'AIzaSyA80wjGa_zI6ta134FRmLvS4cHUpsjgVDE';
+    // 0ddaa1d63f9a5ddf313e1bc236245b2ee96e10e6
     var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
     // Authorization scopes required by the API; multiple scopes can be
@@ -39,7 +44,6 @@
       if (isSignedIn) {
         authorizeButton.style.display = 'none';
         signoutButton.style.display = 'block';
-        listFiles();
       } else {
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';

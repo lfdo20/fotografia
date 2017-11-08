@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "inductive-actor-184322",
+  "private_key_id": "0ddaa1d63f9a5ddf313e1bc236245b2ee96e10e6",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCf4o/2YtAfco81\n+2Qhwy8DmKFoejj74cr0Lcb20lirI15gHD8dwVPEn+kli5EJ+k5RnxIQUkI7wGxB\nnqThEAQiYpXWLC0UBqWDbBvBFiz2NhiHJTkkG6BIZz6NK2ZOurFzUEdNf84By4B7\nPkaFE5LitVznIyPiZntgqTo65mMWKPpj3AxNOZGKbouc4ZRfSn32r4pqkp5g1GOl\np3AJsZ0nNgyyhXWKZxt58E0ixQKvIL1ld3N8+dZ42lGz9hHhMpqiYcbS3lcL5oAi\nFX8j3rW72K3H08UOT3kwXB53xnjTJ3FL+eGr4pLtgWmA0LfvVp3/OQ544qdvH5xA\nxM1Q8MVvAgMBAAECggEAQEA7Sy+lZGXUoERglmLKA190SbiIKsyvkxXMVYbtRATo\nGaZwRMRapfL/LevawtA4ZfuPNkjgPgPTXUFkD9+wUaMdhJ5nFRugquIoex0uv1i4\n3aJ7RoPlkwMOc4ujxvKmeekiZkX8YuNFRAGgND1L81gft/D6rDIz1YHcGSxZWF9H\ntthjaWplSFpVngMdQOf3JhRjvxzQRd3gs3EjQpMaSsSO4OKAmtotkml9v5jUhQIB\n4DLyzU3Ib8poNQxvJdmqfk/6YYgUOmr/pQdXKYp1BElUuPrhSp/T9G4IONgM1ueu\nr08Su7nyE1pYPGR7jQgHwRNbCdOTqNQIasF7LCHybQKBgQDMkC9zp+ta8p59iuj6\nXQ0zzeBoVCEoeYp6sFeBCZy9v2DzARjouyJy0DAISjWtQt3GFmhTnQNE5GGL2N2K\nmf1p9r5+3fPNUSryCjeqzxHcu6X//VNawlZ692jkr7rmdpe4TDUUmc6CBeiwMHwA\ndBn0Dh37mLwZacdDzANsE5wBXQKBgQDIFmw/+oVV3uWA0gdEW5E6ryYaUjLPJO3I\n40DetPqEaib1eIH2zT+cH3p8J2Qj4nwuYKFcwD6tP4vtRbUNpkZMqREq8jvWJCDQ\n8dX2u5O/8HjPpNvLKPawRcB+ZMr86WADqUPNSBP7AHeEr320AFn8w1Yfri1assdQ\nxjGHcb35OwKBgGuq4C7hjPC7jkvJl0JfQ5mmnJyM2z7wacCVnBjgtEzys9ZzF2c3\nR7Rie0WBuarN7Ohb1uFbXOMfyW/P3xsaXdUt96nSrIW+WPo4AoC2qFIjugV4kizM\n6LOkEON80sSGWui3w6BqK9UnwwcpHbsnYJmh7IoGI8rEcArxEEQMNipJAoGAF1G1\nsAcsfwOJT+gqfKcHWAWNtUebMFUneWAy8UG6aLBOdhFjZDYrkbCBf/K/UwdUXbtZ\nUwv8wghD8JVNMpgMXWbe31h37M8tG+zzeNwHrjkCe4DFNPpDNewLMS/iEHPKguK5\nSjV6TqiRRV+GkPHxiunhIbQVCRsI67sNjrGM6H0CgYAUX5lzKsFljWeEtIFHXONN\nqsPM3IUzP1ELlUy+hRmciEbnIMf70RwsdqA7zVUz4axEZOpQpis5QRmYir9IzZqi\nQw7Rrw2GQlbuqGS86u9hO2kCxm3I9BogLr0nNbt5Itv7m5bnrAR8LQfAIcKXvHeU\nilaCG/h91OY0vPu7gr3DQg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "lfdofotoapp@inductive-actor-184322.iam.gserviceaccount.com",
+  "client_id": "102819163713543806885",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/lfdofotoapp%40inductive-actor-184322.iam.gserviceaccount.com"
+}

@@ -14,7 +14,7 @@ $(document).ready(function() {
   );
 
   function checkloc() {
-    console.log(url("?locale"));
+    //console.log(url("?locale"));
     switch (url("?locale")) {
       case "de":
         $.i18n().locale = url("?locale");
@@ -110,14 +110,13 @@ $(document).ready(function() {
 
   //Projetos Page code Images Load
   function loadProjImages() {
-    // when listfiles deferred done
     return $.Deferred(function() {
     var self = this;
-    $.when(listFiles()).done(function(){
-      console.log('Teste C:', dataprojetos);
-      let $items = getImages();
+    $.when(listProjFiles()).done(function(itemsproj){
+      //let $items = getImages();
       $("#projetosgrid").css("opacity", "0");
-      $("#projetosgrid").append($items);
+      $("#projetosgrid").append(itemsproj);
+      console.log('Teste C:', itemsproj);
       $("#projetosgrid")
         .imagesLoaded()
         .done(function() {
@@ -126,7 +125,7 @@ $(document).ready(function() {
           })
           .then(function() {
             $("#projetosgrid")
-              .delay(200)
+              .delay(300)
               .animate({ opacity: "1" }, "slow");
     self.resolve();
         });
@@ -150,14 +149,16 @@ $(document).ready(function() {
     hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
   });
 
-  $.fn.masonryImagesReveal = function($items) {
+  $.fn.masonryProjReveal = function($itemsproj) {
+    //let $itemspro = $itemsproj;
+      console.log($itemsproj);
     let msnry = this.data("masonry");
     let itemSelector = msnry.options.itemSelector;
     // hide by default
-    $items.hide();
+    $itemsproj.hide();
     // append to container
-    this.append($items);
-    $items.imagesLoaded().progress(function(imgLoad, image) {
+    this.append($itemsproj);
+    $itemsproj.imagesLoaded().progress(function(imgLoad, image) {
       // get item
       // image is imagesLoaded class, not <img>, <img> is image.img
       let $item = $(image.img).parents(itemSelector);
@@ -169,10 +170,20 @@ $(document).ready(function() {
     return this;
   };
 
-  function imageReveal() {
-    let $items = getImages();
-    console.log($items);
-    $grid.masonryImagesReveal($items);
+  let convertProjData;
+  function imageProjReveal() {
+    $.when(listProjFiles()).done(function(itemsproj){
+      convertProjData = itemsproj;
+      console.log('test b:', convertProjData);
+
+      let $itemsproj = convePim();
+      console.log($itemsproj);
+    $grid.masonryProjReveal($itemsproj);
+  });
+  }
+  function convePim(){
+    let itemsproj = convertProjData;
+    return $(itemsproj);
   }
 
   $(".projetosgrid").on("scroll", function() {
@@ -181,7 +192,7 @@ $(document).ready(function() {
     let pgscroll = $pgthis.scrollTop(); // Get the vertical scroll position
     let pgisScrolledToEnd = pgscroll >= pgheight - 250;
     if (pgisScrolledToEnd) {
-      imageReveal();
+      imageProjReveal();
     }
   });
 
@@ -229,7 +240,7 @@ $(document).ready(function() {
               $gridinsta.masonry("reloadItems");
               $gridinsta.masonry("layout")
               .then(function() {
-                console.log("test C:");
+                //console.log("test C:", instaimgs);
                 $(".js-vis").css("visibility", "hidden");
                 $(".instagrid, .topbar, .insta").css("visibility", "visible");
                 $("#instafeed")
@@ -261,6 +272,7 @@ let $gridinsta = $("#instafeed").imagesLoaded(function(){
 });
 
   $.fn.masonryInstaReveal = function($itemsinsta) {
+    console.log($itemsinsta);
     let msnry = this.data("masonry");
     let itemSelector = msnry.options.itemSelector;
     $itemsinsta.hide(); // hide by default
@@ -324,7 +336,7 @@ $(".instagrid").on("scroll", function() {
     }
     instafeedstat +=6;
     itemsinsta = tempitems; //split(',').toString(); .join();
-    //console.log('teste A.1', itemsinsta);
+    console.log('teste A.1', itemsinsta);
     return $(itemsinsta);
   }
 
@@ -335,6 +347,7 @@ $(".instagrid").on("scroll", function() {
       "Home",
       "?locale=" + $.i18n().locale + "&page=enterpage"
     );
+    getHomePhoto();
     showPlate(".enterpage");
   }
 
@@ -419,15 +432,6 @@ $(".instagrid").on("scroll", function() {
       "?locale=" + $.i18n().locale + "&page=photo"
     );
     showPlate(".fotopage");
-  //   $.when(listFiles())
-  //     .done(function() {
-  //       console.log("test", dataprojetos);
-  //     })
-  //     .then(function() {
-  //       $(".tempf1").append(
-  //         "<img class='projetoimg' src=''>"
-  //       );
-  //     });
    }
 
   function showPlate(name) {
@@ -538,33 +542,89 @@ $(".instagrid").on("scroll", function() {
   //     $(this).masonry("layout");
   //   });
 
-  //List Files
-  let dataprojetos =[];
+  //List Files Projeto
+  let figimg = '<figure class="item"><img src="';
+  let capfig = '" alt="" /></figure>';
+  let cap = '<caption> <h5>Olár</h5> </caption>';
   var lfdofotoapp = '"0B-Tee9m48NkROU5mcDczbGttbmM" in parents';
   var montanhas = '"0B-Tee9m48NkRZTRzV0tmeUktMmc" in parents';
   var myself = '"0B-Tee9m48NkRNkNQZGtOaGFsVjA" in parents';
+  var home = '"1x1iDODMECOHu62aCtEmDy38qt8OdLnXL" in parents'
   var mimefoto = "mimeType contains 'image/'";
-  function listFiles() {
+  var api_key = 'AIzaSyA80wjGa_zI6ta134FRmLvS4cHUpsjgVDE';
+  var publicId = "'0B-Tee9m48NkROU5mcDczbGttbmM' in parents";
+  var fields = 'nextPageToken, files(id, name, webContentLink, webViewLink)';
+  var pagesize =5;
+  var nextPageToken;
+  var projfeedstat =0;
+  let dataprojetos;
+  var urlgapi = "https://www.googleapis.com/drive/v3/files?q=" + montanhas + "+and+" + mimefoto + /*"&pageSize="+pagesize+ */ "&fields=" + fields+"&key=" + api_key;
+  function listProjFiles() {
     return $.Deferred(function() {
       var self = this;
-      gapi.client.drive.files
-        .list({
-          pageSize: 10,
-          fields: "nextPageToken, files(id, name, webContentLink, webViewLink)",
-          q: mimefoto + "and" + montanhas
-        })
-        .then(function(response) {
-          dataprojetos = response.result.files;
-          console.log('Teste A:', response.result.files);
-          console.log('Teste B:', dataprojetos);
-          self.resolve();
-        });
+      var promise = $.getJSON( urlgapi, function( data, status){
+        console.log('Gapi Retrieve');// on success
+      });
+      promise.done(function( data ){
+        nextPageToken = data.nextPageToken;
+        dataprojetos = data.files;
+        console.log(data.files);
+        //console.log(imgs, nextPageToken);
+        let items;
+        let img1='';
+        let tproj = dataprojetos.length;
+        let fig = $('#projetosgrid figure').length;
+        let loadq= 5;
+        //console.log(tproj, fig);
+        let nextitems =loadq;
+        if ((tproj-fig)<=loadq){nextitems=(tproj-fig)};
+        //console.log(tproj, fig, projfeedstat, nextitems);
+        for ( var i = projfeedstat; i <nextitems+projfeedstat ; i++) {
+          //console.log(i, projfeedstat, (nextitems+projfeedstat));
+          img1 += figimg + dataprojetos[i].webContentLink + capfig;
+        }
+        projfeedstat +=5;
+        //items = img1; //.toString();
+        items = img1.toString();
+        console.log(img1);
+      self.resolve(items);
+      }).fail(function(){
+        console.log('No Data');
+      });
     });
-
   }
 
-  var projfeedstat =0;
-  function getImages() {
+  function getHomePhoto(){
+    var urlhomephotos = "https://www.googleapis.com/drive/v3/files?q=" + home + "+and+" + mimefoto + "&fields=" + fields+"&key=" + api_key;
+    var promise = $.getJSON( urlhomephotos, function( data, status){
+      console.log('Gapi Retrieve');// on success
+    });
+    promise.done(function( data ){
+      var datahomephotos = data.files;
+      console.log(datahomephotos);
+      for ( var i = 0; i <datahomephotos.length ; i++) {
+        $(".enterpage > figure:nth-child("+i+")").css('background', 'url('+datahomephotos[i].webContentLink+')');
+        console.log(datahomephotos[i].webContentLink);
+      }
+  });
+}
+
+
+  // gapi.client.drive.files
+  //   .list({
+  //     pageSize: 10,
+  //     fields: "nextPageToken, files(id, name, webContentLink, webViewLink)",
+  //     q: mimefoto + "and" + montanhas
+  //   })
+  //   .then(function(response) {
+  //     dataprojetos = response.result.files;
+  //     console.log('Teste A:', response.result.files);
+  //     console.log('Teste B:', dataprojetos);
+  //     self.resolve();
+  //   });
+
+    // var projfeedstat =0;
+    // function getImages() {
     // let imgs = [
     //   "https://loremflickr.com/g/320/240/ireland",
     //   "https://picsum.photos/600/400/?fruit",
@@ -585,43 +645,44 @@ $(".instagrid").on("scroll", function() {
     //   "https://picsum.photos/200/300/?cloud"
     // ];
     //  console.log('Teste D:', dataprojetos[1].webContentLink);
-    let figimg = '<figure class="item"><img src="';
-    let capfig =
-      '" alt="Teste" /><caption> <h5>Olár</h5> </caption></figure>';
-    let img1 = "";
-    let items = "";
-    let tproj = dataprojetos.length;
-    let fig = $('#projetosgrid figure').length;
-    let loadq= 5;
-    console.log(tproj, fig);
-    let nextitems =loadq;
-      if ((tproj-fig)<=loadq){nextitems=(tproj-fig)};
-      for ( var i = projfeedstat; i <nextitems+projfeedstat ; i++) {
-      img1 += figimg + dataprojetos[i].webContentLink + capfig;
+  //   let figimg = '<figure class="item"><img src="';
+  //   let capfig =
+  //     '" alt="Teste" /><caption> <h5>Olár</h5> </caption></figure>';
+  //   let img1;
+  //   let items = "";
+  //   let tproj = dataprojetos.length;
+  //   let fig = $('#projetosgrid figure').length;
+  //   let loadq= 5;
+  //   // console.log(tproj, fig);
+  //   let nextitems =loadq;
+  //     if ((tproj-fig)<=loadq){nextitems=(tproj-fig)};
+  //     for ( var i = projfeedstat; i <nextitems+projfeedstat ; i++) {
+  //     img1 += figimg + dataprojetos[i].webContentLink + capfig;
+  //
+  //     }
+  //     projfeedstat +=5;
+  //   items = img1; //.toString();
+  //
+  //   return $(items);
+  // }
+  //
+  //
+  // // Store Variables
+  // if (localStorage){
+  //   if (localStorage.teste !== 'uau FUNCEONA'){
+  //   localStorage.setItem("teste", 'uau FUNCEONA')
+  //   console.log('logstorage', localStorage.getItem('teste'));
+  // }else{ console.log('logstorage', localStorage.getItem('teste')); }
+  // }else{
+  //   console.log('nologtorage');
+  // }
 
-      }
-      projfeedstat +=5;
-    items = img1.toString();
 
-    return $(items);
-  }
-
-
-  // Store Variables
-  if (localStorage){
-    if (localStorage.teste !== 'uau FUNCEONA'){
-    localStorage.setItem("teste", 'uau FUNCEONA')
-    console.log('logstorage', localStorage.getItem('teste'));
-  }else{ console.log('logstorage', localStorage.getItem('teste')); }
-  }else{
-    console.log('nologtorage');
-  }
-
-  
 
   // Scrollbar Firefox
   var ff;
   if (navigator.userAgent.indexOf("Firefox") > 0){
+    console.log('ix ffox');
     $('.ff').css('overflow-y', 'hidden');
    ff = ".instagrid";
     var container = document.querySelectorAll(ff)[0];
@@ -630,5 +691,8 @@ container.addEventListener("wheel", function(event) {
     container.scrollBy({ top: 380, left: 0, behavior: 'smooth' });
   else
     container.scrollBy({ top: -380, left: 0, behavior: 'smooth' }); }, false);
+  }
+  else{
+    console.log('no ffox');
   }
 });
