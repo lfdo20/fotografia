@@ -348,7 +348,9 @@ $(".instagrid").on("scroll", function() {
       "?locale=" + $.i18n().locale + "&page=enterpage"
     );
     getHomePhoto();
-    showPlate(".enterpage");
+    $(".topbar").css("visibility", "hidden"); // MUDAR PARA HIDDEN
+    $(".js-vis").css("visibility", "hidden");
+    $('.enterpage').css("visibility", "visible");
   }
 
   function projetos() {
@@ -387,21 +389,6 @@ $(".instagrid").on("scroll", function() {
       "?locale=" + $.i18n().locale + "&page=insta"
     );
     feed.run();
-    // $.when(loadinstafeed())
-    //   .done(function() {
-    //     console.log("test B:", instaimgs);
-    //     $("#instafeed").css("opacity", "0");
-    //     $gridinsta.masonry("reloadItems");
-    //     $gridinsta.masonry("layout");
-    //   })
-    //   .then(function() {
-    //     console.log("test C:");
-    //     $(".js-vis").css("visibility", "hidden");
-    //     $(".instagrid, .topbar, .insta").css("visibility", "visible");
-    //     $("#instafeed")
-    //       .delay(200)
-    //       .animate({ opacity: "1" }, "slow");
-    //   });
   }
 
   function lightbox() {
@@ -453,15 +440,22 @@ $(".instagrid").on("scroll", function() {
     $(".menupage").css("visibility", "visible");
     $(".topbar").css("visibility", "hidden");
   });
-  $(".menubtnx").click(function() {
-    $(".menupage").css("visibility", "hidden");
+  $(".js-menubtnx").click(function() {
+    $(".js-vis").css("visibility", "hidden");
     $(".topbar").css("visibility", "visible");
+    if (url("?page") !== 'bio'){
+      var beforemenupage = url("?page");
+    }else{
+      var beforemenupage = History.getStateByIndex(-2).title.toLowerCase();
+    }
+    $("."+beforemenupage).css("visibility", "visible");
   });
   $(".logotop").click(function() {
     $(".menupage").css("visibility", "hidden");
     $(".topbar").css("visibility", "visible");
     enterpage();
   });
+
   // Projetos Click
   $(".js-projetosbtn").click(function() {
     projetos();
@@ -486,10 +480,8 @@ $(".instagrid").on("scroll", function() {
   });
   //bio back
   $(".js-biobtnx").click(function() {
-    History.back(2);
-  //$('.menupage').css('visibility', 'visible');
-//  $('.bio .biocontent .biomenubtnx').css('visibility', 'hidden');
-//  $('.bio').css('z-index', '-10');*/
+  $('.menupage').css('visibility', 'visible');
+  $('.bio').css('visibility', 'hidden');
   });
 
   // temporary photo projectpage
@@ -520,27 +512,6 @@ $(".instagrid").on("scroll", function() {
   $(".js-photobackbtn").click(function() {
     History.back();
   });
-
-  // Initialize Masonry
-  // var $grid = $("#projetosgrid")
-  //   .masonry({
-  //     columnWidth: 370,
-  //     initLayout: true,
-  //     itemSelector: ".item",
-  //     isFitWidth: true,
-  //     percentPsotion: false,
-  //     resize: true,
-  //     transitionDuration: "0.2s",
-  //     stagger: 8,
-  //     gutter: 8,
-  //     isAnimated: !Modernizr.csstransitions,
-  //     visibleStyle: { transform: "translateY(0)", opacity: 1 },
-  //     hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
-  //   })
-  //   .imagesLoaded(function() {
-  //     $(this).masonry("reloadItems");
-  //     $(this).masonry("layout");
-  //   });
 
   //List Files Projeto
   let figimg = '<figure class="item"><img src="';
@@ -595,20 +566,47 @@ $(".instagrid").on("scroll", function() {
   }
 
   function getHomePhoto(){
+    progressbar('#progress-bar', 10);
     var urlhomephotos = "https://www.googleapis.com/drive/v3/files?q=" + home + "+and+" + mimefoto + "&fields=" + fields+"&key=" + api_key;
     var promise = $.getJSON( urlhomephotos, function( data, status){
       console.log('Gapi Retrieve');// on success
     });
     promise.done(function( data ){
+      progressbar('#progress-bar', 20);
       var datahomephotos = data.files;
-      console.log(datahomephotos);
+      console.log(datahomephotos, datahomephotos.length);
       for ( var i = 0; i <datahomephotos.length ; i++) {
-        $(".enterpage > figure:nth-child("+i+")").css('background', 'url('+datahomephotos[i].webContentLink+')');
+        $(".enterpage > figure:nth-child("+(i+1)+")").css('background', 'url('+datahomephotos[i].webContentLink+')');
         console.log(datahomephotos[i].webContentLink);
       }
+  }).then(function(){
+
+    $('.enterpage').imagesLoaded({background: '.epbg'}, function(){
+       $('.enterpage > figure').css('animation-play-state', 'running');
+       $('.enterpage .logo').addClass('js-enterpagebtn');
+
+       // Enterpage logo
+       $(".js-enterpagebtn").click(function() {
+         projetos();
+         ff = ".projetosgrid";
+       });
+    }).progress(function(instance, image){
+      if(image.isLoaded) {
+      //  $(image.img).addClass('loaded');
+        //var countLoadedImages = $('#gallery img.loaded').size();
+        var width = new Number((10 * instance.progressedCount)+30);
+        width = width.toFixed();
+        progressbar('#progress-bar', width);
+    }
+
   });
+});
 }
 
+function progressbar(elem, width){
+  $(elem).css({'width' : ((width*.40)*10), 'opacity':(((100-width)*.1)*.1) });
+  console.log((width*.40)*10, width, ((100-width)*.1));
+}
 
   // gapi.client.drive.files
   //   .list({
