@@ -1,4 +1,4 @@
-var MYNamespace = MYNamespace || {};
+/*var MYNamespace = MYNamespace || {};
 
 MYNamespace.MyFirstClass = function(val) {
   this.value = val;
@@ -17,7 +17,7 @@ var testepj = testepj || {};
 testepj.alert = function(val) {
   this.value = val;
   this.showval = function() {
-    return alert(this.showval);
+    console.log(this.value);
   };
 
   testepj.calcval = function(params, data) {
@@ -67,6 +67,7 @@ var vamo2 = new testepj.calcval({
   numd: 6
 });
 console.log(vamo2);
+*/
 
 var mgallery = mgallery || {};
 
@@ -85,7 +86,7 @@ mgallery.masonCreate = function(params, data) {
     }
   }
 
-  let this.options.gridProjetoId = $(this.options.gridSelectorId).masonry({
+  let $gridProjeto = $(this.options.gridSelectorId).masonry({
     columnWidth: this.options.columnWidth,
     initLayout: false,
     itemSelector: this.options.itemSelector,
@@ -104,9 +105,23 @@ mgallery.masonCreate = function(params, data) {
 
 
 mgallery.scrollAppend= function(params, data) {
-
-
-  $.fn.masonryProjReveal = function($itemsproj) {
+  var namesa = this.options.gridProjetoId+'Reveal';
+  var option, value;
+  this.options = {
+    itemSelector: ".item",
+    columnWidth: "410",
+    gridSelectorId: ".",
+    gridProjetoId: "$PJ1grid",
+    itemsProjeto: 'itemsroj'
+  };
+  if (typeof params === "object") {
+    for (option in params) {
+      value = params[option];
+      this.options[option] = value;
+    }
+  }
+console.log();
+  $.fn.namesa = function($itemsproj) {
     //let $itemspro = $itemsproj;
     console.log($itemsproj);
     let msnry = this.data("masonry");

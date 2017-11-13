@@ -5,47 +5,72 @@ $(document).ready(function() {
 
   */
 
-  // Languages Handling
-  var contentPanelId;
+  // Languages Handling order: pt > en > es > de
+  var locxx = ["pt", "en", "es", "de"],
+    locnow, locs = [
+    "<li id='js-locpt' class='js-locale'><a data-locale='pt'>português</a></li>",
+    "<li id='js-locen' class='js-locale'><a data-locale='en'>english</a></li>",
+    "<li id='js-loces' class='js-locale'><a data-locale='es'>español</a></li>",
+    "<li id='js-locde' class='js-locale'><a data-locale='de'>deutsch</a></li>"
+  ];
+
   $(".js-locale").hover(
     function() {
-      $(".switch-locale > li").css("display", "inherit");
+      //$(".switch-locale > li").css("display", "inherit");
+      var nl = "";
+      for (i = 0; i <= locs.length; i++) {
+        if (i != locnow) {
+          nl += locs[i];
+        }
+      }
+      $(nl).insertAfter("#js-loc" + locxx[locnow]);
+      console.log(locxx[locnow], nl);
     },
     function() {
-      $(".switch-locale > li").css("display", "none");
-      $("#js-loc" + local[0] + local[1]).css("display", "inherit");
+      $(".switch-locale").empty();
+      $(".switch-locale").append(locs[locnow]);
+      //$(".switch-locale > li").css("display", "none");
+      //$("#js-loc" + local[0] + local[1]).css("display", "inherit");
     }
   );
 
-  function checkloc() {
-    //console.log(url("?locale"));
+  function checkloc(localchange) {
+    console.log(localchange);
     getCaptions();
-    switch (url("?locale")) {
+    switch (localchange) {
       case "de":
-        $.i18n().locale = url("?locale");
-        local = url("?locale");
-        $("#js-locde").css("display", "inherit");
+        $.i18n().locale = localchange;
+        local = localchange;
+        $(".switch-locale").empty();
+        locnow = "3";
+        $(".switch-locale").append(locs[3]);
         $("body").i18n();
         //console.log("from url", local, $.i18n().locale);
         break;
       case "es":
-        $.i18n().locale = url("?locale");
-        local = url("?locale");
-        $("#js-loces").css("display", "inherit");
+        $.i18n().locale = localchange;
+        local = localchange;
+        $(".switch-locale").empty();
+        locnow = "2";
+        $(".switch-locale").append(locs[2]);
         $("body").i18n();
         //console.log("from url", local, $.i18n().locale);
         break;
       case "en":
-        $.i18n().locale = url("?locale");
-        local = url("?locale");
-        $("#js-locen").css("display", "inherit");
+        $.i18n().locale = localchange;
+        local = localchange;
+        $(".switch-locale").empty();
+        locnow = "1";
+        $(".switch-locale").append(locs[1]);
         $("body").i18n();
         //console.log("from url", local, $.i18n().locale);
         break;
       default:
         $.i18n().locale = navigator.language || navigator.userLanguage;
         local = $.i18n().locale;
-        $("#js-locpt").css("display", "inherit");
+        $(".switch-locale").empty();
+        locnow = "0";
+        $(".switch-locale").append(locs[0]);
         $("body").i18n();
         //console.log("from nav", local, $.i18n().locale);
         break;
@@ -88,7 +113,7 @@ $(document).ready(function() {
       es: "./js/i18n/es.json"
     })
     .done(function() {
-      checkloc();
+      checkloc(url("?locale"));
       checkpage();
       console.log("done!", local, url());
       $("body").i18n();
@@ -98,6 +123,7 @@ $(document).ready(function() {
     e.preventDefault();
     $.i18n().locale = $(this).data("locale");
     local = $(this).data("locale");
+    checkloc(local[0] + local[1]);
     $("body").i18n();
   });
 
@@ -123,7 +149,7 @@ $(document).ready(function() {
       var self = this;
       $.when(listProjFiles()).done(function(itemsproj) {
         //let $items = getImages();
-        progressbar(".carregando #progress-bar-pages", 20);
+        progressbar(".carregando #progress-bar-pages", 30);
         $("#projetosgrid").css("visibility", "visible");
         $("#projetosgrid").css("opacity", "0");
         $("#projetosgrid").append(itemsproj);
@@ -134,7 +160,7 @@ $(document).ready(function() {
             if (image.isLoaded) {
               //  $(image.img).addClass('loaded');
               //var countLoadedImages = $('#gallery img.loaded').size();
-              var width = new Number(10 * instance.progressedCount + 30);
+              var width = new Number(10 * instance.progressedCount + 60);
               width = width.toFixed();
               progressbar(".carregando #progress-bar-pages", width);
             }
@@ -145,18 +171,19 @@ $(document).ready(function() {
           })
           .then(function() {
             $("body").i18n();
-            $(".carregando").css("display", "none");
+            //$(".carregando").css("display", "none");
             $("#projetosgrid").css("visibility", "visible");
             $("#projetosgrid")
               .delay(10)
               .animate({ opacity: "1" }, "slow");
+              loadgallery();
             self.resolve();
           });
       });
     });
   }
-  // Initialize Masonry
 
+  // Initialize Masonry Projetos Page
   let $grid = $("#projetosgrid").masonry({
     columnWidth: 370,
     initLayout: false,
@@ -173,23 +200,16 @@ $(document).ready(function() {
   });
 
   $.fn.masonryProjReveal = function($itemsproj) {
-    //let $itemspro = $itemsproj;
-    //console.log($itemsproj);
     let msnry = this.data("masonry");
     let itemSelector = msnry.options.itemSelector;
-    // hide by default
     $itemsproj.hide();
-    // append to container
     this.append($itemsproj);
     $("body").i18n();
     $itemsproj.imagesLoaded().progress(function(imgLoad, image) {
-      // get item
-      // image is imagesLoaded class, not <img>, <img> is image.img
-      let $item = $(image.img).parents(itemSelector);
-      // un-hide item
-      $item.show();
-      // masonry does its thing
-      msnry.appended($item);
+    let $item = $(image.img).parents(itemSelector);
+    $item.show();
+    msnry.appended($item);
+    loadgallery();
     });
     return this;
   };
@@ -199,9 +219,7 @@ $(document).ready(function() {
     $.when(listProjFiles()).done(function(itemsproj) {
       convertProjData = itemsproj;
       //console.log("test b:", convertProjData);
-
       let $itemsproj = convePim();
-      //console.log($itemsproj);
       $grid.masonryProjReveal($itemsproj);
     });
   }
@@ -210,22 +228,24 @@ $(document).ready(function() {
     return $(itemsproj);
   }
 
+var timerprojsc;
   $(".projetosgrid").on("scroll", function() {
     let $pgthis = $(this);
     let pgheight = this.scrollHeight - $pgthis.height(); // Get the height of the div
     let pgscroll = $pgthis.scrollTop(); // Get the vertical scroll position
-    let pgisScrolledToEnd = pgscroll >= pgheight - 250;
+    let pgisScrolledToEnd = pgscroll >= pgheight -100;
     if (pgisScrolledToEnd) {
-      imageProjReveal();
-    }
-  });
+      if(timerprojsc) {
+  		window.clearTimeout(timerprojsc);
+      }
+      timerprojsc = window.setTimeout(function() {
+              imageProjReveal();
+      },50);
+  }
+});
 
   // Instagram Pages code imagesload
-  let instaimgs = [];
-  let instadata;
-  //  function instaload() {
-  // return $.Deferred(function() {
-  //   var self = this;
+  let instaimgs = [], instadata;
   let feed = new Instafeed({
     get: "user",
     // tagName: 'awesome',
@@ -274,7 +294,6 @@ $(document).ready(function() {
   });
 
   // Insta Page Masonry
-
   let $gridinsta = $("#instafeed").imagesLoaded(function() {
     $gridinsta.masonry({
       columnWidth: 410,
@@ -293,7 +312,7 @@ $(document).ready(function() {
   });
 
   $.fn.masonryInstaReveal = function($itemsinsta) {
-    console.log($itemsinsta);
+    //console.log($itemsinsta);
     let msnry = this.data("masonry");
     let itemSelector = msnry.options.itemSelector;
     $itemsinsta.hide(); // hide by default
@@ -336,7 +355,7 @@ $(document).ready(function() {
     let ifisScrolledToEnd = ifscroll >= ifheight;
     oldinstafeed = "";
     if (ifisScrolledToEnd) {
-      console.log(oldinstafeed === itemsinsta);
+      //console.log(oldinstafeed === itemsinsta);
       if (oldinstafeed !== itemsinsta && instafeedstat < 500) {
         imageInstaReveal();
         oldinstafeed = itemsinsta;
@@ -357,7 +376,7 @@ $(document).ready(function() {
     }
     instafeedstat += 6;
     itemsinsta = tempitems; //split(',').toString(); .join();
-    console.log("teste A.1", itemsinsta);
+    //console.log("teste A.1", itemsinsta);
     return $(itemsinsta);
   }
 
@@ -369,7 +388,7 @@ $(document).ready(function() {
       "?locale=" + $.i18n().locale + "&page=enterpage"
     );
     getHomePhoto();
-    $(".topbar").css("visibility", "visible"); // MUDAR PARA HIDDEN
+    $(".topbar").css("visibility", "hidden"); // MUDAR PARA HIDDEN
     $(".js-vis").css("visibility", "hidden");
     $(".enterpage").css("visibility", "visible");
   }
@@ -381,25 +400,15 @@ $(document).ready(function() {
       "?locale=" + $.i18n().locale + "&page=projetos"
     );
     $(".js-vis").css("visibility", "hidden");
-    $(".projetosgrid, .topbar, .carregando, .projetos, #projetosgrid").css(
+    $(".projetosgrid, .topbar, .projetos, #projetosgrid").css(
       "visibility",
       "visible"
     );
-    $(".carregando").css("display", "contents");
+    //$(".carregando").css("display", "contents");
     var msnry = $("#projetosgrid").data("masonry");
     if (msnry._isLayoutInited !== true) {
-      progressbar(".carregando #progress-bar-pages", 5);
+      progressbar(".carregando #progress-bar-pages", 10);
       loadProjImages();
-      //$.when(loadProjImages()).done(function() {
-      //   //console.log("test", dataprojetos);
-      //   $(".js-vis").css("visibility", "hidden");
-      //   $(".projetosgrid, .topbar, .projetos").css("visibility", "visible");
-      //});
-      // .then(function() {
-      //   $("#projetosgrid")
-      //     .delay(300)
-      //     .animate({ opacity: "1" }, "slow");
-      // });
     } else {
       $(".js-vis").css("visibility", "hidden");
       $(".projetosgrid, .topbar, .projetos, #projetosgrid").css(
@@ -440,6 +449,7 @@ $(document).ready(function() {
       "Lightbox",
       "?locale=" + $.i18n().locale + "&page=lightbox"
     );
+
     showPlate(".lightbox");
   }
 
@@ -482,8 +492,10 @@ $(document).ready(function() {
   $(".menubtn").click(function() {
     $(".menupage").css("visibility", "visible");
     $(".topbar").css("visibility", "hidden");
+    $(".switch-locale > li > a").css("color", "gray");
   });
   $(".js-menubtnx").click(function() {
+    $(".switch-locale > li > a").css("color", "white");
     $(".js-vis").css("visibility", "hidden");
     $(".topbar").css("visibility", "visible");
     if (History.getStateByIndex(-1).data.plate !== ".bio") {
@@ -501,7 +513,7 @@ $(document).ready(function() {
         //title.toLowerCase();
       }
     }
-    console.log(History.getStateByIndex(-2).data.plate);
+    //console.log(History.getStateByIndex(-2).data.plate);
     $(beforemenupage).css("visibility", "visible"); //"." +
   });
 
@@ -582,53 +594,59 @@ $(document).ready(function() {
   let endfig = "</figure>";
   let cap = '<caption> <h5 data-i18n="">Olár</h5> </caption>';
   var lfdofotoapp = '"0B-Tee9m48NkROU5mcDczbGttbmM" in parents';
-  var montanhas = '"0B-Tee9m48NkRZTRzV0tmeUktMmc" in parents';
+  var projetosgaleria = '"1mQYi8dkHLTPxAEdUeiq2o7RPMj24CGi0" in parents';
+  var colecoesgaleria = '"12l7Q_CROppxLpo837TqtF_KDMnNzNub2" in parents';
+  var montanhasmar = '"0B-Tee9m48NkRZTRzV0tmeUktMmc" in parents';
+  var uruguay = '"15EyD9irf6qseb9QVKScGIcXvVzPPrC4j" in parents';
   var myself = '"0B-Tee9m48NkRNkNQZGtOaGFsVjA" in parents';
   var home = '"1x1iDODMECOHu62aCtEmDy38qt8OdLnXL" in parents';
   var mimefoto = "mimeType contains 'image/'";
+  var pgrid = "fullText contains 'pgrid'";
   var api_key = "AIzaSyA80wjGa_zI6ta134FRmLvS4cHUpsjgVDE";
   var publicId = "'0B-Tee9m48NkROU5mcDczbGttbmM' in parents";
   var fields = "nextPageToken, files(id, name, webContentLink, webViewLink)";
-  var pagesize = 5;
-  var nextPageToken;
+  var mrecents = 'recency'; // or : createdTime
+  var pagesize = 3;
+  var nextPageToken='';
   var projfeedstat = 0;
   let dataprojetos;
+  /*  "+and+" + mimefoto + */
   var urlgapi =
-    "https://www.googleapis.com/drive/v3/files?q=" +
-    montanhas +
-    "+and+" +
-    mimefoto +
-    /*"&pageSize="+pagesize+ */ "&fields=" +
-    fields +
-    "&key=" +
-    api_key;
+    "https://www.googleapis.com/drive/v3/files?"+
+    "pageSize="+pagesize+
+    "&fields=" +fields+
+    "&orderBy="+mrecents+
+    "&q="+projetosgaleria+
+    "&key="+api_key+
+    "&pageToken="+nextPageToken;
+
   function listProjFiles() {
     return $.Deferred(function() {
       var self = this;
-      var promise = $.getJSON(urlgapi, function(data, status) {
-        console.log("Gapi Retrieve"); // on success
+      let figimg = '<figure class="item pj'
+      let imgsrc ='"><img src="';
+      if (nextPageToken.length>5|| $('#projetosgrid figure').length === 0){
+
+      var promise = $.getJSON(urlgapi+nextPageToken, function(data, status) {
+        console.log("Gapi Projeto Retrieve"); // on success
       });
       promise
         .done(function(data) {
-          $("#progress-bar-pages").css("background-color", "white");
-          progressbar(".carregando #progress-bar-pages", 10);
-
+          //$("#progress-bar-pages").css("background-color", "white");
+          //progressbar(".carregando #progress-bar-pages", 20);
+          //console.log(data.nextPageToken);
+          if (data.nextPageToken !== undefined){
           nextPageToken = data.nextPageToken;
+          //console.log(nextPageToken);
+        }else { nextPageToken = 0;}
           dataprojetos = data.files;
-          //console.log(data.files);
-          //console.log(imgs, nextPageToken);
+          //console.log(data.files, nextPageToken);
           let items;
           let img1 = "";
           let tproj = dataprojetos.length;
           let fig = $("#projetosgrid figure").length;
-          let loadq = 10;
           //console.log(tproj, fig);
-          let nextitems = loadq;
-          if (tproj - fig <= loadq) {
-            nextitems = tproj - fig;
-          }
-          //console.log(tproj, fig, projfeedstat, nextitems);
-          for (var i = projfeedstat; i < nextitems + projfeedstat; i++) {
+            for (i=0; i< dataprojetos.length; i++){
             var ft = i + 1;
             cap =
               '<caption> <h5 data-i18n="pj1ft' +
@@ -636,17 +654,179 @@ $(document).ready(function() {
               'leg">Olár</h5> </caption>';
             //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
             img1 +=
-              figimg + dataprojetos[i].webContentLink + endimg + cap + endfig;
+              figimg + ft + imgsrc + dataprojetos[i].webContentLink + endimg + cap + endfig;
+              projfeedstat+=1;
           }
-          projfeedstat += 5;
-          //items = img1; //.toString();
           items = img1.toString();
           //console.log(img1);
           self.resolve(items);
+          items='';
         })
         .fail(function() {
           console.log("No Data");
+          items ='';
+          self.resolve(items);
         });
+        }
+    });
+  }
+
+ // List Gallery Files
+function loadgallery(){
+ $(".pj1").one('click',function() {
+   var container = 1;
+   $(".js-vis").css("visibility", "hidden");
+   $(".fotopage, .topbar, .maingrid, #gridpj"+container).css(
+     "visibility",
+     "visible"
+   );
+   //$(".carregando").css("display", "contents");
+  // var msnry = $('#gridpj1').data("masonry");
+   console.log('T1 : ', container);
+  // if (msnry._isLayoutInited !== true) {
+    $(".displaytoggle").toggle();
+    //progressbar(".carregando #progress-bar-pages", 10);
+    createGallery('1','#gridpj1');
+  /* } else {
+     $(".js-vis").css("visibility", "hidden");
+     $(".fotopage, .topbar, .maingrid, #gridpj"+container).css(
+       "visibility",
+       "visible"
+     );
+   }*/
+ });
+}
+
+// Each Projeto loader pj="pj1" / container=#gridpj1"
+
+function createGallery(pj, container, data ) {
+  console.log('T2 : ', pj, container);
+  progressbar(".carregando #progress-bar-pages", 10);
+ window['$gridpj'+pj] = $(container).imagesLoaded(function() {
+ window['$gridpj'+pj].masonry({
+    columnWidth: 370,
+    initLayout: false,
+    itemSelector: ".itempj"+pj,
+    isFitWidth: true,
+    percentPsotion: false,
+    resize: true,
+    transitionDuration: "0.3s",
+    stagger: "0.05s",
+    gutter: 15,
+    isAnimated: !Modernizr.csstransitions,
+    visibleStyle: { transform: "translateY(0)", opacity: 1 },
+    hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
+  });
+});
+
+  // elem="#gridpj1"
+  $.when(listGalleryFiles(container, data)).done(function(itemsproj) {
+    //let $items = getImages();
+    progressbar(".carregando #progress-bar-pages", 30);
+    $(container).css("visibility", "visible");
+    $(container).css("opacity", "0");
+    $(container).append(itemsproj);
+    console.log('T 3:');
+    $(container)
+      .imagesLoaded()
+      .progress(function(instance, image) {
+        if (image.isLoaded) {
+          var width = new Number(10 * instance.progressedCount + 40);
+          width = width.toFixed();
+          progressbar(".carregando #progress-bar-pages", width);
+        }
+      })
+      .done(function() {
+        window['$gridpj'+pj].masonry("reloadItems");
+        window['$gridpj'+pj].masonry("layout");
+        console.log('T 4:');
+      })
+      .then(function() {
+        $("body").i18n();
+        //$(".carregando").css("display", "none");
+        console.log('T 5:', container);
+        $(container)
+          .delay(10)
+          .animate({ opacity: "1" }, "slow");
+      });
+  });
+}
+
+/*
+$.fn.masonryInstaReveal = function($itemsinsta) {
+  console.log($itemsinsta);
+  let msnry = this.data("masonry");
+  let itemSelector = msnry.options.itemSelector;
+  $itemsinsta.hide(); // hide by default
+  this.append($itemsinsta); // append to container
+  $itemsinsta.imagesLoaded().progress(function(imgLoad, image) {
+    let $iteminsta = $(image.img).parents(itemSelector); // get item dom : image is imagesLoaded class, not <img>, <img> is image.img
+    $iteminsta.show(); // un-hide item
+    msnry.appended($iteminsta); // masonry does its thing
+    $itemsinsta = "";
+  });
+  return this;
+};
+});
+
+*/
+
+  function listGalleryFiles(container, data) {
+      var  el = container;
+      let figimg = '<figure class="item itempj1"><img src="';
+      progressbar(".carregando #progress-bar-pages", 30);
+      console.log('T3 : ',el, container);
+      return $.Deferred(function() {
+      var self = this;
+      //if (nextPageToken.length>5|| $(el).length === 0){
+      var urlgapi =
+        "https://www.googleapis.com/drive/v3/files?"+
+        "pageSize="+'6'+
+        "&fields=" +fields+
+        "&orderBy="+mrecents+
+        "&q="+uruguay+
+        "&key="+api_key//+
+        //"&pageToken="+nextPageToken;
+      var promise = $.getJSON(urlgapi, function(data, status) {
+        console.log("Gapi Gallery Retrieve"); // on success
+      });
+      promise
+        .done(function(data) {
+          //$(".carregando #progress-bar-pages").css("background-color", "white");
+          //progressbar(".carregando #progress-bar-pages", 30);
+          //console.log(data.nextPageToken);
+          if (data.nextPageToken !== undefined){
+          nextPageToken = data.nextPageToken;
+          //console.log(nextPageToken);
+        }else { nextPageToken = 0;}
+          dataprojetos = data.files;
+          //console.log(data.files, nextPageToken);
+          let items;
+          let img1 = "";
+          let tproj = dataprojetos.length;
+          let fig = $(el).length;
+          //console.log(tproj, fig);
+            for (i=0; i< dataprojetos.length; i++){
+            var ft = i + 1;
+            cap =
+              '<caption> <h5 data-i18n="pj1ft' +
+              ft +
+              'leg">Olár</h5> </caption>';
+            //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
+            img1 +=
+              figimg + dataprojetos[i].webContentLink + endimg + endfig;
+          }
+          items = img1.toString();
+          //console.log(img1);
+          self.resolve(items);
+          items='';
+        })
+        .fail(function() {
+          console.log("No Data");
+          items ='';
+          self.resolve(items);
+        });
+      //  }
     });
   }
 
@@ -705,10 +885,31 @@ $(document).ready(function() {
 
   function progressbar(elem, width) {
     console.log(elem, width);
+    if (width===10 && elem === '#progress-bar'){
+    $("#progress-bar").css("background-color", "black");
+  }else if (width===10 && elem ==='.carregando #progress-bar-pages'){
+    $("#progress-bar-pages").css("background-color", "white");
+    }
+    if (elem ==='.carregando #progress-bar-pages'){
+      $(".carregando #progress-bar-pages #progress").css('visibility', 'visible');
+      $('.carregando').css('display', 'inherit');
     $(elem).css({
       width: width * 0.4 * 10,
       opacity: (100 - width) * 0.1 * 0.1
     });
+      if (width>=90){
+        $(".carregando #progress-bar-pages #progress").css('visibility', 'hidden');
+        $('.carregando').css('display', 'none');
+      }
+    }else{
+      console.log(elem, width);
+      $(elem).css('visibility', 'visible');
+      $(elem).css('display', 'contents');
+    $(elem).css({
+      width: width * 0.4 * 10,
+      opacity: (100 - width) * 0.1 * 0.1
+    });
+  }
     //console.log((width*.40)*10, width, ((100-width)*.1));
   }
 
@@ -785,63 +986,6 @@ $(document).ready(function() {
     });
   }
 
-  // gapi.client.drive.files
-  //   .list({
-  //     pageSize: 10,
-  //     fields: "nextPageToken, files(id, name, webContentLink, webViewLink)",
-  //     q: mimefoto + "and" + montanhas
-  //   })
-  //   .then(function(response) {
-  //     dataprojetos = response.result.files;
-  //     console.log('Teste A:', response.result.files);
-  //     console.log('Teste B:', dataprojetos);
-  //     self.resolve();
-  //   });
-
-  // var projfeedstat =0;
-  // function getImages() {
-  // let imgs = [
-  //   "https://loremflickr.com/g/320/240/ireland",
-  //   "https://picsum.photos/600/400/?fruit",
-  //   "https://placeimg.com/640/480/animals/grayscale",
-  //   "http://placebear.com/500/800",
-  //   "https://picsum.photos/200/300/?flower",
-  //   "https://loremflickr.com/g/320/240/patagonia",
-  //   "https://picsum.photos/600/400/?paris",
-  //   "https://placeimg.com/640/480/animals/grayscale",
-  //   "http://placebear.com/900/400",
-  //   "https://picsum.photos/200/300/?london",
-  //   "https://picsum.photos/600/400/?moon",
-  //   "https://placeimg.com/640/480/animals/grayscale",
-  //   "https://picsum.photos/200/300/?sun",
-  //   "https://loremflickr.com/g/320/240/uruguay",
-  //   "https://picsum.photos/600/400/?chocolate",
-  //   "https://placeimg.com/640/480/animals/grayscale",
-  //   "https://picsum.photos/200/300/?cloud"
-  // ];
-  //  console.log('Teste D:', dataprojetos[1].webContentLink);
-  //   let figimg = '<figure class="item"><img src="';
-  //   let capfig =
-  //     '" alt="Teste" /><caption> <h5>Olár</h5> </caption></figure>';
-  //   let img1;
-  //   let items = "";
-  //   let tproj = dataprojetos.length;
-  //   let fig = $('#projetosgrid figure').length;
-  //   let loadq= 5;
-  //   // console.log(tproj, fig);
-  //   let nextitems =loadq;
-  //     if ((tproj-fig)<=loadq){nextitems=(tproj-fig)};
-  //     for ( var i = projfeedstat; i <nextitems+projfeedstat ; i++) {
-  //     img1 += figimg + dataprojetos[i].webContentLink + capfig;
-  //
-  //     }
-  //     projfeedstat +=5;
-  //   items = img1; //.toString();
-  //
-  //   return $(items);
-  // }
-  //
-  //
   // // Store Variables
   // if (localStorage){
   //   if (localStorage.teste !== 'uau FUNCEONA'){
