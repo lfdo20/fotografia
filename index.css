@@ -153,7 +153,7 @@ body {
 }
 
 .carregando {
-  position: relative;
+  position: absolute;
   margin: 0 auto;
   top: 50%;
   transform: translateY(-75px);
@@ -183,9 +183,9 @@ body {
   background-clip: content-box;
   background-origin: content-box;
   opacity: 0.9;
-  height: 3px;
+  height: 1px;
   width: 0px;
-  padding: 5px;
+  padding: 3px;
   border: 1px solid white;
 }
 
@@ -551,7 +551,10 @@ body {
 }
 
 /* photo page style*/
-
+.fototview{
+  visibility: visible;
+  display: inherit;
+}
 .fotopage {
   position: absolute;
   top: 0;
@@ -568,7 +571,28 @@ body {
   visibility: hidden;
 }
 
+.maingrid {
+  position: relative;
+  display: flex;
+  background-color: rgba(215, 255, 225, 0.2);
+  align-self: center;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 60px;
+  width: auto;
+  width: 100%;
+  height: 825px;
+  visibility: hidden;
+  z-index: 2;
+  overflow-y: scroll;
+}
+::-webkit-scrollbar {
+  width: 0px; /* remove scrollbar space */
+  background: transparent; /* optional: just make scrollbar invisible */
+}
+
 .mainfoto {
+  display: none;
   position: relative;
   background-color: rgba(255, 255, 255, 0.4);
   align-self: center;
@@ -632,11 +656,11 @@ body {
 
 .projetosgrid {
   position: relative;
-  /* display: inline-block;;  ???? */
+  display: flex;
   background-color: rgba(255, 255, 225, 0.1);
   align-self: center;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
   margin-top: 15px;
   width: inherit; /* Inherit is an option */
   height: 880px;
@@ -644,26 +668,6 @@ body {
 
   z-index: 2;
   overflow-x: hidden;
-  overflow-y: scroll;
-}
-::-webkit-scrollbar {
-  width: 0px; /* remove scrollbar space */
-  background: transparent; /* optional: just make scrollbar invisible */
-}
-
-.maingrid {
-  position: relative;
-  display: none;
-  background-color: rgba(215, 255, 225, 0.2);
-  align-self: center;
-  justify-content: flex-start;
-  align-items: center;
-  margin-top: 60px;
-  width: auto;
-  width: 92%;
-  height: 825px;
-  visibility: hidden;
-  z-index: 2;
   overflow-y: scroll;
 }
 ::-webkit-scrollbar {
@@ -717,7 +721,7 @@ body {
   border: 1px solid black;
   width: 36px;
   height: 36px;
-  line-height: 34px;
+  line-height: 38px;
   text-align: center;
   margin: 20px 10px 20px -20px;
 }
@@ -771,20 +775,20 @@ body {
   max-width: 1600px;
   margin: 0 auto;
   padding: 0 5px;
-  padding-top: 5px;
-  padding-bottom: 280px;
+  padding-top: 10px;
+  padding-bottom: 0px;
   /*transform: translateX(10px);*/
 }
 
 .gridpj {
   /*width: 980px;*/
   /*width: 95%;*/
-  /*display: inline-block;  ???? */
+  display: flex;
   max-width: 1600px;
   margin: 0 auto;
   padding: 0 5px;
-  padding-top: 5px;
-  padding-bottom: 280px;
+  padding-top: 10px;
+  padding-bottom: 0px;
   /*transform: translateX(10px);*/
 }
 
@@ -793,7 +797,7 @@ body {
   /*width: 95%;*/
   width: auto;
   margin: 0 auto;
-  padding: 5px 0 200px 0;
+  padding: 10px 0 200px 0;
   /*transform: translateX(10px);*/
 }
 
