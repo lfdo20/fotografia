@@ -1,13 +1,8 @@
 $(document).ready(function() {
 // Globalvar
 var cfolder=[], ff;
-  /*
-  Use $("body").i18n(); after every gallery loader.
 
-
-  */
-
-  // Languages Handling order: pt > en > es > de
+// Languages Handling order: pt > en > es > de
   var locxx = ["pt", "en", "es", "de"],
     locnow, locs = [
     "<li id='js-locpt' class='js-locale'><a data-locale='pt'>português</a></li>",
@@ -16,25 +11,38 @@ var cfolder=[], ff;
     "<li id='js-locde' class='js-locale'><a data-locale='de'>deutsch</a></li>"
   ];
 
-  $(".js-locale").hover(
-    function() {
-      //$(".switch-locale > li").css("display", "inherit");
+
+langcolor();
+function langcolor(){
+  console.log('lang:', url('?page'), $('.menupage').css('visibility'));
+  if (url('?page')==='bio'|| $('.menupage').css('visibility') === 'visible'){
+    $(".langsa").css("display", "none");
+    $(".langsb").css("display", "block");
+  }else{
+    $(".langsa").css("display", "block");
+    $(".langsb").css("display", "none");
+  }
+}
+
+
+  $(".js-locale").on("mouseenter", function() {
+      var par = $(this).parents();
+      console.log(par[0].className);
       var nl = "";
       for (i = 0; i <= locs.length; i++) {
         if (i != locnow) {
           nl += locs[i];
         }
       }
-      $(nl).insertAfter("#js-loc" + locxx[locnow]);
+      $(nl).insertAfter("."+par[0].className+" #js-loc" + locxx[locnow]);
       console.log(locxx[locnow], nl);
-    },
-    function() {
+    });
+
+    $(".js-locale").on("mouseleave", function() {
       $(".switch-locale").empty();
       $(".switch-locale").append(locs[locnow]);
-      //$(".switch-locale > li").css("display", "none");
-      //$("#js-loc" + local[0] + local[1]).css("display", "inherit");
-    }
-  );
+  });
+
 
   function checkloc(localchange) {
     //console.log(localchange);
@@ -114,7 +122,7 @@ var cfolder=[], ff;
         bio();
         break;
       case "photo":
-        photo(url("?pj"));
+        photo(url("?cat"), url("?pj"));
         break;
       default:
         enterpage();
@@ -158,7 +166,8 @@ var cfolder=[], ff;
     //console.log(url("?page"));
     var plate = State.data.plate;
     var title = State.title;
-    showPlate("." + url("?page"), State.data.pj, plate, title );
+    showPlate("." + url("?page"), State.data.cat, State.data.pj, plate, title );
+    langcolor();
   });
 
   //Projetos Page Images Load
@@ -201,7 +210,7 @@ var cfolder=[], ff;
 
   // Initialize Masonry Projetos Page
   let $grid = $("#projetosgrid").masonry({
-    columnWidth: 370,
+    columnWidth: 420,
     initLayout: false,
     itemSelector: ".item",
     isFitWidth: true,
@@ -209,7 +218,7 @@ var cfolder=[], ff;
     resize: true,
     transitionDuration: "0.3s",
     stagger: "0.05s",
-    gutter: 12,
+    gutter: 20,
     isAnimated: !Modernizr.csstransitions,
     visibleStyle: { transform: "translateY(0)", opacity: 1 },
     hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
@@ -295,7 +304,7 @@ function loadColecImages() {
           $("#colecoesgrid")
             .delay(10)
             .animate({ opacity: "1" }, "slow");
-            //loadgallery();
+            loadgallery();
           self.resolve();
         });
     });
@@ -305,7 +314,7 @@ function loadColecImages() {
 
   // Initialize Masonry Coleções Page
   let $ccgrid = $("#colecoesgrid").masonry({
-    columnWidth: 370,
+    columnWidth: 420,
     initLayout: false,
     itemSelector: ".item",
     isFitWidth: true,
@@ -313,7 +322,7 @@ function loadColecImages() {
     resize: true,
     transitionDuration: "0.3s",
     stagger: "0.05s",
-    gutter: 12,
+    gutter: 20,
     isAnimated: !Modernizr.csstransitions,
     visibleStyle: { transform: "translateY(0)", opacity: 1 },
     hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
@@ -330,7 +339,7 @@ function loadColecImages() {
     $item.show();
     msnry.appended($item);
     //console.log($item, $itemsproj);
-    loadColecgallery();
+    loadgallery();
     });
     return this;
   };
@@ -418,7 +427,7 @@ function convePim() {
   // Insta Page Masonry
   let $gridinsta = $("#instafeed").imagesLoaded(function() {
     $gridinsta.masonry({
-      columnWidth: 410,
+      columnWidth: 420,
       initLayout: false,
       itemSelector: ".iteminsta",
       isFitWidth: true,
@@ -578,34 +587,36 @@ function convePim() {
     $(".js-vis").css("visibility", "hidden");
     $(".topbar").css("visibility", "hidden");
     $(".bio").css("visibility", "visible");
+    langcolor();
   }
 
-  function photo(pj) {
-    var cat = 'pj';
-    if ($('#gridpj'+pj+' figure').length >0){
-    $('#gridpj'+pj).siblings().css({display:'none'});
-    $('#gridpj'+pj).css({display:'inherit', visible: 'visible'});
-    $(".fotopage, .topbar, .maingrid, #gridpj"+pj).css(
+  function photo(cat, pj) {
+    var cat = cat;
+    console.log(cat, pj);
+    if ($('#grid'+cat+pj+' figure').length >0){
+    $('#grid'+cat+pj).siblings().css({display:'none'});
+    $('#grid'+cat+pj).css({display:'inherit', visible: 'visible'});
+    $(".fotopage, .topbar, .maingrid, #grid"+cat+pj).css(
       "visibility",
       "visible"
     );
     }else{
-    $(".maingrid").append('<div id="gridpj'+pj+'" class="js-vis gridpj"></div>');
-    $('#gridpj'+pj).siblings().css('display','none');
+    $(".maingrid").append('<div id="grid'+cat+pj+'" class="js-vis gridpj"></div>');
+    $('#grid'+cat+pj).siblings().css('display','none');
     $(".js-vis").css({visibility: 'hidden'});
-    $(".fotopage, .topbar, .maingrid, #gridpj"+pj).css(
+    $(".fotopage, .topbar, .maingrid, #grid"+cat+pj).css(
       "visibility",
       "visible"
     );
-     createGallery(pj, cat, '#gridpj'+pj);
+     createGallery(pj, cat, '#grid'+cat+pj);
     }
     //createGallery(pj, cat, '#gridpj'+pj);
     //showPlate(".fotopage");
   }
 
-  function showPlate(url, pj, plate, title) {
+  function showPlate(url, cat, pj, plate, title) {
     $(".menupage").css("visibility", "hidden");
-    //console.log('Teste Hist :', url, pj, plate, title);
+    console.log('Teste Hist :', url, cat, pj, plate, title);
     if (title === "Photo") {
       //photo(url('?pj'));
       // $(".topbar").css("visibility", "visible");
@@ -619,9 +630,11 @@ function convePim() {
     }else if( title === 'Biografia') {
       bio();
     }else if (title === 'Projetos Galeria'){
-      photo(pj);
+      photo(cat, pj);
     }else if(title === 'Colecoes'){
       colecoes();
+    }else if (title === 'Colecoes Galeria'){
+      photo(cat, pj);
     }else{
       if (plate !== undefined){
         $(".topbar").css("visibility", "visible");
@@ -636,37 +649,42 @@ function convePim() {
 }
 
   //menu Buttons
-  var beforemenupage;
+  var beforemenupage, beforemenustate;
   $(".menubtn").click(function() {
     $(".menupage").css("visibility", "visible");
     $(".topbar").css("visibility", "hidden");
-    $(".switch-locale > li > a").css("color", "black");
+    langcolor();
+    //$(".switch-locale > li > a").css("color", "black");
 
   });
 
   $(".js-menubtnx").click(function() {
-    $(".switch-locale > li > a").css("color", "white");
+    //$(".switch-locale > li > a").css("color", "white");
     $(".menupage").css("visibility", "hidden");
     //$(".js-vis").css("visibility", "hidden");
     $(".topbar").css("visibility", "visible");
     //console.log(History.getStateByIndex(-1).title);
+    //langcolor();
+    console.log(history.state);
     if (history.state === null) {
       console.log('tt1');
       enterpage();
+      langcolor();
     }else {
       if (History.getStateByIndex(-1).title !== 'Biografia'){
         console.log('tt2');
         $('.menupage').css("visibility", "hidden");
+        langcolor();
       }else{
         console.log('tt3');
-        console.log(History.getStateByIndex(-2).data.plate);
-          beforemenupage = History.getStateByIndex(-2).data.plate;
+        beforemenupage = History.getStateByIndex(-2).data.plate;
+        beforemenustate = History.getStateByIndex(-2).data;
+        $(beforemenupage).css("visibility", "visible");
+        History.pushState(History.getStateByIndex(-2).data, History.getStateByIndex(-2).title, History.getStateByIndex(-2).url);
+        console.log(beforemenustate);
 
-          $(beforemenupage).css("visibility", "visible");
-
+        langcolor(beforemenustate);
       }
-
-
     }
   });
 
@@ -728,7 +746,7 @@ function convePim() {
   });
   // bio click
   $(".js-biobtn").click(function() {
-    $(".switch-locale > li > a").css("color", "black");
+    //$(".switch-locale > li > a").css("color", "black");
     History.pushState(
       { state: 6, plate: ".bio", rand: Math.random() },
       "Biografia",
@@ -741,6 +759,7 @@ function convePim() {
   $(".js-biobtnx").click(function() {
     $(".menupage").css("visibility", "visible");
     $(".bio").css("visibility", "hidden");
+    langcolor();
   });
 
   // photo page Buttons
@@ -761,13 +780,17 @@ function convePim() {
 
   $(".js-photobackbtn").click(function() {
     $('.js-vis').css({visibility: 'hidden'});
+    if (url('?cat')==='pj'){
     projetos();
+  } else{
+    colecoes();
+  }
     //$('.projetos, .projetosgrid, #projetosgrid').css({visibility: 'visible'});
   });
 
   //List Files Projeto
   let figimg = '<figure class="item"><img src="';
-  let endimg = '" alt="" />';
+  let endimg = '" alt="Teste"/>';
   let endfig = "</figure>";
   let cap = '<caption> <h5 data-i18n="">Olár</h5> </caption>';
   var lfdofotoapp = '"0B-Tee9m48NkROU5mcDczbGttbmM" in parents';
@@ -898,7 +921,7 @@ function listColecFiles() {
             'leg">Olár</h5> </caption>';
           //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
           img1 +=
-            figimg + figdata + fotocount + figcat + imgsrc + datacolecoes[i].webContentLink + endimg + cap + endfig;
+            figimg + figdata + fotocccount + figcat + imgsrc + datacolecoes[i].webContentLink + endimg + cap + endfig;
             colecfeedstat+=1;
         }
         itemscolec = img1.toString();
@@ -915,42 +938,26 @@ function listColecFiles() {
   });
 }
 
-
-
  // List Gallery Files
 function loadgallery(){
  $(".js-pj").on('click',function(e) {
    var pj = $(this).data('pj');
    $(".projetosgrid").off( "scroll" );
    History.pushState(
-     { state: 7, plate: ".fotopage, .maingrid, .gridpj", pj:pj, rand: Math.random() },
+     { state: 7, plate: ".fotopage, .maingrid, .gridpj", cat:'pj', pj:pj, rand: Math.random() },
      "Projetos Galeria",
-     "?locale=" + $.i18n().locale + "&page=photo" + "&pj="+pj
+     "?locale=" + $.i18n().locale + "&page=photo" + "&cat=pj" + "&pj="+pj
    );
-   //console.log('T1 : ',pj, cat );
-   //onsole.log('testegrid : #gridpj'+pj);
 
-   //photo(pj);
-   /*
-   var cat = $(this).data('cat').toLowerCase();
-   if ($('#gridpj'+pj+' figure').length >0){
-   $('#gridpj'+pj).siblings().css({display:'none'});
-   $('#gridpj'+pj).css({display:'inherit', visible: 'visible'});
-   $(".fotopage, .topbar, .maingrid, #gridpj"+pj).css(
-     "visibility",
-     "visible"
+ });
+ $(".js-cc").on('click',function(e) {
+   var cc = $(this).data('cc');
+   $(".projetosgrid").off( "scroll" );
+   History.pushState(
+     { state: 8, plate: ".fotopage, .maingrid, .gridcc", cat:'cc', pj:cc, rand: Math.random() },
+     "Colecoes Galeria",
+     "?locale=" + $.i18n().locale + "&page=photo" + "&cat=cc" + "&pj="+cc
    );
-   }else{
-   $(".maingrid").append('<div id="gridpj'+pj+'" class="js-vis gridpj"></div>');
-   $('#gridpj'+pj).siblings().css('display','none');
-   $(".js-vis").css({visibility: 'hidden'});
-   $(".fotopage, .topbar, .maingrid, #gridpj"+pj).css(
-     "visibility",
-     "visible"
-   );
-    createGallery(pj, cat, '#gridpj'+pj);
-   }
-   */
  });
 }
 
@@ -968,30 +975,33 @@ function loadgallery(){
 function createGallery(pj, cat, container, data ) {
   console.log('T2 : ', pj, cat,  container);
   progressbar(".carregando #progress-bar-pages", 5);
-  window['$gridpj'+pj] = $(container).imagesLoaded(function() {
-  window['$gridpj'+pj].masonry({
-    columnWidth: 370,
+  window['$grid'+cat+pj] = $(container).imagesLoaded(function() {
+  window['$grid'+cat+pj].masonry({
+    columnWidth: 420,
     initLayout: false,
-    itemSelector: ".itempj"+pj,
+    itemSelector: ".item"+cat+pj,
     isFitWidth: true,
     percentPsotion: false,
     resize: true,
     transitionDuration: "0.3s",
     stagger: "0.05s",
-    gutter: 15,
+    gutter: 20,
     isAnimated: !Modernizr.csstransitions,
     visibleStyle: { transform: "translateY(0)", opacity: 1 },
     hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
   });
   });
 
-  $.when(listGalleryFiles(pj, cat, container, data)).done(function(itemsproj) {
+  $.when(listGalleryFiles(pj, cat, container, data)).done(function(items, itemsfoto) {
     //let $items = getImages();
 
     progressbar(".carregando #progress-bar-pages", 15);
     $(container).css("visibility", "visible");
     $(container).css("opacity", "0");
-    $(container).append(itemsproj);
+    $(container).append(items);
+    $('.foto').append('<div class="fotodiv'+cat+pj+' fotogrid"></div>');
+    $('.fotodiv'+cat+pj).append(itemsfoto);
+
     //console.log('T4 :',pj,cat, container, itemsproj);
     $(container)
       .imagesLoaded()
@@ -1004,8 +1014,8 @@ function createGallery(pj, cat, container, data ) {
         }
       })
       .done(function() {
-        window['$gridpj'+pj].masonry("reloadItems");
-        window['$gridpj'+pj].masonry("layout");
+        window['$grid'+cat+pj].masonry("reloadItems");
+        window['$grid'+cat+pj].masonry("layout");
         adjustgridheight('.maingrid', container);
         console.log('T5 :', pj, cat, container);
       })
@@ -1048,7 +1058,7 @@ function pjgridReveal(pj, cat, container) {
     convertpjgridData = itemsproj;
     //console.log("test b:", convertProjData);
     let $itemsproj = convertItemsPjGrid();
-    window['$gridpj'+pj].pjgridReveal($itemsproj);
+    window['$grid'+cat+pj].pjgridReveal($itemsproj);
   });
 }
 let convertpjgridData;
@@ -1075,17 +1085,17 @@ $.fn.pjgridReveal = function($itemsproj) {
 
 
   function listGalleryFiles(pj, cat, container, data) {
-    if (window['nextPageTokenpj'+pj]===undefined){
-      window['nextPageTokenpj'+pj]='';
+    if (window['nextPageToken'+cat+pj]===undefined){
+      window['nextPageToken'+cat+pj]='';
     };
       return $.Deferred(function() {
       var self = this;
-      let figimg = '<figure class="item itempj'+pj+'"><img src="';
+      let figimg = '<figure class="itemgallery item'+cat+pj+'"><img src="';
       progressbar(".carregando #progress-bar-pages", 10);
       console.log('T3 : ', pj, cat, container);
-      console.log(window['nextPageTokenpj'+pj]);
-      console.log(window['nextPageTokenpj'+pj].length, $(container+ ' figure').length);
-      if (window['nextPageTokenpj'+pj].length>5|| $(container+ ' figure').length === 0){
+      console.log(window['nextPageToken'+cat+pj]);
+      console.log(window['nextPageToken'+cat+pj].length, $(container+ ' figure').length);
+      if (window['nextPageToken'+cat+pj].length>5|| $(container+ ' figure').length === 0){
       var urlgapi =
         "https://www.googleapis.com/drive/v3/files?"+
         "pageSize="+'8'+
@@ -1097,8 +1107,8 @@ $.fn.pjgridReveal = function($itemsproj) {
             }
           }).id+
         "&key="+api_key+
-        "&pageToken="+window['nextPageTokenpj'+pj];
-        console.log(window['nextPageTokenpj'+pj]);
+        "&pageToken="+window['nextPageToken'+cat+pj];
+        console.log(window['nextPageToken'+cat+pj]);
         console.log(urlgapi);
 
       var promise = $.getJSON(urlgapi, function(data, status) {
@@ -1111,29 +1121,29 @@ $.fn.pjgridReveal = function($itemsproj) {
           //progressbar(".carregando #progress-bar-pages", 30);
           //console.log(data.nextPageToken);
           if (data.nextPageToken !== undefined){
-          window['nextPageTokenpj'+pj] = data.nextPageToken;
-          console.log(data.nextPageToken, window['nextPageTokenpj'+pj]);
-        }else { window['nextPageTokenpj'+pj] = 0;}
+          window['nextPageToken'+cat+pj] = data.nextPageToken;
+          console.log(data.nextPageToken, window['nextPageToken'+cat+pj]);
+        }else { window['nextPageToken'+cat+pj] = 0;}
           dataprojetos = data.files.sort((a,b) => a.name - b.name);;
           //console.log(data.files, nextPageToken);
           let items;
-          let img1 = "";
+          let img1 = "",img2='';
           let tproj = dataprojetos.length;
           let fig = $(container).length;
-          //console.log(tproj, fig);
             for (i=0; i< dataprojetos.length; i++){
             var ft = i + 1;
             cap =
-              '<caption> <h5 data-i18n="pj'+pj+'ft' +
+              '<caption> <h5 data-i18n="'+cat+pj+'ft' +
               ft +
               'leg">Olár</h5> </caption>';
-            //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
             img1 +=
               figimg + dataprojetos[i].webContentLink + endimg + endfig;
+            img2 += '<figure class="foto'+cat+pj+'"><img src='+ dataprojetos[i].webContentLink + '/></figure>';
           }
           items = img1.toString();
+          itemsfoto = img2.toString();
           //console.log(img1);
-          self.resolve(items);
+          self.resolve(items, itemsfoto);
           //console.log(items);
           items='';
         })
