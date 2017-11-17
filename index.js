@@ -81,18 +81,33 @@ var cfolder=[], ff;
 
   //Url handling
   function checkpage() {
-    //console.log(url("?page"));
+    console.log(url("?page"));
+    //var pj = url("?pj");
     switch (url("?page")) {
       case "projetos":
-        projetos();
+      ff = ".projetosgrid";
+      History.pushState(
+        { state: 2, plate: ".projetos, .projetosgrid, #projetosgrid", rand: Math.random() },
+        "Projetos",
+        "?locale=" + $.i18n().locale + "&page=projetos"
+      );
         break;
       case "lightbox":
-        lightbox();
+      History.pushState(
+        { state: 5, plate: ".lightbox", rand: Math.random() },
+        "Lightbox",
+        "?locale=" + $.i18n().locale + "&page=lightbox"
+      );
         break;
       case "colecoes":
-        colecoes();
+      History.pushState(
+        { state: 3, plate: ".colecoes, .colecoesgrid, #colecoesgrid", rand: Math.random() },
+        "Coleções",
+        "?locale=" + $.i18n().locale + "&page=colecoes"
+      );
         break;
       case "insta":
+        ff = ".gridinsta";
         insta();
         break;
       case "bio":
@@ -116,12 +131,10 @@ var cfolder=[], ff;
     })
     .done(function() {
       $.when(getdrivefolders()).done(function(){
-
         checkpage();
         checkloc(url("?locale"));
         console.log("Locale:", local, url());
       });
-
       $("body").i18n();
     });
 
@@ -145,11 +158,10 @@ var cfolder=[], ff;
     //console.log(url("?page"));
     var plate = State.data.plate;
     var title = State.title;
-
     showPlate("." + url("?page"), State.data.pj, plate, title );
   });
 
-  //Projetos Page code Images Load
+  //Projetos Page Images Load
   function loadProjImages() {
     return $.Deferred(function() {
       var self = this;
@@ -219,23 +231,113 @@ var cfolder=[], ff;
     return this;
   };
 
+  var timerprojsc;
+    $(".projetosgrid").on("scroll.pjgrid", function() {
 
-  function adjustgridheight(parent, child){
-    console.log('Child height:'+($(child).height()),'Parent height:'+($(parent).height()));
-    console.log('Child width:'+($(child).width()), 'Parent width:'+($(parent).width()));
-    if (($(child).height()) <($(parent).height()-40) && ($(child).width()) > 1100){
-      console.log(child, $(child).height(), parent, $(parent).height()-40);
-      $(parent).css('align-items', 'center');
-      $(child).css('align-self','center');
-    }else{
-      $(parent).css('align-items', 'flex-start');
-      $(child).css('align-self','flex-start');
+      let $pgthis = $(this);
+      let pgheight = this.scrollHeight - $pgthis.height();
+      let pgscroll = $pgthis.scrollTop();
+      let pgisScrolledToEnd = pgscroll >= pgheight -100;
+      //console.log(pgheight, $pgthis.height(), this.scrollHeight);
+      if (pgisScrolledToEnd || this.scrollHeight<($pgthis.height()-80)) {
+        if(timerprojsc) {
+    		window.clearTimeout(timerprojsc);
+        }
+        timerprojsc = window.setTimeout(function() {
+          console.log('ttetet');
+                imageProjReveal();
+        },400);
     }
+  });
+
+  function imageProjReveal() {
+    $.when(listProjFiles()).done(function(itemsproj) {
+      convertProjData = itemsproj;
+      let $itemsproj = convePim();
+      //console.log("test b:", convertProjData, $itemsproj);
+      $grid.masonryProjReveal($itemsproj);
+    });
+  }
+  let convertProjData;
+  function convePim() {
+    let itemsproj = convertProjData;
+    return $(itemsproj);
   }
 
-var timerprojsc;
+// Coleções Page Images Load
+function loadColecImages() {
+  return $.Deferred(function() {
+    var self = this;
+    $.when(listColecFiles()).done(function(itemscolec) {
+      //let $items = getImages();
+      progressbar(".carregando #progress-bar-pages", 15);
+      $("#colecoesgrid").css("visibility", "visible");
+      $("#colecoesgrid").css("opacity", "0");
+      $("#colecoesgrid").append(itemscolec);
+      //console.log('Teste C:', itemscolec);
+      $("#colecoesgrid")
+        .imagesLoaded()
+        .progress(function(instance, image) {
+          //adjustgridheight('.projetosgrid','#colecoesgrid');
+          if (image.isLoaded) {
+            var width = new Number(instance.progressedCount*(100/instance.images.length));
+            width = width.toFixed();
+            progressbar(".carregando #progress-bar-pages", width);
+          }
+        })
+        .done(function() {
+          $ccgrid.masonry("reloadItems");
+          $ccgrid.masonry("layout");
+        })
+        .then(function() {
+          $("body").i18n();
+          $("#colecoesgrid").css("visibility", "visible");
+          $("#colecoesgrid")
+            .delay(10)
+            .animate({ opacity: "1" }, "slow");
+            //loadgallery();
+          self.resolve();
+        });
+    });
+  });
+}
 
-  $(".projetosgrid").on("scroll.pjgrid", function() {
+
+  // Initialize Masonry Coleções Page
+  let $ccgrid = $("#colecoesgrid").masonry({
+    columnWidth: 370,
+    initLayout: false,
+    itemSelector: ".item",
+    isFitWidth: true,
+    percentPsotion: false,
+    resize: true,
+    transitionDuration: "0.3s",
+    stagger: "0.05s",
+    gutter: 12,
+    isAnimated: !Modernizr.csstransitions,
+    visibleStyle: { transform: "translateY(0)", opacity: 1 },
+    hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
+  });
+
+  $.fn.masonryColecReveal = function($itemscolec) {
+    let msnry = this.data("masonry");
+    let itemSelector = msnry.options.itemSelector;
+    $itemscolec.hide();
+    this.append($itemscolec);
+    $("body").i18n();
+    $itemscolec.imagesLoaded().progress(function(imgLoad, image) {
+    let $item = $(image.img).parents(itemSelector);
+    $item.show();
+    msnry.appended($item);
+    //console.log($item, $itemsproj);
+    loadColecgallery();
+    });
+    return this;
+  };
+
+// Coleções Grid Config
+var timercolecsc;
+  $(".colecoesgrid").on("scroll.ccgrid", function() {
 
     let $pgthis = $(this);
     let pgheight = this.scrollHeight - $pgthis.height();
@@ -243,35 +345,35 @@ var timerprojsc;
     let pgisScrolledToEnd = pgscroll >= pgheight -100;
     //console.log(pgheight, $pgthis.height(), this.scrollHeight);
     if (pgisScrolledToEnd || this.scrollHeight<($pgthis.height()-80)) {
-      if(timerprojsc) {
-  		window.clearTimeout(timerprojsc);
+      if(timercolecsc) {
+  		window.clearTimeout(timercolecsc);
       }
-      timerprojsc = window.setTimeout(function() {
+      timercolecsc = window.setTimeout(function() {
         console.log('ttetet');
-              imageProjReveal();
+              imageColecReveal();
       },400);
   }
 });
 
-function imageProjReveal() {
-  $.when(listProjFiles()).done(function(itemsproj) {
-    convertProjData = itemsproj;
-    let $itemsproj = convePim();
-    //console.log("test b:", convertProjData, $itemsproj);
-    $grid.masonryProjReveal($itemsproj);
+function imageColecReveal() {
+  $.when(listColecFiles()).done(function(itemscolec) {
+    convertColecData = itemscolec;
+    let $itemscolec = convePim();
+    //console.log("test b:", convertProjData, $itemscolec);
+    $ccgrid.masonryProjReveal($itemscolec);
   });
 }
-let convertProjData;
+let convertColecData;
 function convePim() {
-  let itemsproj = convertProjData;
-  return $(itemsproj);
+  let itemscolec = convertColecData;
+  return $(itemscolec);
 }
+
 
   // Instagram Pages code imagesload
   let instaimgs = [], instadata;
   let feed = new Instafeed({
     get: "user",
-    // tagName: 'awesome',
     userId: "576189084",
     clientId: "153df6b116e44b3cb8ee9055b12d9ea0",
     accessToken: "576189084.153df6b.81b8c79b84b94589b597a348a4c45108",
@@ -282,9 +384,6 @@ function convePim() {
     limit: 100,
     template:
       '<figure class="iteminsta"><a target="_blank" href="{{link}}"><img src="{{image}}" /></a><h5>{{caption}}</h5></figure>',
-    // after: function(){
-    //   console.log('testando retorno after instafeed 1');
-    // },
     success: function(data) {
       let images = data.data;
       let result;
@@ -439,6 +538,23 @@ function convePim() {
   }
 
   function colecoes() {
+    $(".js-vis").css("visibility", "hidden");
+    $(".colecoesgrid, .topbar, .colecoes, #colecoesgrid").css(
+      "visibility",
+      "visible"
+    );
+    //$(".carregando").css("display", "contents");
+    var msnry = $("#colecoesgrid").data("masonry");
+    if (msnry._isLayoutInited !== true) {
+      progressbar(".carregando #progress-bar-pages", 10);
+      loadColecImages();
+    } else {
+      $(".js-vis").css("visibility", "hidden");
+      $(".colecoesgrid, .topbar, .colecoes, #colecoesgrid").css(
+        "visibility",
+        "visible"
+      );
+    }
     //showPlate(".colecoes");
   }
 
@@ -504,6 +620,8 @@ function convePim() {
       bio();
     }else if (title === 'Projetos Galeria'){
       photo(pj);
+    }else if(title === 'Colecoes'){
+      colecoes();
     }else{
       if (plate !== undefined){
         $(".topbar").css("visibility", "visible");
@@ -522,22 +640,33 @@ function convePim() {
   $(".menubtn").click(function() {
     $(".menupage").css("visibility", "visible");
     $(".topbar").css("visibility", "hidden");
-    $(".switch-locale > li > a").css("color", "gray");
+    $(".switch-locale > li > a").css("color", "black");
+
   });
+
   $(".js-menubtnx").click(function() {
     $(".switch-locale > li > a").css("color", "white");
     $(".menupage").css("visibility", "hidden");
     //$(".js-vis").css("visibility", "hidden");
     $(".topbar").css("visibility", "visible");
-      if (History.getStateByIndex(-2) === undefined){
-        $('.menupage').css("visibility", "visible");
+    //console.log(History.getStateByIndex(-1).title);
+    if (history.state === null) {
+      console.log('tt1');
+      enterpage();
+    }else {
+      if (History.getStateByIndex(-1).title !== 'Biografia'){
+        console.log('tt2');
+        $('.menupage').css("visibility", "hidden");
       }else{
-        if (History.getStateByIndex(-2).data.title !== "Biografia") {
+        console.log('tt3');
+        console.log(History.getStateByIndex(-2).data.plate);
           beforemenupage = History.getStateByIndex(-2).data.plate;
+
           $(beforemenupage).css("visibility", "visible");
-      } else {
-        enterpage();
+
       }
+
+
     }
   });
 
@@ -548,18 +677,18 @@ function convePim() {
     enterpage();
   });
 
-  // Logo Home click
-  $(".js-enterpagebtn").on("click", function() {
-    //getCaptions();
-    projetos();
-    ff = ".projetosgrid";
-  });
+  // // Logo Home click
+  // $(".js-enterpagebtn").on("click", function() {
+  //   //getCaptions();
+  //   projetos();
+  //   ff = ".projetosgrid";
+  // });
 
-  // Projetos Click
+  // Projetos & Home Click
   $(".js-projetosbtn").click(function() {
     ff = ".projetosgrid";
     History.pushState(
-      { state: 2, plate: ".projetos, .projetosgrid", rand: Math.random() },
+      { state: 2, plate: ".projetos, .projetosgrid, #projetosgri", rand: Math.random() },
       "Projetos",
       "?locale=" + $.i18n().locale + "&page=projetos"
     );
@@ -568,22 +697,25 @@ function convePim() {
 
   // Coleções Click
   $(".js-colecoesbtn").click(function() {
+    ff = ".colecoesgrid";
     History.pushState(
-      { state: 3, plate: ".colecoes", rand: Math.random() },
-      "Coleções",
+      { state: 3, plate: ".colecoes, .colecoesgrid, #colecoesgrid", rand: Math.random() },
+      "Colecoes",
       "?locale=" + $.i18n().locale + "&page=colecoes"
     );
     //colecoes();
   });
+
   // Instagram Click
   $(".js-instabtn").click(function() {
+    ff = ".gridinsta";
     History.pushState(
-      { state: 4, plate: ".insta .instagrid", rand: Math.random() },
+      { state: 4, plate: ".insta, .instagrid", rand: Math.random() },
       "Instagram",
       "?locale=" + $.i18n().locale + "&page=insta"
     );
     //insta();
-    ff = ".gridinsta";
+
   });
   // Lightbox Click
   $(".js-lightboxbtn").click(function() {
@@ -596,6 +728,7 @@ function convePim() {
   });
   // bio click
   $(".js-biobtn").click(function() {
+    $(".switch-locale > li > a").css("color", "black");
     History.pushState(
       { state: 6, plate: ".bio", rand: Math.random() },
       "Biografia",
@@ -628,7 +761,8 @@ function convePim() {
 
   $(".js-photobackbtn").click(function() {
     $('.js-vis').css({visibility: 'hidden'});
-    $('.projetos, .projetosgrid, #projetosgrid').css({visibility: 'visible'});
+    projetos();
+    //$('.projetos, .projetosgrid, #projetosgrid').css({visibility: 'visible'});
   });
 
   //List Files Projeto
@@ -716,13 +850,80 @@ function convePim() {
     });
   }
 
+// List Coleções Files
+var fotocccount = 0;
+var nextCCPageToken = '';
+var datacolecoes;
+var colecfeedstat = 0;
+var urlccgapi =
+  "https://www.googleapis.com/drive/v3/files?"+
+  "pageSize="+pagesize+
+  "&fields=" +fields+
+  "&orderBy="+mrecents+
+  "&q="+colecoesgaleria+
+  "&key="+api_key+
+  "&pageToken="+nextCCPageToken;
+function listColecFiles() {
+  return $.Deferred(function() {
+    var self = this;
+    let figimg = '<figure class="item js-cc"'
+    let figdata = ' data-cc="';
+    let figcat = '" data-cat="cc'
+    let imgsrc ='"><img src="';
+    if (nextCCPageToken.length>5 || $('#colecoesgrid figure').length === 0){
+
+    var promise = $.getJSON(urlccgapi+nextCCPageToken, function(data, status) {
+      console.log("Gapi Coleções Retrieve"); // on success
+    });
+    promise
+      .done(function(data) {
+        //$("#progress-bar-pages").css("background-color", "white");
+        //progressbar(".carregando #progress-bar-pages", 20);
+        //console.log(data.nextPageToken);
+        if (data.nextPageToken !== undefined){
+        nextCCPageToken = data.nextPageToken;
+        //console.log(nextPageToken);
+      }else { nextCCPageToken = 0;}
+        datacolecoes = data.files;
+        //console.log(data.files, nextPageToken);
+        let itemscolec, img1 = "";
+        //let tproj = dataprojetos.length;
+        //let fig = $("#projetosgrid figure").length;
+        //console.log(tproj, fig);
+          for (i=0; i< datacolecoes.length; i++){
+          fotocccount++
+          cap =
+            '<caption> <h5 data-i18n="pj1cc' +
+            fotocccount+
+            'leg">Olár</h5> </caption>';
+          //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
+          img1 +=
+            figimg + figdata + fotocount + figcat + imgsrc + datacolecoes[i].webContentLink + endimg + cap + endfig;
+            colecfeedstat+=1;
+        }
+        itemscolec = img1.toString();
+        //console.log(img1);
+        self.resolve(itemscolec);
+        itemscolec='';
+      })
+      .fail(function() {
+        console.log("No Data");
+        itemscolec ='';
+        self.resolve(itemscolec);
+      });
+      }
+  });
+}
+
+
+
  // List Gallery Files
 function loadgallery(){
  $(".js-pj").on('click',function(e) {
    var pj = $(this).data('pj');
    $(".projetosgrid").off( "scroll" );
    History.pushState(
-     { state: 7, plate: ".fotopage .maingrid .gridpj", pj:pj, rand: Math.random() },
+     { state: 7, plate: ".fotopage, .maingrid, .gridpj", pj:pj, rand: Math.random() },
      "Projetos Galeria",
      "?locale=" + $.i18n().locale + "&page=photo" + "&pj="+pj
    );
@@ -981,9 +1182,12 @@ $.fn.pjgridReveal = function($itemsproj) {
 
             // Enterpage logo
             $(".js-enterpagebtn").click(function() {
-              //getCaptions();
-              projetos();
               ff = ".projetosgrid";
+              History.pushState(
+                { state: 2, plate: ".projetos, .projetosgrid, #projetosgrid", rand: Math.random() },
+                "Projetos",
+                "?locale=" + $.i18n().locale + "&page=projetos"
+              );
             });
           })
           .progress(function(instance, image) {
@@ -1179,6 +1383,21 @@ function waitfor(){
   // }else{
   //   console.log('nologtorage');
   // }
+
+// Grid Responsiveness
+  function adjustgridheight(parent, child){
+    console.log('Child height:'+($(child).height()),'Parent height:'+($(parent).height()));
+    console.log('Child width:'+($(child).width()), 'Parent width:'+($(parent).width()));
+    if (($(child).height()) <($(parent).height()-40) && ($(child).width()) > 1100){
+      console.log(child, $(child).height(), parent, $(parent).height()-40);
+      $(parent).css('align-items', 'center');
+      $(child).css('align-self','center');
+    }else{
+      $(parent).css('align-items', 'flex-start');
+      $(child).css('align-self','flex-start');
+    }
+  }
+
 
   // Scrollbar Firefox
   if (navigator.userAgent.indexOf("Firefox") > 0) {
