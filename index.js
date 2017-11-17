@@ -999,8 +999,8 @@ function createGallery(pj, cat, container, data ) {
     $(container).css("visibility", "visible");
     $(container).css("opacity", "0");
     $(container).append(items);
-    $('.foto').append('<div class="fotodiv'+cat+pj+' fotogrid"></div>');
-    $('.fotodiv'+cat+pj).append(itemsfoto);
+    //$('.foto').append('<div class="fotodiv'+cat+pj+' fotogrid"></div>');
+    //$('.fotodiv'+cat+pj).append(itemsfoto);
 
     //console.log('T4 :',pj,cat, container, itemsproj);
     $(container)
