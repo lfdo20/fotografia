@@ -999,9 +999,9 @@ function createGallery(pj, cat, container, data ) {
     $(container).css("visibility", "visible");
     $(container).css("opacity", "0");
     $(container).append(items);
-    //$('.foto').append('<div class="fotodiv'+cat+pj+' fotogrid"></div>');
-    //$('.fotodiv'+cat+pj).append(itemsfoto);
-
+    //$('.foto').append('<div class="fotodiv'+cat+pj+' fotogrid"></div>'); $('.fotodiv'+cat+pj).append(itemsfoto);
+    $('.foto').append(itemsfoto);
+    gslides(pj, cat);
     //console.log('T4 :',pj,cat, container, itemsproj);
     $(container)
       .imagesLoaded()
@@ -1054,11 +1054,13 @@ function scrollpjgrid(pj, cat, container){
 
 function pjgridReveal(pj, cat, container) {
 
-  $.when(listGalleryFiles(pj, cat, container)).done(function(itemsproj) {
+  $.when(listGalleryFiles(pj, cat, container)).done(function(itemsproj, itemsfoto) {
     convertpjgridData = itemsproj;
     //console.log("test b:", convertProjData);
     let $itemsproj = convertItemsPjGrid();
     window['$grid'+cat+pj].pjgridReveal($itemsproj);
+    $('.foto').append(itemsfoto);
+    //gslides(pj, cat);
   });
 }
 let convertpjgridData;
@@ -1074,6 +1076,8 @@ $.fn.pjgridReveal = function($itemsproj) {
   let itemSelector = msnry.options.itemSelector;
   $itemsproj.hide(); // hide by default
   this.append($itemsproj); // append to container
+
+
   $itemsproj.imagesLoaded().progress(function(imgLoad, image) {
     let $itemproj = $(image.img).parents(itemSelector); // get item dom : image is imagesLoaded class, not <img>, <img> is image.img
     $itemproj.show(); // un-hide item
@@ -1083,14 +1087,21 @@ $.fn.pjgridReveal = function($itemsproj) {
   return this;
 };
 
-
+  var ftcount={};
   function listGalleryFiles(pj, cat, container, data) {
     if (window['nextPageToken'+cat+pj]===undefined){
       window['nextPageToken'+cat+pj]='';
     };
+    console.log(cat+pj, ftcount);
+    if (ftcount.hasOwnProperty(cat+pj)===false){
+
+      ftcount[cat+pj] ='';
+      console.log(cat+pj, ftcount);
+    }
       return $.Deferred(function() {
       var self = this;
-      let figimg = '<figure class="itemgallery item'+cat+pj+'"><img src="';
+
+
       progressbar(".carregando #progress-bar-pages", 10);
       console.log('T3 : ', pj, cat, container);
       console.log(window['nextPageToken'+cat+pj]);
@@ -1131,20 +1142,21 @@ $.fn.pjgridReveal = function($itemsproj) {
           let tproj = dataprojetos.length;
           let fig = $(container).length;
             for (i=0; i< dataprojetos.length; i++){
-            var ft = i + 1;
+            ftcount[cat+pj] ++;
+            console.log(ftcount);
+            let figimg = '<figure class="itemgallery js-slide item'+cat+pj+' " data-'+cat+pj+'="'+ftcount[cat+pj]+'"><img src="';
             cap =
               '<caption> <h5 data-i18n="'+cat+pj+'ft' +
-              ft +
+              ftcount[cat+pj] +
               'leg">Olár</h5> </caption>';
             img1 +=
               figimg + dataprojetos[i].webContentLink + endimg + endfig;
-            img2 += '<figure class="foto'+cat+pj+'"><img src='+ dataprojetos[i].webContentLink + '/></figure>';
+            img2 += '<figure class="gSlides foto'+cat+pj+'"><img src='+ dataprojetos[i].webContentLink + '/></figure>';
           }
           items = img1.toString();
           itemsfoto = img2.toString();
-          //console.log(img1);
+
           self.resolve(items, itemsfoto);
-          //console.log(items);
           items='';
         })
         .fail(function() {
@@ -1381,8 +1393,65 @@ function waitfor(){
           });
       });
     });
-  //});
   }
+
+// Full Screen photos
+function gslides(pj, cat){
+
+$(".js-slide").click(function() {
+console.log(pj, cat);
+var ft = $(this).data(cat+pj);
+console.log('testee', ft);
+$(".maingrid").css({display: 'none', visibility: 'hidden'});
+$(".mainfoto").css({display: 'block', visibility: 'visible'});
+//openModal();
+currentSlide(ft);
+});
+}
+$(".prev").click(function() {
+plusSlides(-1);
+});
+
+$(".next").click(function() {
+plusSlides(1);
+});
+
+function openModal() {
+  $(".maingrid").css({display: 'none', visibility: 'hidden'});
+  $(".mainfoto").css({display: 'block', visibility: 'visible'});
+  //document.getElementsByClassName('.mainfoto').style.display = "block";
+}
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = $('.gSlides');
+  console.log(slides, n);
+  //var dots = document.getElementsByClassName("demo");
+  //var captionText = document.getElementsByClassName("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  // for (i = 0; i < dots.length; i++) {
+  //   dots[i].className = dots[i].className.replace(" active", "");
+  // }
+  slides[slideIndex-1].style.display = "flex";
+  //dots[slideIndex-1].className += " active";
+  //console.log(captionText, slides[i]);
+  //captionText.innerHTML = $('.mySlides')[i].attributes[1].value;
+}
+$('.addbox').addClass('lightboxadd');
+//$('.addbox').addClass('lightboxrem');
+
+
 
   // // Store Variables
   // if (localStorage){
