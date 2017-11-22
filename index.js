@@ -1,48 +1,50 @@
 $(document).ready(function() {
-// Globalvar
-var cfolder=[], ff;
+  // Globalvar
+  var cfolder = [],
+    ff;
 
-// Languages Handling order: pt > en > es > de
+  // Languages Handling order: pt > en > es > de
   var locxx = ["pt", "en", "es", "de"],
-    locnow, locs = [
-    "<li id='js-locpt' class='js-locale'><a data-locale='pt'>português</a></li>",
-    "<li id='js-locen' class='js-locale'><a data-locale='en'>english</a></li>",
-    "<li id='js-loces' class='js-locale'><a data-locale='es'>español</a></li>",
-    "<li id='js-locde' class='js-locale'><a data-locale='de'>deutsch</a></li>"
-  ];
+    locnow,
+    locs = [
+      "<li id='js-locpt' class='js-locale'><a data-locale='pt'>português</a></li>",
+      "<li id='js-locen' class='js-locale'><a data-locale='en'>english</a></li>",
+      "<li id='js-loces' class='js-locale'><a data-locale='es'>español</a></li>",
+      "<li id='js-locde' class='js-locale'><a data-locale='de'>deutsch</a></li>"
+    ];
 
-
-langcolor();
-function langcolor(){
-  console.log('lang:', url('?page'), $('.menupage').css('visibility'));
-  if (url('?page')==='bio'|| $('.menupage').css('visibility') === 'visible'){
-    $(".langsa").css("display", "none");
-    $(".langsb").css("display", "block");
-  }else{
-    $(".langsa").css("display", "block");
-    $(".langsb").css("display", "none");
+  langcolor();
+  function langcolor() {
+    //console.log('lang:', url('?page'), $('.menupage').css('visibility'));
+    if (
+      url("?page") === "bio" ||
+      $(".menupage").css("visibility") === "visible"
+    ) {
+      $(".langsa").css("display", "none");
+      $(".langsb").css("display", "block");
+    } else {
+      $(".langsa").css("display", "block");
+      $(".langsb").css("display", "none");
+    }
   }
-}
-
 
   $(".js-locale").on("mouseenter", function() {
-      var par = $(this).parents();
-      console.log(par[0].className);
-      var nl = "";
-      for (i = 0; i <= locs.length; i++) {
-        if (i != locnow) {
-          nl += locs[i];
-        }
+    var par = $(this).parents();
+    //console.log(par[0].className);
+    var nl = "";
+    for (i = 0; i <= locs.length; i++) {
+      if (i != locnow) {
+        nl += locs[i];
       }
-      $(nl).insertAfter("."+par[0].className+" #js-loc" + locxx[locnow]);
-      console.log(locxx[locnow], nl);
-    });
-
-    $(".js-locale").on("mouseleave", function() {
-      $(".switch-locale").empty();
-      $(".switch-locale").append(locs[locnow]);
+    }
+    $(nl).insertAfter("." + par[0].className + " #js-loc" + locxx[locnow]);
+    console.log(locxx[locnow], nl);
   });
 
+  $(".js-locale").on("mouseleave", function() {
+    $(".switch-locale").empty();
+    $(".switch-locale").append(locs[locnow]);
+  });
 
   function checkloc(localchange) {
     //console.log(localchange);
@@ -93,26 +95,34 @@ function langcolor(){
     //var pj = url("?pj");
     switch (url("?page")) {
       case "projetos":
-      ff = ".projetosgrid";
-      History.pushState(
-        { state: 2, plate: ".projetos, .projetosgrid, #projetosgrid", rand: Math.random() },
-        "Projetos",
-        "?locale=" + $.i18n().locale + "&page=projetos"
-      );
+        ff = ".projetosgrid";
+        History.pushState(
+          {
+            state: 2,
+            plate: ".projetos, .projetosgrid, #projetosgrid",
+            rand: Math.random()
+          },
+          "Projetos",
+          "?locale=" + $.i18n().locale + "&page=projetos"
+        );
         break;
       case "lightbox":
-      History.pushState(
-        { state: 5, plate: ".lightbox", rand: Math.random() },
-        "Lightbox",
-        "?locale=" + $.i18n().locale + "&page=lightbox"
-      );
+        History.pushState(
+          { state: 5, plate: ".lightbox", rand: Math.random() },
+          "Lightbox",
+          "?locale=" + $.i18n().locale + "&page=lightbox"
+        );
         break;
       case "colecoes":
-      History.pushState(
-        { state: 3, plate: ".colecoes, .colecoesgrid, #colecoesgrid", rand: Math.random() },
-        "Coleções",
-        "?locale=" + $.i18n().locale + "&page=colecoes"
-      );
+        History.pushState(
+          {
+            state: 3,
+            plate: ".colecoes, .colecoesgrid, #colecoesgrid",
+            rand: Math.random()
+          },
+          "Coleções",
+          "?locale=" + $.i18n().locale + "&page=colecoes"
+        );
         break;
       case "insta":
         ff = ".gridinsta";
@@ -138,7 +148,7 @@ function langcolor(){
       es: "./js/i18n/es.json"
     })
     .done(function() {
-      $.when(getdrivefolders()).done(function(){
+      $.when(getdrivefolders()).done(function() {
         checkpage();
         checkloc(url("?locale"));
         console.log("Locale:", local, url());
@@ -166,7 +176,7 @@ function langcolor(){
     //console.log(url("?page"));
     var plate = State.data.plate;
     var title = State.title;
-    showPlate("." + url("?page"), State.data.cat, State.data.pj, plate, title );
+    showPlate("." + url("?page"), State.data.cat, State.data.pj, plate, title);
     langcolor();
   });
 
@@ -186,7 +196,9 @@ function langcolor(){
           .progress(function(instance, image) {
             //adjustgridheight('.projetosgrid','#projetosgrid');
             if (image.isLoaded) {
-              var width = new Number(instance.progressedCount*(100/instance.images.length));
+              var width = new Number(
+                instance.progressedCount * (100 / instance.images.length)
+              );
               width = width.toFixed();
               progressbar(".carregando #progress-bar-pages", width);
             }
@@ -201,7 +213,7 @@ function langcolor(){
             $("#projetosgrid")
               .delay(10)
               .animate({ opacity: "1" }, "slow");
-              loadgallery();
+            loadgallery();
             self.resolve();
           });
       });
@@ -231,31 +243,30 @@ function langcolor(){
     this.append($itemsproj);
     $("body").i18n();
     $itemsproj.imagesLoaded().progress(function(imgLoad, image) {
-    let $item = $(image.img).parents(itemSelector);
-    $item.show();
-    msnry.appended($item);
-    //console.log($item, $itemsproj);
-    loadgallery();
+      let $item = $(image.img).parents(itemSelector);
+      $item.show();
+      msnry.appended($item);
+      //console.log($item, $itemsproj);
+      loadgallery();
     });
     return this;
   };
 
   var timerprojsc;
-    $(".projetosgrid").on("scroll.pjgrid", function() {
-
-      let $pgthis = $(this);
-      let pgheight = this.scrollHeight - $pgthis.height();
-      let pgscroll = $pgthis.scrollTop();
-      let pgisScrolledToEnd = pgscroll >= pgheight -100;
-      //console.log(pgheight, $pgthis.height(), this.scrollHeight);
-      if (pgisScrolledToEnd || this.scrollHeight<($pgthis.height()-80)) {
-        if(timerprojsc) {
-    		window.clearTimeout(timerprojsc);
-        }
-        timerprojsc = window.setTimeout(function() {
-          console.log('ttetet');
-                imageProjReveal();
-        },400);
+  $(".projetosgrid").on("scroll.pjgrid", function() {
+    let $pgthis = $(this);
+    let pgheight = this.scrollHeight - $pgthis.height();
+    let pgscroll = $pgthis.scrollTop();
+    let pgisScrolledToEnd = pgscroll >= pgheight - 100;
+    //console.log(pgheight, $pgthis.height(), this.scrollHeight);
+    if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
+      if (timerprojsc) {
+        window.clearTimeout(timerprojsc);
+      }
+      timerprojsc = window.setTimeout(function() {
+        console.log("ttetet");
+        imageProjReveal();
+      }, 400);
     }
   });
 
@@ -273,44 +284,45 @@ function langcolor(){
     return $(itemsproj);
   }
 
-// Coleções Page Images Load
-function loadColecImages() {
-  return $.Deferred(function() {
-    var self = this;
-    $.when(listColecFiles()).done(function(itemscolec) {
-      //let $items = getImages();
-      progressbar(".carregando #progress-bar-pages", 15);
-      $("#colecoesgrid").css("visibility", "visible");
-      $("#colecoesgrid").css("opacity", "0");
-      $("#colecoesgrid").append(itemscolec);
-      //console.log('Teste C:', itemscolec);
-      $("#colecoesgrid")
-        .imagesLoaded()
-        .progress(function(instance, image) {
-          //adjustgridheight('.projetosgrid','#colecoesgrid');
-          if (image.isLoaded) {
-            var width = new Number(instance.progressedCount*(100/instance.images.length));
-            width = width.toFixed();
-            progressbar(".carregando #progress-bar-pages", width);
-          }
-        })
-        .done(function() {
-          $ccgrid.masonry("reloadItems");
-          $ccgrid.masonry("layout");
-        })
-        .then(function() {
-          $("body").i18n();
-          $("#colecoesgrid").css("visibility", "visible");
-          $("#colecoesgrid")
-            .delay(10)
-            .animate({ opacity: "1" }, "slow");
+  // Coleções Page Images Load
+  function loadColecImages() {
+    return $.Deferred(function() {
+      var self = this;
+      $.when(listColecFiles()).done(function(itemscolec) {
+        //let $items = getImages();
+        progressbar(".carregando #progress-bar-pages", 15);
+        $("#colecoesgrid").css("visibility", "visible");
+        $("#colecoesgrid").css("opacity", "0");
+        $("#colecoesgrid").append(itemscolec);
+        //console.log('Teste C:', itemscolec);
+        $("#colecoesgrid")
+          .imagesLoaded()
+          .progress(function(instance, image) {
+            //adjustgridheight('.projetosgrid','#colecoesgrid');
+            if (image.isLoaded) {
+              var width = new Number(
+                instance.progressedCount * (100 / instance.images.length)
+              );
+              width = width.toFixed();
+              progressbar(".carregando #progress-bar-pages", width);
+            }
+          })
+          .done(function() {
+            $ccgrid.masonry("reloadItems");
+            $ccgrid.masonry("layout");
+          })
+          .then(function() {
+            $("body").i18n();
+            $("#colecoesgrid").css("visibility", "visible");
+            $("#colecoesgrid")
+              .delay(10)
+              .animate({ opacity: "1" }, "slow");
             loadgallery();
-          self.resolve();
-        });
+            self.resolve();
+          });
+      });
     });
-  });
-}
-
+  }
 
   // Initialize Masonry Coleções Page
   let $ccgrid = $("#colecoesgrid").masonry({
@@ -335,52 +347,51 @@ function loadColecImages() {
     this.append($itemscolec);
     $("body").i18n();
     $itemscolec.imagesLoaded().progress(function(imgLoad, image) {
-    let $item = $(image.img).parents(itemSelector);
-    $item.show();
-    msnry.appended($item);
-    //console.log($item, $itemsproj);
-    loadgallery();
+      let $item = $(image.img).parents(itemSelector);
+      $item.show();
+      msnry.appended($item);
+      //console.log($item, $itemsproj);
+      loadgallery();
     });
     return this;
   };
 
-// Coleções Grid Config
-var timercolecsc;
+  // Coleções Grid Config
+  var timercolecsc;
   $(".colecoesgrid").on("scroll.ccgrid", function() {
-
     let $pgthis = $(this);
     let pgheight = this.scrollHeight - $pgthis.height();
     let pgscroll = $pgthis.scrollTop();
-    let pgisScrolledToEnd = pgscroll >= pgheight -100;
+    let pgisScrolledToEnd = pgscroll >= pgheight - 100;
     //console.log(pgheight, $pgthis.height(), this.scrollHeight);
-    if (pgisScrolledToEnd || this.scrollHeight<($pgthis.height()-80)) {
-      if(timercolecsc) {
-  		window.clearTimeout(timercolecsc);
+    if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
+      if (timercolecsc) {
+        window.clearTimeout(timercolecsc);
       }
       timercolecsc = window.setTimeout(function() {
-        console.log('ttetet');
-              imageColecReveal();
-      },400);
-  }
-});
-
-function imageColecReveal() {
-  $.when(listColecFiles()).done(function(itemscolec) {
-    convertColecData = itemscolec;
-    let $itemscolec = convePim();
-    //console.log("test b:", convertProjData, $itemscolec);
-    $ccgrid.masonryProjReveal($itemscolec);
+        console.log("ttetet");
+        imageColecReveal();
+      }, 400);
+    }
   });
-}
-let convertColecData;
-function convePim() {
-  let itemscolec = convertColecData;
-  return $(itemscolec);
-}
 
+  function imageColecReveal() {
+    $.when(listColecFiles()).done(function(itemscolec) {
+      convertColecData = itemscolec;
+      let $itemscolec = convePim();
+      //console.log("test b:", convertProjData, $itemscolec);
+      $ccgrid.masonryProjReveal($itemscolec);
+    });
+  }
+  let convertColecData;
+  function convePim() {
+    let itemscolec = convertColecData;
+    return $(itemscolec);
+  }
 
   // Instagram Pages code imagesload
-  let instaimgs = [], instadata;
+  let instaimgs = [],
+    instadata;
   let feed = new Instafeed({
     get: "user",
     userId: "576189084",
@@ -518,7 +529,7 @@ function convePim() {
       "Home",
       "?locale=" + $.i18n().locale + "&page=enterpage"
     );
-    $.when(waitfor()).done(function(){
+    $.when(waitfor()).done(function() {
       getHomePhoto();
     });
     $(".topbar").css("visibility", "hidden"); // MUDAR PARA HIDDEN
@@ -593,22 +604,32 @@ function convePim() {
   function photo(cat, pj) {
     var cat = cat;
     console.log(cat, pj);
-    if ($('#grid'+cat+pj+' figure').length >0){
-    $('#grid'+cat+pj).siblings().css({display:'none'});
-    $('#grid'+cat+pj).css({display:'inherit', visible: 'visible'});
-    $(".fotopage, .topbar, .maingrid, #grid"+cat+pj).css(
-      "visibility",
-      "visible"
-    );
-    }else{
-    $(".maingrid").append('<div id="grid'+cat+pj+'" class="js-vis gridpj"></div>');
-    $('#grid'+cat+pj).siblings().css('display','none');
-    $(".js-vis").css({visibility: 'hidden'});
-    $(".fotopage, .topbar, .maingrid, #grid"+cat+pj).css(
-      "visibility",
-      "visible"
-    );
-     createGallery(pj, cat, '#grid'+cat+pj);
+    if ($("#grid" + cat + pj + " figure").length > 0) {
+      $("#grid" + cat + pj)
+        .siblings()
+        .css({ display: "none" });
+      $(".maingrid, #grid" + cat + pj).css({
+        display: "flex",
+        visible: "visible"
+      });
+      $(".fotopage, .topbar, .maingrid, #grid" + cat + pj).css(
+        "visibility",
+        "visible"
+      );
+    } else {
+      $(".maingrid").append(
+        '<div id="grid' + cat + pj + '" class="js-vis gridpj"></div>'
+      );
+      $("#grid" + cat + pj)
+        .siblings()
+        .css("display", "none");
+      $(".js-vis").css({ visibility: "hidden" });
+      $(".fotopage, .topbar, .maingrid, #grid" + cat + pj).css(
+        "visibility",
+        "visible"
+      );
+      $('.maingrid').css({display: 'flex'});
+      createGallery(pj, cat, "#grid" + cat + pj);
     }
     //createGallery(pj, cat, '#gridpj'+pj);
     //showPlate(".fotopage");
@@ -616,37 +637,37 @@ function convePim() {
 
   function showPlate(url, cat, pj, plate, title) {
     $(".menupage").css("visibility", "hidden");
-    console.log('Teste Hist :', url, cat, pj, plate, title);
+    console.log("Teste Hist :", url, cat, pj, plate, title);
     if (title === "Photo") {
       //photo(url('?pj'));
       // $(".topbar").css("visibility", "visible");
       // $(".js-vis").css("visibility", "hidden");
       // $(name).css("visibility", "visible");
       // $(".mainfoto").css("visibility", "visible");
-    } else if (title === 'Projetos'){
+    } else if (title === "Projetos") {
       projetos();
-    }else if (title === 'Instagram'){
+    } else if (title === "Instagram") {
       insta();
-    }else if( title === 'Biografia') {
+    } else if (title === "Biografia") {
       bio();
-    }else if (title === 'Projetos Galeria'){
+    } else if (title === "Projetos Galeria") {
       photo(cat, pj);
-    }else if(title === 'Colecoes'){
+    } else if (title === "Colecoes") {
       colecoes();
-    }else if (title === 'Colecoes Galeria'){
+    } else if (title === "Colecoes Galeria") {
       photo(cat, pj);
-    }else{
-      if (plate !== undefined){
+    } else {
+      if (plate !== undefined) {
         $(".topbar").css("visibility", "visible");
         $(".js-vis").css("visibility", "hidden");
         $(plate).css("visibility", "visible");
-    }else{
-      $(".topbar").css("visibility", "visible");
-      $(".js-vis").css("visibility", "hidden");
-      $(name).css("visibility", "visible");
+      } else {
+        $(".topbar").css("visibility", "visible");
+        $(".js-vis").css("visibility", "hidden");
+        $(name).css("visibility", "visible");
+      }
     }
   }
-}
 
   //menu Buttons
   var beforemenupage, beforemenustate;
@@ -655,7 +676,6 @@ function convePim() {
     $(".topbar").css("visibility", "hidden");
     langcolor();
     //$(".switch-locale > li > a").css("color", "black");
-
   });
 
   $(".js-menubtnx").click(function() {
@@ -667,20 +687,24 @@ function convePim() {
     //langcolor();
     console.log(history.state);
     if (history.state === null) {
-      console.log('tt1');
+      console.log("tt1");
       enterpage();
       langcolor();
-    }else {
-      if (History.getStateByIndex(-1).title !== 'Biografia'){
-        console.log('tt2');
-        $('.menupage').css("visibility", "hidden");
+    } else {
+      if (History.getStateByIndex(-1).title !== "Biografia") {
+        console.log("tt2");
+        $(".menupage").css("visibility", "hidden");
         langcolor();
-      }else{
-        console.log('tt3');
+      } else {
+        console.log("tt3");
         beforemenupage = History.getStateByIndex(-2).data.plate;
         beforemenustate = History.getStateByIndex(-2).data;
         $(beforemenupage).css("visibility", "visible");
-        History.pushState(History.getStateByIndex(-2).data, History.getStateByIndex(-2).title, History.getStateByIndex(-2).url);
+        History.pushState(
+          History.getStateByIndex(-2).data,
+          History.getStateByIndex(-2).title,
+          History.getStateByIndex(-2).url
+        );
         console.log(beforemenustate);
 
         langcolor(beforemenustate);
@@ -706,7 +730,11 @@ function convePim() {
   $(".js-projetosbtn").click(function() {
     ff = ".projetosgrid";
     History.pushState(
-      { state: 2, plate: ".projetos, .projetosgrid, #projetosgri", rand: Math.random() },
+      {
+        state: 2,
+        plate: ".projetos, .projetosgrid, #projetosgrid",
+        rand: Math.random()
+      },
       "Projetos",
       "?locale=" + $.i18n().locale + "&page=projetos"
     );
@@ -717,7 +745,11 @@ function convePim() {
   $(".js-colecoesbtn").click(function() {
     ff = ".colecoesgrid";
     History.pushState(
-      { state: 3, plate: ".colecoes, .colecoesgrid, #colecoesgrid", rand: Math.random() },
+      {
+        state: 3,
+        plate: ".colecoes, .colecoesgrid, #colecoesgrid",
+        rand: Math.random()
+      },
       "Colecoes",
       "?locale=" + $.i18n().locale + "&page=colecoes"
     );
@@ -733,7 +765,6 @@ function convePim() {
       "?locale=" + $.i18n().locale + "&page=insta"
     );
     //insta();
-
   });
   // Lightbox Click
   $(".js-lightboxbtn").click(function() {
@@ -742,7 +773,7 @@ function convePim() {
       "Lightbox",
       "?locale=" + $.i18n().locale + "&page=lightbox"
     );
-  //  lightbox();
+    //  lightbox();
   });
   // bio click
   $(".js-biobtn").click(function() {
@@ -778,16 +809,6 @@ function convePim() {
     }
   );
 
-  $(".js-photobackbtn").click(function() {
-    $('.js-vis').css({visibility: 'hidden'});
-    if (url('?cat')==='pj'){
-    projetos();
-  } else{
-    colecoes();
-  }
-    //$('.projetos, .projetosgrid, #projetosgrid').css({visibility: 'visible'});
-  });
-
   //List Files Projeto
   let figimg = '<figure class="item"><img src="';
   let endimg = '" alt="Teste"/>';
@@ -805,365 +826,412 @@ function convePim() {
   var api_key = "AIzaSyA80wjGa_zI6ta134FRmLvS4cHUpsjgVDE";
   var publicId = "'0B-Tee9m48NkROU5mcDczbGttbmM' in parents";
   var fields = "nextPageToken, files(id, name, webContentLink, webViewLink)";
-  var mrecents = 'recency'; // or : createdTime
+  var mrecents = "recency"; // or : createdTime
   var pagesize = 8;
-  var nextPageToken='';
+  var nextPageToken = "";
   var projfeedstat = 0;
   let dataprojetos;
   /*  "+and+" + mimefoto + */
   var urlgapi =
-    "https://www.googleapis.com/drive/v3/files?"+
-    "pageSize="+pagesize+
-    "&fields=" +fields+
-    "&orderBy="+mrecents+
-    "&q="+projetosgaleria+
-    "&key="+api_key+
-    "&pageToken="+nextPageToken;
+    "https://www.googleapis.com/drive/v3/files?" +
+    "pageSize=" +
+    pagesize +
+    "&fields=" +
+    fields +
+    "&orderBy=" +
+    mrecents +
+    "&q=" +
+    projetosgaleria +
+    "&key=" +
+    api_key +
+    "&pageToken=" +
+    nextPageToken;
 
   var fotocount = 0;
   function listProjFiles() {
     return $.Deferred(function() {
       var self = this;
-      let figimg = '<figure class="item js-pj"'
+      let figimg = '<figure class="item js-pj"';
       let figdata = ' data-pj="';
-      let figcat = '" data-cat="pj'
-      let imgsrc ='"><img src="';
-      if (nextPageToken.length>5|| $('#projetosgrid figure').length === 0){
-
-      var promise = $.getJSON(urlgapi+nextPageToken, function(data, status) {
-        console.log("Gapi Projeto Retrieve"); // on success
-      });
-      promise
-        .done(function(data) {
-          //$("#progress-bar-pages").css("background-color", "white");
-          //progressbar(".carregando #progress-bar-pages", 20);
-          //console.log(data.nextPageToken);
-          if (data.nextPageToken !== undefined){
-          nextPageToken = data.nextPageToken;
-          //console.log(nextPageToken);
-        }else { nextPageToken = 0;}
-          dataprojetos = data.files;
-          //console.log(data.files, nextPageToken);
-          let items, img1 = "";
-          //let tproj = dataprojetos.length;
-          //let fig = $("#projetosgrid figure").length;
-          //console.log(tproj, fig);
-            for (i=0; i< dataprojetos.length; i++){
-            fotocount++
-            cap =
-              '<caption> <h5 data-i18n="pj1ft' +
-              fotocount+
-              'leg">Olár</h5> </caption>';
-            //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
-            img1 +=
-              figimg + figdata + fotocount + figcat + imgsrc + dataprojetos[i].webContentLink + endimg + cap + endfig;
-              projfeedstat+=1;
-          }
-          items = img1.toString();
-          //console.log(img1);
-          self.resolve(items);
-          items='';
-        })
-        .fail(function() {
-          console.log("No Data");
-          items ='';
-          self.resolve(items);
+      let figcat = '" data-cat="pj';
+      let imgsrc = '"><img src="';
+      if (nextPageToken.length > 5 || $("#projetosgrid figure").length === 0) {
+        var promise = $.getJSON(urlgapi + nextPageToken, function(
+          data,
+          status
+        ) {
+          console.log("Gapi Projeto Retrieve"); // on success
         });
-        }
-    });
-  }
-
-// List Coleções Files
-var fotocccount = 0;
-var nextCCPageToken = '';
-var datacolecoes;
-var colecfeedstat = 0;
-var urlccgapi =
-  "https://www.googleapis.com/drive/v3/files?"+
-  "pageSize="+pagesize+
-  "&fields=" +fields+
-  "&orderBy="+mrecents+
-  "&q="+colecoesgaleria+
-  "&key="+api_key+
-  "&pageToken="+nextCCPageToken;
-function listColecFiles() {
-  return $.Deferred(function() {
-    var self = this;
-    let figimg = '<figure class="item js-cc"'
-    let figdata = ' data-cc="';
-    let figcat = '" data-cat="cc'
-    let imgsrc ='"><img src="';
-    if (nextCCPageToken.length>5 || $('#colecoesgrid figure').length === 0){
-
-    var promise = $.getJSON(urlccgapi+nextCCPageToken, function(data, status) {
-      console.log("Gapi Coleções Retrieve"); // on success
-    });
-    promise
-      .done(function(data) {
-        //$("#progress-bar-pages").css("background-color", "white");
-        //progressbar(".carregando #progress-bar-pages", 20);
-        //console.log(data.nextPageToken);
-        if (data.nextPageToken !== undefined){
-        nextCCPageToken = data.nextPageToken;
-        //console.log(nextPageToken);
-      }else { nextCCPageToken = 0;}
-        datacolecoes = data.files;
-        //console.log(data.files, nextPageToken);
-        let itemscolec, img1 = "";
-        //let tproj = dataprojetos.length;
-        //let fig = $("#projetosgrid figure").length;
-        //console.log(tproj, fig);
-          for (i=0; i< datacolecoes.length; i++){
-          fotocccount++
-          cap =
-            '<caption> <h5 data-i18n="pj1cc' +
-            fotocccount+
-            'leg">Olár</h5> </caption>';
-          //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
-          img1 +=
-            figimg + figdata + fotocccount + figcat + imgsrc + datacolecoes[i].webContentLink + endimg + cap + endfig;
-            colecfeedstat+=1;
-        }
-        itemscolec = img1.toString();
-        //console.log(img1);
-        self.resolve(itemscolec);
-        itemscolec='';
-      })
-      .fail(function() {
-        console.log("No Data");
-        itemscolec ='';
-        self.resolve(itemscolec);
-      });
+        promise
+          .done(function(data) {
+            //$("#progress-bar-pages").css("background-color", "white");
+            //progressbar(".carregando #progress-bar-pages", 20);
+            //console.log(data.nextPageToken);
+            if (data.nextPageToken !== undefined) {
+              nextPageToken = data.nextPageToken;
+              //console.log(nextPageToken);
+            } else {
+              nextPageToken = 0;
+            }
+            dataprojetos = data.files;
+            //console.log(data.files, nextPageToken);
+            let items,
+              img1 = "";
+            //let tproj = dataprojetos.length;
+            //let fig = $("#projetosgrid figure").length;
+            //console.log(tproj, fig);
+            for (i = 0; i < dataprojetos.length; i++) {
+              fotocount++;
+              cap =
+                '<caption> <h5 data-i18n="pj1ft' +
+                fotocount +
+                'leg">Olár</h5> </caption>';
+              //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
+              img1 +=
+                figimg +
+                figdata +
+                fotocount +
+                figcat +
+                imgsrc +
+                dataprojetos[i].webContentLink +
+                endimg +
+                cap +
+                endfig;
+              projfeedstat += 1;
+            }
+            items = img1.toString();
+            //console.log(img1);
+            self.resolve(items);
+            items = "";
+          })
+          .fail(function() {
+            console.log("No Data");
+            items = "";
+            self.resolve(items);
+          });
       }
-  });
-}
-
- // List Gallery Files
-function loadgallery(){
- $(".js-pj").on('click',function(e) {
-   var pj = $(this).data('pj');
-   $(".projetosgrid").off( "scroll" );
-   History.pushState(
-     { state: 7, plate: ".fotopage, .maingrid, .gridpj", cat:'pj', pj:pj, rand: Math.random() },
-     "Projetos Galeria",
-     "?locale=" + $.i18n().locale + "&page=photo" + "&cat=pj" + "&pj="+pj
-   );
-
- });
- $(".js-cc").on('click',function(e) {
-   var cc = $(this).data('cc');
-   $(".projetosgrid").off( "scroll" );
-   History.pushState(
-     { state: 8, plate: ".fotopage, .maingrid, .gridcc", cat:'cc', pj:cc, rand: Math.random() },
-     "Colecoes Galeria",
-     "?locale=" + $.i18n().locale + "&page=photo" + "&cat=cc" + "&pj="+cc
-   );
- });
-}
-
-  $(".js-gridbtn").click(function() {
-    var $main = $(".maingrid")
-    if($main.is(':hidden')){
-    $(".maingrid").css({display: 'flex', visibility: 'visible'});
-    $(".mainfoto").css({display: 'none', visibility: 'hidden'});
-  }else{
-    $(".maingrid").css({display: 'none', visibility: 'hidden'});
-    $(".mainfoto").css({display: 'block', visibility: 'visible'});
+    });
   }
-  });
 
-function createGallery(pj, cat, container, data ) {
-  console.log('T2 : ', pj, cat,  container);
-  progressbar(".carregando #progress-bar-pages", 5);
-  window['$grid'+cat+pj] = $(container).imagesLoaded(function() {
-  window['$grid'+cat+pj].masonry({
-    columnWidth: 420,
-    initLayout: false,
-    itemSelector: ".item"+cat+pj,
-    isFitWidth: true,
-    percentPsotion: false,
-    resize: true,
-    transitionDuration: "0.3s",
-    stagger: "0.05s",
-    gutter: 20,
-    isAnimated: !Modernizr.csstransitions,
-    visibleStyle: { transform: "translateY(0)", opacity: 1 },
-    hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
-  });
-  });
+  // List Coleções Files
+  var fotocccount = 0;
+  var nextCCPageToken = "";
+  var datacolecoes;
+  var colecfeedstat = 0;
+  var urlccgapi =
+    "https://www.googleapis.com/drive/v3/files?" +
+    "pageSize=" +
+    pagesize +
+    "&fields=" +
+    fields +
+    "&orderBy=" +
+    mrecents +
+    "&q=" +
+    colecoesgaleria +
+    "&key=" +
+    api_key +
+    "&pageToken=" +
+    nextCCPageToken;
+  function listColecFiles() {
+    return $.Deferred(function() {
+      var self = this;
+      let figimg = '<figure class="item js-cc"';
+      let figdata = ' data-cc="';
+      let figcat = '" data-cat="cc';
+      let imgsrc = '"><img src="';
+      if (
+        nextCCPageToken.length > 5 ||
+        $("#colecoesgrid figure").length === 0
+      ) {
+        var promise = $.getJSON(urlccgapi + nextCCPageToken, function(
+          data,
+          status
+        ) {
+          console.log("Gapi Coleções Retrieve"); // on success
+        });
+        promise
+          .done(function(data) {
+            //$("#progress-bar-pages").css("background-color", "white");
+            //progressbar(".carregando #progress-bar-pages", 20);
+            //console.log(data.nextPageToken);
+            if (data.nextPageToken !== undefined) {
+              nextCCPageToken = data.nextPageToken;
+              //console.log(nextPageToken);
+            } else {
+              nextCCPageToken = 0;
+            }
+            datacolecoes = data.files;
+            //console.log(data.files, nextPageToken);
+            let itemscolec,
+              img1 = "";
+            //let tproj = dataprojetos.length;
+            //let fig = $("#projetosgrid figure").length;
+            //console.log(tproj, fig);
+            for (i = 0; i < datacolecoes.length; i++) {
+              fotocccount++;
+              cap =
+                '<caption> <h5 data-i18n="pj1cc' +
+                fotocccount +
+                'leg">Olár</h5> </caption>';
+              //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
+              img1 +=
+                figimg +
+                figdata +
+                fotocccount +
+                figcat +
+                imgsrc +
+                datacolecoes[i].webContentLink +
+                endimg +
+                cap +
+                endfig;
+              colecfeedstat += 1;
+            }
+            itemscolec = img1.toString();
+            //console.log(img1);
+            self.resolve(itemscolec);
+            itemscolec = "";
+          })
+          .fail(function() {
+            console.log("No Data");
+            itemscolec = "";
+            self.resolve(itemscolec);
+          });
+      }
+    });
+  }
 
-  $.when(listGalleryFiles(pj, cat, container, data)).done(function(items, itemsfoto) {
-    //let $items = getImages();
+  // List Gallery Files
+  function loadgallery() {
+    $(".js-pj").on("click", function(e) {
+      var pj = $(this).data("pj");
+      $(".projetosgrid").off("scroll");
+      History.pushState(
+        {
+          state: 7,
+          plate: ".fotopage, .maingrid, .gridpj",
+          cat: "pj",
+          pj: pj,
+          rand: Math.random()
+        },
+        "Projetos Galeria",
+        "?locale=" + $.i18n().locale + "&page=photo" + "&cat=pj" + "&pj=" + pj
+      );
+    });
+    $(".js-cc").on("click", function(e) {
+      var cc = $(this).data("cc");
+      $(".projetosgrid").off("scroll");
+      History.pushState(
+        {
+          state: 8,
+          plate: ".fotopage, .maingrid, .gridcc",
+          cat: "cc",
+          pj: cc,
+          rand: Math.random()
+        },
+        "Colecoes Galeria",
+        "?locale=" + $.i18n().locale + "&page=photo" + "&cat=cc" + "&pj=" + cc
+      );
+    });
+  }
 
-    progressbar(".carregando #progress-bar-pages", 15);
-    $(container).css("visibility", "visible");
-    $(container).css("opacity", "0");
-    $(container).append(items);
-    //$('.foto').append('<div class="fotodiv'+cat+pj+' fotogrid"></div>'); $('.fotodiv'+cat+pj).append(itemsfoto);
-    $('.foto').append(itemsfoto);
-    gslides(pj, cat);
-    //console.log('T4 :',pj,cat, container, itemsproj);
-    $(container)
-      .imagesLoaded()
-      .progress(function(instance, image) {
-        if (image.isLoaded) {
-          var width = new Number(instance.progressedCount*(100/instance.images.length));
-          width = width.toFixed();
-
-          progressbar(".carregando #progress-bar-pages", width);
-        }
-      })
-      .done(function() {
-        window['$grid'+cat+pj].masonry("reloadItems");
-        window['$grid'+cat+pj].masonry("layout");
-        adjustgridheight('.maingrid', container);
-        console.log('T5 :', pj, cat, container);
-      })
-      .then(function() {
-        $("body").i18n();
-        //$(".carregando").css("display", "none");
-        console.log('T6 :',pj, cat, container);
-        $(container)
-          .delay(10)
-          .animate({ opacity: "1" }, "slow");
-          scrollpjgrid(pj, cat, container);
+  function createGallery(pj, cat, container, data) {
+    console.log("T2 : ", pj, cat, container);
+    progressbar(".carregando #progress-bar-pages", 5);
+    window["$grid" + cat + pj] = $(container).imagesLoaded(function() {
+      window["$grid" + cat + pj].masonry({
+        columnWidth: 420,
+        initLayout: false,
+        itemSelector: ".item" + cat + pj,
+        isFitWidth: true,
+        percentPsotion: false,
+        resize: true,
+        transitionDuration: "0.3s",
+        stagger: "0.05s",
+        gutter: 20,
+        isAnimated: !Modernizr.csstransitions,
+        visibleStyle: { transform: "translateY(0)", opacity: 1 },
+        hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
       });
-  });
-}
+    });
 
+    $.when(listGalleryFiles(pj, cat, container, data)).done(function(itemsproj, itemsfoto) {
+      //let $items = getImages();
+      progressbar(".carregando #progress-bar-pages", 15);
+      $(container).css("visibility", "visible");
+      $(container).css("opacity", "0");
+      $(container).append(itemsproj);
+      //$('.foto').append('<div class="fotodiv'+cat+pj+' fotogrid"></div>'); $('.fotodiv'+cat+pj).append(itemsfoto);
+      //$(".gSlides").detach();
+      $(".foto").append(itemsfoto);
+      gslides();
+      console.log('T4 :',pj,cat, container, itemsproj);
+      $(container)
+        .imagesLoaded()
+        .progress(function(instance, image) {
+          if (image.isLoaded) {
+            var width = new Number(
+              instance.progressedCount * (100 / instance.images.length)
+            );
+            width = width.toFixed();
 
-function scrollpjgrid(pj, cat, container){
-  $('.maingrid').on("scroll.gridpj1", function() {
-  let $pgthis = $(this);
-  let pgheight = this.scrollHeight - $pgthis.height();
-  let pgscroll = $pgthis.scrollTop();
-  let pgisScrolledToEnd = pgscroll >= pgheight -100;
-  //console.log(pgheight, $pgthis.height(), this.scrollHeight);
-  if (pgisScrolledToEnd || this.scrollHeight<($pgthis.height()-80)) {
-    if(timerprojsc) {
-    window.clearTimeout(timerprojsc);
-    }
-    timerprojsc = window.setTimeout(function() {
-      console.log('ttetet');
-            pjgridReveal(pj, cat, container);
-    },400);
-}
-});
-}
+            progressbar(".carregando #progress-bar-pages", width);
+          }
+        })
+        .done(function() {
+          window["$grid" + cat + pj].masonry("reloadItems");
+          window["$grid" + cat + pj].masonry("layout");
+          adjustgridheight(".maingrid", container);
+          console.log("T5 :", pj, cat, container);
+        })
+        .then(function() {
+          $("body").i18n();
+          //$(".carregando").css("display", "none");
+          console.log("T6 :", pj, cat, container);
+          $(container)
+            .delay(10)
+            .animate({ opacity: "1" }, "slow");
+          scrollpjgrid(pj, cat, container);
+        });
+    });
+  }
 
+  function scrollpjgrid(pj, cat, container) {
+    $(".maingrid").on("scroll.gridpj1", function() {
+      let $pgthis = $(this);
+      let pgheight = this.scrollHeight - $pgthis.height();
+      let pgscroll = $pgthis.scrollTop();
+      let pgisScrolledToEnd = pgscroll >= pgheight - 100;
+      //console.log(pgheight, $pgthis.height(), this.scrollHeight);
+      if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
+        if (timerprojsc) {
+          window.clearTimeout(timerprojsc);
+        }
+        timerprojsc = window.setTimeout(function() {
+          console.log("ttetet");
+          pjgridReveal(pj, cat, container);
+        }, 400);
+      }
+    });
+  }
 
-function pjgridReveal(pj, cat, container) {
+  function pjgridReveal(pj, cat, container) {
+    $.when(listGalleryFiles(pj, cat, container)).done(function(
+      itemsproj,
+      itemsfoto
+    ) {
+      convertpjgridData = itemsproj;
+      //console.log("test b:", convertProjData);
+      let $itemsproj = convertItemsPjGrid();
+      window["$grid" + cat + pj].pjgridReveal($itemsproj);
 
-  $.when(listGalleryFiles(pj, cat, container)).done(function(itemsproj, itemsfoto) {
-    convertpjgridData = itemsproj;
-    //console.log("test b:", convertProjData);
-    let $itemsproj = convertItemsPjGrid();
-    window['$grid'+cat+pj].pjgridReveal($itemsproj);
-    $('.foto').append(itemsfoto);
-    //gslides(pj, cat);
-  });
-}
-let convertpjgridData;
-function convertItemsPjGrid(){
-  let itemsproj = convertpjgridData;
-  return $(itemsproj);
-}
+      //$(".gSlides").detach();
+      $(".foto").append(itemsfoto);
+      gslides();
+    });
+  }
+  let convertpjgridData;
+  function convertItemsPjGrid() {
+    let itemsproj = convertpjgridData;
+    return $(itemsproj);
+  }
 
+  $.fn.pjgridReveal = function($itemsproj) {
+    //console.log($itemsproj);
+    let msnry = this.data("masonry");
+    let itemSelector = msnry.options.itemSelector;
+    $itemsproj.hide(); // hide by default
+    this.append($itemsproj); // append to container
+    $itemsproj.imagesLoaded().progress(function(imgLoad, image) {
+      let $itemproj = $(image.img).parents(itemSelector); // get item dom : image is imagesLoaded class, not <img>, <img> is image.img
+      $itemproj.show(); // un-hide item
+      msnry.appended($itemproj); // masonry does its thing
+      $itemsproj = "";
+    });
+    return this;
+  };
 
-$.fn.pjgridReveal = function($itemsproj) {
-  console.log($itemsproj);
-  let msnry = this.data("masonry");
-  let itemSelector = msnry.options.itemSelector;
-  $itemsproj.hide(); // hide by default
-  this.append($itemsproj); // append to container
-
-
-  $itemsproj.imagesLoaded().progress(function(imgLoad, image) {
-    let $itemproj = $(image.img).parents(itemSelector); // get item dom : image is imagesLoaded class, not <img>, <img> is image.img
-    $itemproj.show(); // un-hide item
-    msnry.appended($itemproj); // masonry does its thing
-    $itemsproj = "";
-  });
-  return this;
-};
-
-  var ftcount={};
+  var ftcount = {};
   function listGalleryFiles(pj, cat, container, data) {
-    if (window['nextPageToken'+cat+pj]===undefined){
-      window['nextPageToken'+cat+pj]='';
-    };
-    console.log(cat+pj, ftcount);
-    if (ftcount.hasOwnProperty(cat+pj)===false){
-
-      ftcount[cat+pj] ='';
-      console.log(cat+pj, ftcount);
+    if (window["nextPageToken" + cat + pj] === undefined) {
+      window["nextPageToken" + cat + pj] = "";
     }
-      return $.Deferred(function() {
+    console.log(cat + pj, ftcount);
+    if (ftcount.hasOwnProperty(cat + pj) === false) {
+      ftcount[cat + pj] = "";
+      console.log(cat + pj, ftcount);
+    }
+    return $.Deferred(function() {
       var self = this;
 
-
       progressbar(".carregando #progress-bar-pages", 10);
-      console.log('T3 : ', pj, cat, container);
-      console.log(window['nextPageToken'+cat+pj]);
-      console.log(window['nextPageToken'+cat+pj].length, $(container+ ' figure').length);
-      if (window['nextPageToken'+cat+pj].length>5|| $(container+ ' figure').length === 0){
-      var urlgapi =
-        "https://www.googleapis.com/drive/v3/files?"+
-        "pageSize="+'8'+
-        "&fields=" +fields+
-        "&orderBy=name"+//mrecents+
-        "&q="+cfolder.find((el) => {
-            if (el.category === cat && pj.toString() === el.pj){
+      //console.log('T3 : ', pj, cat, container);
+      //console.log(window['nextPageToken'+cat+pj]);
+      //console.log(window['nextPageToken'+cat+pj].length, $(container+ ' figure').length);
+      if (
+        window["nextPageToken" + cat + pj].length > 5 ||
+        $(container + " figure").length === 0
+      ) {
+        var urlgapi =
+          "https://www.googleapis.com/drive/v3/files?" +
+          "pageSize=" +
+          "8" +
+          "&fields=" +
+          fields +
+          "&orderBy=name" + //mrecents+
+          "&q=" +
+          cfolder.find(el => {
+            if (el.category === cat && pj.toString() === el.pj) {
               return el;
             }
-          }).id+
-        "&key="+api_key+
-        "&pageToken="+window['nextPageToken'+cat+pj];
-        console.log(window['nextPageToken'+cat+pj]);
-        console.log(urlgapi);
+          }).id +
+          "&key=" +
+          api_key +
+          "&pageToken=" +
+          window["nextPageToken" + cat + pj];
+        //console.log(window['nextPageToken'+cat+pj]);
+        //console.log(urlgapi);
 
-      var promise = $.getJSON(urlgapi, function(data, status) {
-        console.log("Gapi Gallery Retrieve"); // on success
-        console.log(data);
-      });
-      promise
-        .done(function(data) {
-          //$(".carregando #progress-bar-pages").css("background-color", "white");
-          //progressbar(".carregando #progress-bar-pages", 30);
-          //console.log(data.nextPageToken);
-          if (data.nextPageToken !== undefined){
-          window['nextPageToken'+cat+pj] = data.nextPageToken;
-          console.log(data.nextPageToken, window['nextPageToken'+cat+pj]);
-        }else { window['nextPageToken'+cat+pj] = 0;}
-          dataprojetos = data.files.sort((a,b) => a.name - b.name);;
-          //console.log(data.files, nextPageToken);
-          let items;
-          let img1 = "",img2='';
-          let tproj = dataprojetos.length;
-          let fig = $(container).length;
-            for (i=0; i< dataprojetos.length; i++){
-            ftcount[cat+pj] ++;
-            console.log(ftcount);
-            let figimg = '<figure class="itemgallery js-slide item'+cat+pj+' " data-'+cat+pj+'="'+ftcount[cat+pj]+'"><img src="';
-            cap =
-              '<caption> <h5 data-i18n="'+cat+pj+'ft' +
-              ftcount[cat+pj] +
-              'leg">Olár</h5> </caption>';
-            img1 +=
-              figimg + dataprojetos[i].webContentLink + endimg + endfig;
-            img2 += '<figure class="gSlides foto'+cat+pj+'"><img src='+ dataprojetos[i].webContentLink + '/></figure>';
-          }
-          items = img1.toString();
-          itemsfoto = img2.toString();
-
-          self.resolve(items, itemsfoto);
-          items='';
-        })
-        .fail(function() {
-          console.log("No Data");
-          items ='';
-          self.resolve(items);
+        var promise = $.getJSON(urlgapi, function(data, status) {
+          console.log("Gapi Gallery Retrieve"); // on success
+          //console.log(data);
         });
+        promise
+          .done(function(data) {
+            //$(".carregando #progress-bar-pages").css("background-color", "white");
+            //progressbar(".carregando #progress-bar-pages", 30);
+            //console.log(data.nextPageToken);
+            if (data.nextPageToken !== undefined) {
+              window["nextPageToken" + cat + pj] = data.nextPageToken;
+              //console.log(data.nextPageToken, window['nextPageToken'+cat+pj]);
+            } else {
+              window["nextPageToken" + cat + pj] = 0;
+            }
+            dataprojetos = data.files.sort((a, b) => a.name - b.name);
+            //console.log(data.files, nextPageToken);
+            let items;
+            let img1 = "", img2 = "";
+            let tproj = dataprojetos.length;
+            let fig = $(container).length;
+            for (i = 0; i < dataprojetos.length; i++) {
+              ftcount[cat + pj]++;
+              console.log(ftcount);
+              let figimg = '<figure class="itemgallery js-slide item' + cat + pj + ' " data-pjcatft="' + pj + cat + ftcount[cat + pj] + '"><img src="';
+              cap = '<caption> <h5 data-i18n="' + cat + pj + "ft" + ftcount[cat + pj] + 'leg">Olár</h5> </caption>';
+              img1 += figimg + dataprojetos[i].webContentLink + endimg + endfig;
+              img2 += '<figure class="gSlides foto' + cat + pj + '"><img src=' +
+                dataprojetos[i].webContentLink + "/></figure>";
+            }
+            items = img1.toString();
+            itemsfoto = img2.toString();
+
+            self.resolve(items, itemsfoto);
+            items = "";
+          })
+          .fail(function() {
+            console.log("No Data");
+            items = "";
+            self.resolve(items);
+          });
       }
     });
   }
@@ -1206,7 +1274,11 @@ $.fn.pjgridReveal = function($itemsproj) {
             $(".js-enterpagebtn").click(function() {
               ff = ".projetosgrid";
               History.pushState(
-                { state: 2, plate: ".projetos, .projetosgrid, #projetosgrid", rand: Math.random() },
+                {
+                  state: 2,
+                  plate: ".projetos, .projetosgrid, #projetosgrid",
+                  rand: Math.random()
+                },
                 "Projetos",
                 "?locale=" + $.i18n().locale + "&page=projetos"
               );
@@ -1216,7 +1288,9 @@ $.fn.pjgridReveal = function($itemsproj) {
             if (image.isLoaded) {
               //  $(image.img).addClass('loaded');
               //var countLoadedImages = $('#gallery img.loaded').size();
-              var width = new Number(instance.progressedCount*(100/instance.images.length));
+              var width = new Number(
+                instance.progressedCount * (100 / instance.images.length)
+              );
               width = width.toFixed();
               progressbar("#progress-bar", width);
             }
@@ -1226,117 +1300,126 @@ $.fn.pjgridReveal = function($itemsproj) {
 
   function progressbar(elem, width) {
     //console.log(elem, width);
-    if (width===10 && elem === '#progress-bar'){
-    $("#progress-bar").css("background-color", "black");
-    }else if (width===10 && elem ==='.carregando #progress-bar-pages'){
-    $("#progress-bar-pages").css("background-color", "white");
+    if (width === 10 && elem === "#progress-bar") {
+      $("#progress-bar").css("background-color", "black");
+    } else if (width === 10 && elem === ".carregando #progress-bar-pages") {
+      $("#progress-bar-pages").css("background-color", "white");
     }
-    if (elem ==='.carregando #progress-bar-pages'){
-      $(".carregando #progress-bar-pages #progress").css('visibility', 'visible');
-      $('.carregando').css('display', 'inherit');
-    $(elem).css({
-      width: width * 0.4 * 10,
-      opacity: (100 - width) * 0.1 * 0.1
-    });
-      if (width>=90){
-        $(".carregando #progress-bar-pages #progress").css('visibility', 'hidden');
-        $('.carregando').css('display', 'none');
+    if (elem === ".carregando #progress-bar-pages") {
+      $(".carregando #progress-bar-pages #progress").css(
+        "visibility",
+        "visible"
+      );
+      $(".carregando").css("display", "inherit");
+      $(elem).css({
+        width: width * 0.4 * 10,
+        opacity: (100 - width) * 0.1 * 0.1
+      });
+      if (width >= 90) {
+        $(".carregando #progress-bar-pages #progress").css(
+          "visibility",
+          "hidden"
+        );
+        $(".carregando").css("display", "none");
       }
-    }else{
+    } else {
       //console.log(elem, width);
-      $(elem).css('visibility', 'visible');
-      $(elem).css('display', 'contents');
-    $(elem).css({
-      width: width * 0.4 * 10,
-      opacity: (100 - width) * 0.1 * 0.1
-    });
-  }
+      $(elem).css("visibility", "visible");
+      $(elem).css("display", "contents");
+      $(elem).css({
+        width: width * 0.4 * 10,
+        opacity: (100 - width) * 0.1 * 0.1
+      });
+    }
     //console.log((width*.40)*10, width, ((100-width)*.1));
   }
-
 
   // Drive Folders project config
   // mainfolder in q var
   // cfolder[0] 00.CC / cfolder[1] 00.PJ / cfolder[2] 00.home / cfolder[3] 00.legendas
   // {Category: "PJ", pj: "5", name: "PJ5 NIGHTSTARS", id: "1zCFIwBcE5JWXP5YU4yQ4bwAYPU7rnkFk"}
-function getdrivefolders() {
+  function getdrivefolders() {
     return $.Deferred(function() {
-    var self = this;
-    var q = '"0B-Tee9m48NkROU5mcDczbGttbmM" in parents and mimeType = "application/vnd.google-apps.folder"';
-    var urlfolders =
-      "https://www.googleapis.com/drive/v3/files?q=" + q +
-      "&fields=nextPageToken, files(id, name, webContentLink, webViewLink)" +
-      "&key=AIzaSyA80wjGa_zI6ta134FRmLvS4cHUpsjgVDE";
-    var promise = $.getJSON(urlfolders, function(data, status) {
-      //console.log("Configuring Project Folders: ",data);
-      var regpj = /(\w\w)([0-9])(\s\w*)/;
-      var configpj1a=[], configpj1b=[], configpjb=[];
-        for (var i=0; i<data.files.length; i++){
-          var pj = data.files[i].name.replace(regpj, '$2');
-          var cat = data.files[i].name.replace(regpj, '$1').toLowerCase();
+      var self = this;
+      var q =
+        '"0B-Tee9m48NkROU5mcDczbGttbmM" in parents and mimeType = "application/vnd.google-apps.folder"';
+      var urlfolders =
+        "https://www.googleapis.com/drive/v3/files?q=" +
+        q +
+        "&fields=nextPageToken, files(id, name, webContentLink, webViewLink)" +
+        "&key=AIzaSyA80wjGa_zI6ta134FRmLvS4cHUpsjgVDE";
+      var promise = $.getJSON(urlfolders, function(data, status) {
+        //console.log("Configuring Project Folders: ",data);
+        var regpj = /(\w\w)([0-9])(\s\w*)/;
+        var configpj1a = [],
+          configpj1b = [],
+          configpjb = [];
+        for (var i = 0; i < data.files.length; i++) {
+          var pj = data.files[i].name.replace(regpj, "$2");
+          var cat = data.files[i].name.replace(regpj, "$1").toLowerCase();
           //var id = data.files[i].id;
-          if( cat === 'cc' || cat === 'pj'){
-            var ca = data.files[i].name.replace(regpj, '$1').toLowerCase();
-            if(cat==='cc'){
-            configpj1a.push({
-                "category": ca,
-                "pj": pj,
-                "name": data.files[i].name,
-                "id": '"'+data.files[i].id+'" in parents'
+          if (cat === "cc" || cat === "pj") {
+            var ca = data.files[i].name.replace(regpj, "$1").toLowerCase();
+            if (cat === "cc") {
+              configpj1a.push({
+                category: ca,
+                pj: pj,
+                name: data.files[i].name,
+                id: '"' + data.files[i].id + '" in parents'
               });
-            }else{
+            } else {
               configpj1b.push({
-                  "category": ca,
-                  "pj": pj,
-                  "name": data.files[i].name,
-                  "id": '"'+data.files[i].id+'" in parents'
-                });
+                category: ca,
+                pj: pj,
+                name: data.files[i].name,
+                id: '"' + data.files[i].id + '" in parents'
+              });
             }
-          }else {
-            if(data.files[i].name !=='00.00'){
-              var srt = data.files[i].name.replace(/(\d\d).(\w*)/, '$1');
-              var ca = '00';
-            configpjb.push({
-                "category": ca,
-                "pj": srt,
-                "name": data.files[i].name,
-                "id": '"'+data.files[i].id+'" in parents'
+          } else {
+            if (data.files[i].name !== "00.00") {
+              var srt = data.files[i].name.replace(/(\d\d).(\w*)/, "$1");
+              var ca = "00";
+              configpjb.push({
+                category: ca,
+                pj: srt,
+                name: data.files[i].name,
+                id: '"' + data.files[i].id + '" in parents'
               });
             }
           }
-    }
-    configpjb.sort((a,b) => a.pj - b.pj);
-    configpj1a.sort((a,b) => a.pj - b.pj);
-    configpj1b.sort((a,b) => a.pj - b.pj);
-    cfolder = configpjb.concat(configpj1a,configpj1b);
-    console.log('Gapi Folders Retrieve');
-    self.resolve();
-    });
-  });
-}
-function waitfor(){
-  return $.Deferred(function() {
-  var self = this;
-    setTimeout(function(){
-      if (cfolder.length <10){
-          setTimeout(function(){
-      $.when(getdrivefolders()).done(function(){
+        }
+        configpjb.sort((a, b) => a.pj - b.pj);
+        configpj1a.sort((a, b) => a.pj - b.pj);
+        configpj1b.sort((a, b) => a.pj - b.pj);
+        cfolder = configpjb.concat(configpj1a, configpj1b);
+        console.log("Gapi Folders Retrieve");
         self.resolve();
       });
-    },100);
-  }else{
-    self.resolve();
+    });
   }
-  },300)
-  });
-}
+  function waitfor() {
+    return $.Deferred(function() {
+      var self = this;
+      setTimeout(function() {
+        if (cfolder.length < 10) {
+          setTimeout(function() {
+            $.when(getdrivefolders()).done(function() {
+              self.resolve();
+            });
+          }, 100);
+        } else {
+          self.resolve();
+        }
+      }, 300);
+    });
+  }
   // Captions from Drive
   //var drivecaptions = '"1cYWG2Ebzp7-Temn3ltPNQTPZ6P--98a8" in parents';
   function getCaptions() {
     //$.when(waitfor()).done(function(){
     //  console.log(drivecaptions,' =  = ', cfolder[3].id);
     var urlcaptions =
-      'https://www.googleapis.com/drive/v3/files?q=' +
+      "https://www.googleapis.com/drive/v3/files?q=" +
       cfolder[3].id +
       "&fields=" +
       fields +
@@ -1385,7 +1468,6 @@ function waitfor(){
             es: capes
           })
           .done(function() {
-
             console.log("Done Caps!");
           })
           .fail(function() {
@@ -1395,63 +1477,168 @@ function waitfor(){
     });
   }
 
-// Full Screen photos
-function gslides(pj, cat){
+  //
+  //     Regex data selection
+  //      projeto/categoria/foto
+  //      10cc15
+  //      /^(\d+)([a-z]+)(\d+)/
+  //      $1 - $2 - $3
+  //      .replace(regpj, '$1')
+  //
 
-$(".js-slide").click(function() {
-console.log(pj, cat);
-var ft = $(this).data(cat+pj);
-console.log('testee', ft);
-$(".maingrid").css({display: 'none', visibility: 'hidden'});
-$(".mainfoto").css({display: 'block', visibility: 'visible'});
-//openModal();
-currentSlide(ft);
-});
-}
-$(".prev").click(function() {
-plusSlides(-1);
-});
+  // Full Screen photos
 
-$(".next").click(function() {
-plusSlides(1);
-});
+  $(".js-photobackbtn").click(function() {
+    $(".js-vis").css({ visibility: "hidden" });
+    if (url("?cat") === "pj") {
+      projetos();
+    } else {
+      colecoes();
+    }
+    //$('.projetos, .projetosgrid, #projetosgrid').css({visibility: 'visible'});
+  });
 
-function openModal() {
-  $(".maingrid").css({display: 'none', visibility: 'hidden'});
-  $(".mainfoto").css({display: 'block', visibility: 'visible'});
-  //document.getElementsByClassName('.mainfoto').style.display = "block";
-}
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
+  $(".js-gridbtn").click(function() {
+    var $main = $(".maingrid");
+    //console.log($main);
+    var oldfotogrid = $main[0].lastChild.id;
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
+    if ($main.is(":hidden")) {
+      //console.log("A");
+      $(".maingrid").css({ display: "flex", visibility: "visible" });
+      $(".gridpj").css({ display: "none", visibility: "hidden" });
+      $("#" + oldfotogrid).css({ display: "block", visibility: "visible" });
+      $(".mainfoto").css({ display: "none", visibility: "hidden" });
+    } else {
+      //console.log("B");
+      $(".maingrid").css({ display: "none", visibility: "hidden" });
+      $(".mainfoto").css({ display: "block", visibility: "visible" });
+    }
+  });
 
-function showSlides(n) {
-  var i;
-  var slides = $('.gSlides');
-  console.log(slides, n);
-  //var dots = document.getElementsByClassName("demo");
-  //var captionText = document.getElementsByClassName("caption");
-  if (n > slides.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
+  function slideslector() {}
+
+  //      $1 - $2 - $3
+  //      .replace(regpj, '$1')
+
+  var rxgrid = /^(\d+)([a-z]+)(\d+)/;
+  var ggcat, ggpj;
+  function gslides() {
+    $('.js-slide, .prev, .next').off();
+
+    $(".js-slide").click(function() {
+      //if ()
+      ggcat = $(this).data('pjcatft').replace(rxgrid, "$2");
+      ggpj = $(this).data('pjcatft').replace(rxgrid, "$1");
+      //console.log('T SlidesLoad: ', ggcat, ggpj);
+      var ft = $(this).data('pjcatft').replace(rxgrid, "$3");
+      $(".maingrid").css({ display: "none", visibility: "hidden" });
+      $(".gridpj").css({ visibility: "hidden" });
+      $(".mainfoto").css({ display: "block", visibility: "visible" });
+      //openModal();
+      var allslides = $(".gSlides");
+      //allslides[i].style.display = "none";
+      for (i = 0; i < allslides.length; i++) {
+        allslides[i].style.display = "none";
+        //slides[i].style.display = "none";
+      }
+      currentSlide(ft);
+    });
+
+    $(".prev").click(function() {
+      plusSlides(-1);
+    });
+
+    $(".next").click(function() {
+      plusSlides(+1);
+    });
+
+    function openModal() {
+      $(".maingrid").css({ display: "none", visibility: "hidden" });
+      $(".mainfoto").css({ display: "block", visibility: "visible" });
+      //document.getElementsByClassName('.mainfoto').style.display = "block";
+    }
+    function plusSlides(n) {
+      slideIndex = Number(slideIndex);
+      //console.log(n, slideIndex, ggcat, ggpj);
+      //if(n>0){ slideIndex= parseInt(slideIndex+1)}
+      //else{ slideIndex = parseInt(slideIndex-1)}
+      showSlides(slideIndex+=n);
+      //console.log(n, slideIndex, ggcat, ggpj);
+    }
+
+    function currentSlide(n) {
+      n= Number(n);
+      showSlides(slideIndex = n);
+      console.log(slideIndex, n);
+    }
+
+    function showSlides(n) {
+      // fazer a seleção pela classe do projeto "fotopj1"
+      var i;
+      var slides = $(".foto" + ggcat+ggpj); //$('.gSlides'); / +cat+pj
+      console.log(n, slideIndex, ggcat, ggpj);
+      //var dots = document.getElementsByClassName("demo");
+      //var captionText = document.getElementsByClassName("caption");
+      if (n > slides.length) {
+        slideIndex = 1;
+      }
+      if (n < 1) {
+        slideIndex = slides.length;
+      }
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      // for (i = 0; i < dots.length; i++) {
+      //   dots[i].className = dots[i].className.replace(" active", "");
+      // }
+      slides[slideIndex - 1].style.display = "block";
+      //dots[slideIndex-1].className += " active";
+      //console.log(captionText, slides[i]);
+      //captionText.innerHTML = $('.mySlides')[i].attributes[1].value;
+    }
+    $(".addbox").addClass("lightboxadd");
+    //$('.addbox').addClass('lightboxrem');
   }
-  // for (i = 0; i < dots.length; i++) {
-  //   dots[i].className = dots[i].className.replace(" active", "");
-  // }
-  slides[slideIndex-1].style.display = "flex";
-  //dots[slideIndex-1].className += " active";
-  //console.log(captionText, slides[i]);
-  //captionText.innerHTML = $('.mySlides')[i].attributes[1].value;
-}
-$('.addbox').addClass('lightboxadd');
-//$('.addbox').addClass('lightboxrem');
+
+  /*
+//                                  Colored Image Background
+
+function  getcolor(imgv) {
+        var myImage = $('.foto > figure > img');
+          //myImage[2].setAttribute('crossOrigin', 'anonymous');
+        myImage[2].crossOrigin = 'Anonymous';
+
+        $('.foto ').imagesLoaded().done(function(){
+          var imgTile = new Image();
+          imgTile.src = myImage[2].src;
+          imgTile.onload = function() {
+            //var colorthief = new ColorThief();
+            //colorthief.getPalette(myImage[1], 8);
+            //console.log(colorthief, myImage);
 
 
+
+
+           var vibrant = new Vibrant(imgTile);
+           var swatches = vibrant.swatches()
+           console.log(vibrant, swatches);
+           for (var swatch in swatches)
+               if (swatches.hasOwnProperty(swatch) && swatches[swatch])
+                   console.log(swatch, swatches[swatch].getHex())
+
+          /*
+           * Results into:
+           * Vibrant #7a4426
+           * Muted #7b9eae
+           * DarkVibrant #348945
+           * DarkMuted #141414
+           * LightVibrant #f3ccb4
+
+           }
+           })
+      }
+*/
 
   // // Store Variables
   // if (localStorage){
@@ -1463,20 +1650,28 @@ $('.addbox').addClass('lightboxadd');
   //   console.log('nologtorage');
   // }
 
-// Grid Responsiveness
-  function adjustgridheight(parent, child){
-    console.log('Child height:'+($(child).height()),'Parent height:'+($(parent).height()));
-    console.log('Child width:'+($(child).width()), 'Parent width:'+($(parent).width()));
-    if (($(child).height()) <($(parent).height()-40) && ($(child).width()) > 1100){
-      console.log(child, $(child).height(), parent, $(parent).height()-40);
-      $(parent).css('align-items', 'center');
-      $(child).css('align-self','center');
-    }else{
-      $(parent).css('align-items', 'flex-start');
-      $(child).css('align-self','flex-start');
+  // Grid Responsiveness
+  function adjustgridheight(parent, child) {
+    console.log(
+      "Child height:" + $(child).height(),
+      "Parent height:" + $(parent).height()
+    );
+    console.log(
+      "Child width:" + $(child).width(),
+      "Parent width:" + $(parent).width()
+    );
+    if (
+      $(child).height() < $(parent).height() - 40 &&
+      $(child).width() > 1100
+    ) {
+      console.log(child, $(child).height(), parent, $(parent).height() - 40);
+      $(parent).css("align-items", "center");
+      $(child).css("align-self", "center");
+    } else {
+      $(parent).css("align-items", "flex-start");
+      $(child).css("align-self", "flex-start");
     }
   }
-
 
   // Scrollbar Firefox
   if (navigator.userAgent.indexOf("Firefox") > 0) {
@@ -1493,8 +1688,7 @@ $('.addbox').addClass('lightboxadd');
       },
       false
     );
-  }
-  else {
+  } else {
     console.log("no ffox");
   }
 });
