@@ -1,7 +1,6 @@
 $(document).ready(function() {
   // Globalvar
-  var cfolder = [],
-    ff;
+  var cfolder = [], ff;
 
   // Languages Handling order: pt > en > es > de
   var locxx = ["pt", "en", "es", "de"],
@@ -93,7 +92,7 @@ $(document).ready(function() {
   function checkpage() {
     switch (url("?page")) {
       case "projetos":
-        ff = ".projetosgrid";
+        //ff = ".projetosgrid";
         photoManager('load', 'projeto', 'pj', '0');
         break;
       case "lightbox":
@@ -115,6 +114,7 @@ $(document).ready(function() {
         bio();
         break;
       case "photo":
+      ff = ".maingrid";
         photoManager('load', 'grid', url("?cat"), url("?pj"));
         //photo(url("?cat"), url("?pj"));
         break;
@@ -196,6 +196,7 @@ $(document).ready(function() {
             $("#projetosgrid")
               .delay(10)
               .animate({ opacity: "1" }, "slow");
+              ffoxscroll('.projetosgrid');
             loadgallery();
             self.resolve();
           });
@@ -235,8 +236,27 @@ $(document).ready(function() {
     return this;
   };
 
+
+
+
+
+
+
+/*
+container.addEventListener(
+  "wheel",
+  function(event) {
+    event.preventDefault();
+    if (event.deltaY > 0)
+      container.scrollBy({ top: 380, left: 0, behavior: "smooth" });
+    else container.scrollBy({ top: -300, left: 0, behavior: "smooth" });
+  },
+  false
+);
+*/
   var timerprojsc;
-  $(".projetosgrid").on("scroll.pjgrid", function() {
+  $(".projetosgrid").on("scroll.projScroll", function() {
+    //console.log('teste1');
     let $pgthis = $(this);
     let pgheight = this.scrollHeight - $pgthis.height();
     let pgscroll = $pgthis.scrollTop();
@@ -244,6 +264,7 @@ $(document).ready(function() {
     //console.log(pgheight, $pgthis.height(), this.scrollHeight);
     if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
       if (timerprojsc) {
+        //console.log('teste2');
         window.clearTimeout(timerprojsc);
       }
       timerprojsc = window.setTimeout(function() {
@@ -253,19 +274,24 @@ $(document).ready(function() {
     }
   });
 
+
   function imageProjReveal() {
     $.when(listProjFiles()).done(function(itemsproj) {
-      convertProjData = itemsproj;
-      let $itemsproj = convePim();
-      //console.log("test b:", convertProjData, $itemsproj);
+      //convertProjData = itemsproj;
+      let $itemsproj = new function(){
+        //let itemsproj = convertProjData;
+        return $(itemsproj);
+      } //convePim();
+      //console.log("test b:", $itemsproj);
       $grid.masonryProjReveal($itemsproj);
     });
   }
-  let convertProjData;
-  function convePim() {
-    let itemsproj = convertProjData;
-    return $(itemsproj);
-  }
+  //let convertProjData;
+  // function convePim() {
+  //   console.log(itemsproj);
+  //   let itemsproj = convertProjData;
+  //   return $(itemsproj);
+  // }
 
   // Coleções Page Images Load
   function loadColecImages() {
@@ -300,6 +326,7 @@ $(document).ready(function() {
             $("#colecoesgrid")
               .delay(10)
               .animate({ opacity: "1" }, "slow");
+              ffoxscroll('.colecoesgrid');
             loadgallery();
             self.resolve();
           });
@@ -413,6 +440,7 @@ $(document).ready(function() {
           $("#instafeed")
             .delay(10)
             .animate({ opacity: "1" }, "slow");
+            ffoxscroll('.instagrid');
         });
       });
     }
@@ -1068,11 +1096,13 @@ $(document).ready(function() {
           $(container)
             .delay(10)
             .animate({ opacity: "1" }, "slow");
+            ffoxscroll('.maingrid');
           scrollpjgrid(pj, cat, container);
         });
     });
   }
 
+  var timergridsc;
   function scrollpjgrid(pj, cat, container) {
     $(".maingrid").on("scroll.gridpj1", function() {
       let $pgthis = $(this);
@@ -1081,10 +1111,10 @@ $(document).ready(function() {
       let pgisScrolledToEnd = pgscroll >= pgheight - 100;
       //console.log(pgheight, $pgthis.height(), this.scrollHeight);
       if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
-        if (timerprojsc) {
-          window.clearTimeout(timerprojsc);
+        if (timergridsc) {
+          window.clearTimeout(timergridsc);
         }
-        timerprojsc = window.setTimeout(function() {
+        timergridsc = window.setTimeout(function() {
           console.log("ttetet");
           pjgridReveal(pj, cat, container);
         }, 400);
@@ -1474,15 +1504,17 @@ $(document).ready(function() {
 
   $(".js-gridbtn").click(function() {
     var $main = $(".maingrid");
-    var oldfotogrid = $main[0].lastChild.id;
+    //var oldfotogrid = $main[0].lastChild.id;
     if ($main.is(":hidden")) {
-      $(".maingrid").css({ display: "flex", visibility: "visible" });
-      $(".gridpj").css({ display: "none", visibility: "hidden" });
-      $("#" + oldfotogrid).css({ display: "block", visibility: "visible" });
-      $(".mainfoto").css({ display: "none", visibility: "hidden" });
+      photoManager('slide', 'grid', '', '');
+      // $(".maingrid").css({ display: "flex", visibility: "visible" });
+      // $(".gridpj").css({ display: "none", visibility: "hidden" });
+      // $("#" + oldfotogrid).css({ display: "block", visibility: "visible" });
+      // $(".mainfoto").css({ display: "none", visibility: "hidden" });
     } else {
-      $(".maingrid").css({ display: "none", visibility: "hidden" });
-      $(".mainfoto").css({ display: "block", visibility: "visible" });
+      photoManager('grid', 'slide', '', '');
+      // $(".maingrid").css({ display: "none", visibility: "hidden" });
+      // $(".mainfoto").css({ display: "block", visibility: "visible" });
     }
   });
 
@@ -1506,16 +1538,20 @@ $(document).ready(function() {
     }
     console.log('Tmanager 2 ',orig, dest, cat, pj, lastVisible);
       switch (dest) {
-        // case 'slide':
-        // $(".maingrid").css({ display: "none", visibility: "hidden" });
-        // $(".gridpj").css({ visibility: "hidden" });
-        // $(".mainfoto").css({ display: "block", visibility: "visible" });
-        //   break;
+        case 'slide':
+         $(".maingrid").css({ display: "none", visibility: "hidden" });
+        $(".gridpj").css({ visibility: "hidden" });
+         $(".mainfoto").css({ display: "block", visibility: "visible" });
+          break;
         case 'grid':
         $(".maingrid").css({ display: "flex", visibility: "visible" });
         $(".gridpj").css({ display: "none", visibility: "hidden" });
         $(".mainfoto").css({ display: "none", visibility: "hidden" });
-        photo(cat, pj);
+        if (orig === 'slide'){
+          $("#grid"+cat+pj).css({ display: "block", visibility: "visible" });
+        }else {
+          photo(cat, pj);
+      }
           break;
         case 'projeto':
           History.pushState(
@@ -1688,11 +1724,21 @@ function  getcolor(imgv) {
     }
   }
 
+
   // Scrollbar Firefox
-  if (navigator.userAgent.indexOf("Firefox") > 0) {
-    console.log("ix ffox");
+  if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+  // supported
+  console.log(navigator.userAgent.toLowerCase().indexOf('firefox') > -1);
+    console.log("ix ffox", ff);
     $(".ff").css("overflow-y", "hidden");
-    ff = ".instagrid";
+    $('.projetos').css('overflow-x', 'hidden')
+    //ff = ".instagrid";
+  } else {
+    console.log("no ffox");
+  }
+
+    function ffoxscroll(ff){
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
     var container = document.querySelectorAll(ff)[0];
     container.addEventListener(
       "wheel",
@@ -1703,7 +1749,7 @@ function  getcolor(imgv) {
       },
       false
     );
-  } else {
-    console.log("no ffox");
-  }
+}
+}
+
 });
