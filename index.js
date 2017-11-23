@@ -91,20 +91,10 @@ $(document).ready(function() {
 
   //Url handling
   function checkpage() {
-    console.log(url("?page"));
-    //var pj = url("?pj");
     switch (url("?page")) {
       case "projetos":
         ff = ".projetosgrid";
-        History.pushState(
-          {
-            state: 2,
-            plate: ".projetos, .projetosgrid, #projetosgrid",
-            rand: Math.random()
-          },
-          "Projetos",
-          "?locale=" + $.i18n().locale + "&page=projetos"
-        );
+        photoManager('load', 'projetos', 'pj', '0');
         break;
       case "lightbox":
         History.pushState(
@@ -114,15 +104,8 @@ $(document).ready(function() {
         );
         break;
       case "colecoes":
-        History.pushState(
-          {
-            state: 3,
-            plate: ".colecoes, .colecoesgrid, #colecoesgrid",
-            rand: Math.random()
-          },
-          "Coleções",
-          "?locale=" + $.i18n().locale + "&page=colecoes"
-        );
+      ff = ".colecoesgrid";
+        photoManager('load', 'colecoes', 'cc', '0');
         break;
       case "insta":
         ff = ".gridinsta";
@@ -132,7 +115,8 @@ $(document).ready(function() {
         bio();
         break;
       case "photo":
-        photo(url("?cat"), url("?pj"));
+        photoManager('load', 'grid', url("?cat"), url("?pj"));
+        //photo(url("?cat"), url("?pj"));
         break;
       default:
         enterpage();
@@ -332,8 +316,8 @@ $(document).ready(function() {
     isFitWidth: true,
     percentPsotion: false,
     resize: true,
-    transitionDuration: "0.3s",
-    stagger: "0.05s",
+    transitionDuration: "0.03s",
+    stagger: "0.01s",
     gutter: 20,
     isAnimated: !Modernizr.csstransitions,
     visibleStyle: { transform: "translateY(0)", opacity: 1 },
@@ -369,7 +353,7 @@ $(document).ready(function() {
         window.clearTimeout(timercolecsc);
       }
       timercolecsc = window.setTimeout(function() {
-        console.log("ttetet");
+        //console.log("ttetet");
         imageColecReveal();
       }, 400);
     }
@@ -380,7 +364,7 @@ $(document).ready(function() {
       convertColecData = itemscolec;
       let $itemscolec = convePim();
       //console.log("test b:", convertProjData, $itemscolec);
-      $ccgrid.masonryProjReveal($itemscolec);
+      $ccgrid.masonryColecReveal($itemscolec);
     });
   }
   let convertColecData;
@@ -570,12 +554,12 @@ $(document).ready(function() {
       loadColecImages();
     } else {
       $(".js-vis").css("visibility", "hidden");
+      $(".carregando").css({display: 'none'});
       $(".colecoesgrid, .topbar, .colecoes, #colecoesgrid").css(
         "visibility",
         "visible"
       );
     }
-    //showPlate(".colecoes");
   }
 
   function insta() {
@@ -618,7 +602,7 @@ $(document).ready(function() {
       );
     } else {
       $(".maingrid").append(
-        '<div id="grid' + cat + pj + '" class="js-vis gridpj"></div>'
+        '<div id="grid' + cat + pj + '" class="js-vis grid'+cat+'"></div>'
       );
       $("#grid" + cat + pj)
         .siblings()
@@ -639,11 +623,11 @@ $(document).ready(function() {
     $(".menupage").css("visibility", "hidden");
     console.log("Teste Hist :", url, cat, pj, plate, title);
     if (title === "Photo") {
-      //photo(url('?pj'));
-      // $(".topbar").css("visibility", "visible");
-      // $(".js-vis").css("visibility", "hidden");
-      // $(name).css("visibility", "visible");
-      // $(".mainfoto").css("visibility", "visible");
+       // photo(url('?pj'));
+       // $(".topbar").css("visibility", "visible");
+       // $(".js-vis").css("visibility", "hidden");
+       // $(name).css("visibility", "visible");
+       // $(".mainfoto").css("visibility", "visible");
     } else if (title === "Projetos") {
       projetos();
     } else if (title === "Instagram") {
@@ -651,11 +635,11 @@ $(document).ready(function() {
     } else if (title === "Biografia") {
       bio();
     } else if (title === "Projetos Galeria") {
-      photo(cat, pj);
-    } else if (title === "Colecoes") {
+      photoManager('projeto', 'grid', cat, pj);
+    } else if (title === "Coleções") {
       colecoes();
-    } else if (title === "Colecoes Galeria") {
-      photo(cat, pj);
+    } else if (title === "Coleções Galeria") {
+      photoManager('colecoes', 'grid', cat, pj);
     } else {
       if (plate !== undefined) {
         $(".topbar").css("visibility", "visible");
@@ -738,7 +722,6 @@ $(document).ready(function() {
       "Projetos",
       "?locale=" + $.i18n().locale + "&page=projetos"
     );
-    //projetos();
   });
 
   // Coleções Click
@@ -750,10 +733,9 @@ $(document).ready(function() {
         plate: ".colecoes, .colecoesgrid, #colecoesgrid",
         rand: Math.random()
       },
-      "Colecoes",
+      "Coleções",
       "?locale=" + $.i18n().locale + "&page=colecoes"
     );
-    //colecoes();
   });
 
   // Instagram Click
@@ -1028,7 +1010,7 @@ $(document).ready(function() {
           pj: cc,
           rand: Math.random()
         },
-        "Colecoes Galeria",
+        "Coleções Galeria",
         "?locale=" + $.i18n().locale + "&page=photo" + "&cat=cc" + "&pj=" + cc
       );
     });
@@ -1055,25 +1037,20 @@ $(document).ready(function() {
     });
 
     $.when(listGalleryFiles(pj, cat, container, data)).done(function(itemsproj, itemsfoto) {
-      //let $items = getImages();
       progressbar(".carregando #progress-bar-pages", 15);
       $(container).css("visibility", "visible");
       $(container).css("opacity", "0");
       $(container).append(itemsproj);
-      //$('.foto').append('<div class="fotodiv'+cat+pj+' fotogrid"></div>'); $('.fotodiv'+cat+pj).append(itemsfoto);
-      //$(".gSlides").detach();
       $(".foto").append(itemsfoto);
       gslides();
-      console.log('T4 :',pj,cat, container, itemsproj);
+      //console.log('T4 :',pj,cat, container, itemsproj);
       $(container)
         .imagesLoaded()
         .progress(function(instance, image) {
           if (image.isLoaded) {
             var width = new Number(
-              instance.progressedCount * (100 / instance.images.length)
-            );
+              instance.progressedCount * (100 / instance.images.length));
             width = width.toFixed();
-
             progressbar(".carregando #progress-bar-pages", width);
           }
         })
@@ -1127,6 +1104,7 @@ $(document).ready(function() {
       //$(".gSlides").detach();
       $(".foto").append(itemsfoto);
       gslides();
+      //photoManager('projcolec', 'grid', cat, pj);
     });
   }
   let convertpjgridData;
@@ -1325,7 +1303,7 @@ $(document).ready(function() {
     } else {
       //console.log(elem, width);
       $(elem).css("visibility", "visible");
-      $(elem).css("display", "contents");
+      $(elem).css("display", "inherit");
       $(elem).css({
         width: width * 0.4 * 10,
         opacity: (100 - width) * 0.1 * 0.1
@@ -1490,33 +1468,80 @@ $(document).ready(function() {
 
   $(".js-photobackbtn").click(function() {
     $(".js-vis").css({ visibility: "hidden" });
-    if (url("?cat") === "pj") {
-      projetos();
-    } else {
-      colecoes();
-    }
-    //$('.projetos, .projetosgrid, #projetosgrid').css({visibility: 'visible'});
+      photoManager('backbtn', 'projeto', '', '');
   });
 
   $(".js-gridbtn").click(function() {
     var $main = $(".maingrid");
-    //console.log($main);
     var oldfotogrid = $main[0].lastChild.id;
-
     if ($main.is(":hidden")) {
-      //console.log("A");
       $(".maingrid").css({ display: "flex", visibility: "visible" });
       $(".gridpj").css({ display: "none", visibility: "hidden" });
       $("#" + oldfotogrid).css({ display: "block", visibility: "visible" });
       $(".mainfoto").css({ display: "none", visibility: "hidden" });
     } else {
-      //console.log("B");
       $(".maingrid").css({ display: "none", visibility: "hidden" });
       $(".mainfoto").css({ display: "block", visibility: "visible" });
     }
   });
 
-  function slideslector() {}
+  var lastVisible = [[],[],[]];
+  function photoManager(orig, dest, cat, pj) {
+    console.log('Tmanager 1 ',orig, dest, cat, pj, lastVisible);
+    var mcat,mpj;
+    if ( !cat && !pj ){
+    cat = lastVisible[1];
+    pj = lastVisible[2]
+    }else{
+      lastVisible =[[],[],[]];
+      lastVisible[0] = orig;
+      lastVisible[1] = cat;
+      lastVisible[2] = pj;
+    }
+    if (orig === 'backbtn' && cat === 'pj'){
+      dest = 'projeto';
+    } else if (orig === 'backbtn' && cat === 'cc'){
+      dest = 'colecoes';
+    }
+    console.log('Tmanager 2 ',orig, dest, cat, pj, lastVisible);
+      switch (dest) {
+        // case 'slide':
+        // $(".maingrid").css({ display: "none", visibility: "hidden" });
+        // $(".gridpj").css({ visibility: "hidden" });
+        // $(".mainfoto").css({ display: "block", visibility: "visible" });
+        //   break;
+        case 'grid':
+        $(".maingrid").css({ display: "flex", visibility: "visible" });
+        $(".gridpj").css({ display: "none", visibility: "hidden" });
+        $(".mainfoto").css({ display: "none", visibility: "hidden" });
+        photo(cat, pj);
+          break;
+        case 'projeto':
+          History.pushState(
+            {
+              state: 2,
+              plate: ".projetos, .projetosgrid, #projetosgrid",
+              rand: Math.random()
+            },
+            "Projetos",
+            "?locale=" + $.i18n().locale + "&page=projetos"
+          );
+          dest='pj';
+          break;
+        case 'colecoes':
+          History.pushState(
+            {
+              state: 3,
+              plate: ".colecoes, .colecoesgrid, #colecoesgrid",
+              rand: Math.random()
+            },
+            "Coleções",
+            "?locale=" + $.i18n().locale + "&page=colecoes"
+          );
+          dest='cc';
+          break;
+      }
+  }
 
   //      $1 - $2 - $3
   //      .replace(regpj, '$1')
@@ -1525,22 +1550,16 @@ $(document).ready(function() {
   var ggcat, ggpj;
   function gslides() {
     $('.js-slide, .prev, .next').off();
-
     $(".js-slide").click(function() {
-      //if ()
       ggcat = $(this).data('pjcatft').replace(rxgrid, "$2");
       ggpj = $(this).data('pjcatft').replace(rxgrid, "$1");
-      //console.log('T SlidesLoad: ', ggcat, ggpj);
       var ft = $(this).data('pjcatft').replace(rxgrid, "$3");
       $(".maingrid").css({ display: "none", visibility: "hidden" });
       $(".gridpj").css({ visibility: "hidden" });
       $(".mainfoto").css({ display: "block", visibility: "visible" });
-      //openModal();
       var allslides = $(".gSlides");
-      //allslides[i].style.display = "none";
       for (i = 0; i < allslides.length; i++) {
         allslides[i].style.display = "none";
-        //slides[i].style.display = "none";
       }
       currentSlide(ft);
     });
@@ -1574,7 +1593,6 @@ $(document).ready(function() {
     }
 
     function showSlides(n) {
-      // fazer a seleção pela classe do projeto "fotopj1"
       var i;
       var slides = $(".foto" + ggcat+ggpj); //$('.gSlides'); / +cat+pj
       console.log(n, slideIndex, ggcat, ggpj);
@@ -1589,11 +1607,7 @@ $(document).ready(function() {
       for (i = 0; i < slides.length; i++) {
         slides[i].style.display = "none";
       }
-      // for (i = 0; i < dots.length; i++) {
-      //   dots[i].className = dots[i].className.replace(" active", "");
-      // }
       slides[slideIndex - 1].style.display = "block";
-      //dots[slideIndex-1].className += " active";
       //console.log(captionText, slides[i]);
       //captionText.innerHTML = $('.mySlides')[i].attributes[1].value;
     }
