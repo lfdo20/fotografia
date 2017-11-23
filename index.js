@@ -94,7 +94,7 @@ $(document).ready(function() {
     switch (url("?page")) {
       case "projetos":
         ff = ".projetosgrid";
-        photoManager('load', 'projetos', 'pj', '0');
+        photoManager('load', 'projeto', 'pj', '0');
         break;
       case "lightbox":
         History.pushState(
@@ -157,7 +157,6 @@ $(document).ready(function() {
   History.Adapter.bind(window, "statechange", function() {
     var State = History.getState();
     History.log("statechange:", State.data, State.title, State.url);
-    //console.log(url("?page"));
     var plate = State.data.plate;
     var title = State.title;
     showPlate("." + url("?page"), State.data.cat, State.data.pj, plate, title);
@@ -748,6 +747,7 @@ $(document).ready(function() {
     );
     //insta();
   });
+
   // Lightbox Click
   $(".js-lightboxbtn").click(function() {
     History.pushState(
@@ -1038,7 +1038,7 @@ $(document).ready(function() {
 
     $.when(listGalleryFiles(pj, cat, container, data)).done(function(itemsproj, itemsfoto) {
       progressbar(".carregando #progress-bar-pages", 15);
-      $(container).css("visibility", "visible");
+      $(container).css("display", "none");
       $(container).css("opacity", "0");
       $(container).append(itemsproj);
       $(".foto").append(itemsfoto);
@@ -1055,6 +1055,7 @@ $(document).ready(function() {
           }
         })
         .done(function() {
+          $(container).css("display", "flex");
           window["$grid" + cat + pj].masonry("reloadItems");
           window["$grid" + cat + pj].masonry("layout");
           adjustgridheight(".maingrid", container);

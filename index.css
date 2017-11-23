@@ -239,8 +239,9 @@ body {
 }
 
 #progress-bar-pages {
-  position: relative;
+  position: absolute;
   top: 50%;
+  transform: translateY(-3px);
   display: block;
   background-color: white;
   background-clip: content-box;
@@ -741,7 +742,7 @@ body {
   margin-top: 6px;
   width: auto;
   width: 100%;
-  height: 825px;
+  height: 87vh;
   visibility: hidden;
   z-index: 2;
   overflow-y: scroll;
@@ -875,7 +876,7 @@ body {
           align-items: flex-start;
   margin-top: 6px;
   width: inherit; /* Inherit is an option */
-  height: 880px;
+  height: 89.6vh; /*880px*/
   visibility: visible;
   z-index: 2;
   overflow-x: hidden;
@@ -904,7 +905,7 @@ body {
           align-items: flex-start;
   margin-top: 6px;
   width: inherit; /* Inherit is an option */
-  height: 880px;
+  height: 89.6vh; /*880px*/
   visibility: visible;
   z-index: 2;
   overflow-x: hidden;
