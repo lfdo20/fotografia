@@ -745,7 +745,8 @@ body {
   height: 87vh;
   visibility: hidden;
   z-index: 2;
-  overflow-y: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 ::-webkit-scrollbar {
   width: 0px; /* remove scrollbar space */
@@ -1018,7 +1019,7 @@ body {
   /*width: 980px;*/
   /*width: 95%;*/
   /*display: inline-block;  ???? */
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 0 5px;
   padding-top: 0px;
@@ -1031,7 +1032,7 @@ body {
   /*width: 980px;*/
   /*width: 95%;*/
   /*display: inline-block;  ???? */
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 0 5px;
   padding-top: 10px;
@@ -1045,7 +1046,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 0 5px;
   padding-top: 10px;

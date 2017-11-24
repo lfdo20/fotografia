@@ -1,6 +1,6 @@
 $(document).ready(function() {
   // Globalvar
-  var cfolder = [], ff, ffv;
+  var cfolder = [], lbselected=[], ff, ffv;
 
   if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
     ffv = true;
@@ -207,7 +207,7 @@ $(document).ready(function() {
               //if ( ffv === false){
               loadgallery();
             //}else{
-            ffoxscroll('.projetosgrid');
+              ffoxscroll('.projetosgrid');
             //}
             self.resolve();
           });
@@ -1027,21 +1027,27 @@ container.addEventListener(
   // List Gallery Files
   function loadgallery() {
     $(".js-pj").on("click", function(e) {
-      var pj = $(this).data("pj");
-      $(".projetosgrid").off("scroll");
-      History.pushState(
-        {
-          state: 7,
-          plate: ".fotopage, .maingrid, .gridpj",
-          cat: "pj",
-          pj: pj,
-          rand: Math.random()
-        },
-        "Projetos Galeria",
-        "?locale=" + $.i18n().locale + "&page=photo" + "&cat=pj" + "&pj=" + pj
-      );
+      if (e.handled !== true) {
+        var pj = $(this).data("pj");
+        $(".projetosgrid").off("scroll");
+        History.pushState(
+          {
+            state: 7,
+            plate: ".fotopage, .maingrid, .gridpj",
+            cat: "pj",
+            pj: pj,
+            rand: Math.random()
+          },
+          "Projetos Galeria",
+          "?locale=" + $.i18n().locale + "&page=photo" + "&cat=pj" + "&pj=" + pj
+        );
+        e.handled = true;
+        return false;
+    }
     });
+
     $(".js-cc").on("click", function(e) {
+      if (e.handled !== true) {
       var cc = $(this).data("cc");
       $(".projetosgrid").off("scroll");
       History.pushState(
@@ -1055,6 +1061,9 @@ container.addEventListener(
         "Coleções Galeria",
         "?locale=" + $.i18n().locale + "&page=photo" + "&cat=cc" + "&pj=" + cc
       );
+      e.handled = true;
+      return false;
+    }
     });
   }
 
@@ -1544,6 +1553,7 @@ container.addEventListener(
     }
   });
 
+  checkstored();
   var lastVisible = [[],[],[]];
   function photoManager(orig, dest, cat, pj) {
     console.log('Tmanager 1 ',orig, dest, cat, pj, lastVisible);
@@ -1673,22 +1683,36 @@ container.addEventListener(
       $('.slcaption').text($.i18n(ggcat + ggpj +'ft'+ n +'leg'));
       var x = (ggcat + ggpj +'ft'+ ggft).toString();
       console.log(x, lbselected.indexOf(x),  lbselected);
-
-      if (lbselected.indexOf(x) !== -1){
+      if (lbselected.indexOf(x) === -1){
         console.log('sim');
-        $(".addbox").addClass("lightboxrem");
-        $(".addbox").removeClass("lightboxadd");
-      }else{
-        console.log('nao');
         $(".addbox").removeClass("lightboxrem");
         $(".addbox").addClass("lightboxadd");
+      }else{
+        console.log('nao');
+        $(".addbox").addClass("lightboxrem");
+        $(".addbox").removeClass("lightboxadd");
       }
     }
   }
 
   // Store Variables
-  var lbselected=[''];
-  $('.addbox').click(function(){
+
+  function checkstored(){
+    if (!localStorage.selected === false){
+      console.log(localStorage.getItem("selected"));
+      var items = JSON.parse(localStorage.getItem("selected"));
+      for (var i=0; i<items.length; i++) {
+        lbselected.push(items[i]);
+        console.log(lbselected, items[i]);
+      }
+      console.log(lbselected, items );
+    }else {
+      console.log('teste checkstorage not');
+    }
+  }
+  console.log(lbselected);
+
+  $('.foto').on('click', '.lightboxadd', function(){
     console.log( !localStorage.selected );
     if (localStorage){
       if ( !localStorage.selected === false){
@@ -1699,6 +1723,7 @@ container.addEventListener(
         console.log('Image Saved : ', selected);
         localStorage.setItem("selected", JSON.stringify(selected));
         $(".addbox").addClass("lightboxrem");
+        $(".addbox").removeClass("lightboxadd");
         console.log('Image Saved : ', lbselected)
       }else{
         var selected =[];
@@ -1707,7 +1732,8 @@ container.addEventListener(
         console.log('Image Saved : ', selected);
         localStorage.setItem("selected", JSON.stringify(selected));
         $(".addbox").addClass("lightboxrem");
-        console.log('Image Saved : ', lbselected)
+        $(".addbox").removeClass("lightboxadd");
+        //console.log('Image Saved : ', lbselected)
       }
     }
     else if (sessionStorage){
@@ -1718,6 +1744,7 @@ container.addEventListener(
           lbselected.push(ggcat + ggpj +'ft'+ ggft);
           sessionStorage.setItem("selected", JSON.stringify(selected));
           $(".addbox").addClass("lightboxrem");
+          $(".addbox").removeClass("lightboxadd");
           console.log('Image Saved : ', lbselected)
         }else{
           var selected =[];
@@ -1725,14 +1752,43 @@ container.addEventListener(
           lbselected.push(ggcat + ggpj +'ft'+ ggft);
           sessionStorage.setItem("selected", JSON.stringify(selected));
           $(".addbox").addClass("lightboxrem");
+          $(".addbox").removeClass("lightboxadd");
           console.log('Image Saved : ', lbselected)
         }
     } else {
       console.log('Your browser do not support Storage');
     }
-
 });
-
+console.log(!sessionStorage.selected);
+console.log( !localStorage.selected );
+$('.foto').on('click', '.lightboxrem', function(){
+  console.log( !localStorage.selected );
+  if (localStorage){
+    if ( !localStorage.selected === false){
+      var remove = ggcat + ggpj +'ft'+ ggft;
+      var selected =[];
+      selected = JSON.parse(localStorage.getItem("selected"));
+      selected.splice(selected.indexOf(remove), 1);
+      lbselected.splice(lbselected.indexOf(remove), 1);
+      localStorage.setItem("selected", JSON.stringify(selected));
+      $(".addbox").addClass("lightboxadd");
+      $(".addbox").removeClass("lightboxrem");
+      console.log('Image Removed : ', JSON.parse(localStorage.getItem("selected")));
+    }
+  }else if(sessionStorage){
+    if ( !sessionStorage.selected === false){
+      var remove = ggcat + ggpj +'ft'+ ggft;
+      var selected =[];
+      selected = JSON.parse(sessionStorage.getItem("selected"));
+      selected.splice(selected.indexOf(remove), 1);
+      lbselected.splice(lbselected.indexOf(remove), 1);
+      sessionStorage.setItem("selected", JSON.stringify(selected));
+      $(".addbox").addClass("lightboxadd");
+      $(".addbox").removeClass("lightboxrem");
+      console.log('Image Removed : ', JSON.parse(localStorage.getItem("selected")));
+    }
+  }
+});
 
 
 
