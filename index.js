@@ -172,6 +172,7 @@ $(document).ready(function() {
   });
 
   //Projetos Page Images Load
+
   function loadProjImages() {
     return $.Deferred(function() {
       var self = this;
@@ -837,7 +838,7 @@ container.addEventListener(
   let figimg = '<figure class="item"><img src="';
   let endimg = '" alt="Teste"/>';
   let endfig = "</figure>";
-  let cap = '<caption> <h5 data-i18n="">Olár</h5> </caption>';
+  let cap = '<figcaption data-i18n="">Olár <figcaption>';
   var lfdofotoapp = '"0B-Tee9m48NkROU5mcDczbGttbmM" in parents';
   var projetosgaleria = '"1mQYi8dkHLTPxAEdUeiq2o7RPMj24CGi0" in parents';
   var colecoesgaleria = '"12l7Q_CROppxLpo837TqtF_KDMnNzNub2" in parents';
@@ -907,9 +908,9 @@ container.addEventListener(
             for (i = 0; i < dataprojetos.length; i++) {
               fotocount++;
               cap =
-                '<caption> <h5 data-i18n="pj1ft' +
+                '<figcaption data-i18n="pj1ft' +
                 fotocount +
-                'leg">Olár</h5> </caption>';
+                'leg">Olár <figcaption>';
               //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
               img1 +=
                 figimg +
@@ -994,9 +995,9 @@ container.addEventListener(
             for (i = 0; i < datacolecoes.length; i++) {
               fotocccount++;
               cap =
-                '<caption> <h5 data-i18n="pj1cc' +
+                '<figcaption data-i18n="pj1cc' +
                 fotocccount +
-                'leg">Olár</h5> </caption>';
+                'leg">Olár <figcaption>';
               //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
               img1 +=
                 figimg +
@@ -1045,6 +1046,9 @@ container.addEventListener(
         return false;
     }
     });
+
+    //$('.js-pj').on('mouseenter', function(){
+    //});
 
     $(".js-cc").on("click", function(e) {
       if (e.handled !== true) {
@@ -1258,7 +1262,7 @@ container.addEventListener(
               ftcount[cat + pj]++;
               console.log(ftcount);
               let figimg = '<figure class="itemgallery js-slide item' + cat + pj + ' " data-pjcatft="' + pj + cat + ftcount[cat + pj] + '"><img src="';
-              cap = '<caption> <h5 data-i18n="' + cat + pj + "ft" + ftcount[cat + pj] + 'leg">Olár</h5> </caption>';
+              cap = '<figcaption data-i18n="' + cat + pj + "ft" + ftcount[cat + pj] + 'leg">Olár <figcaption>';
               img1 += figimg + dataprojetos[i].webContentLink + endimg + endfig;
               ftlist[cat + pj].g.push(img1);
               img2 += '<figure class="gSlides foto' + cat + pj + '"><img src=' +
@@ -1521,6 +1525,34 @@ container.addEventListener(
     });
   }
 
+
+
+
+
+// Photo Page grid
+
+$('.fotopage').ready(function(){
+
+  $('.projdescription').delay(100).animate({
+    left: '+=30%'
+},1000);
+  $('.projdescription').on('click', function(){
+    var box = $('.projdescription');
+      var targetWidth = box.width() > 0 ? 0 : 350;
+      var tp = box.width() > 0 ? 0.5 : 3;
+      box.animate({
+        width: targetWidth + "px",
+        padding: tp+'em 0 0 '+tp+'em'
+      },100);
+  });
+  $('#pd--tx')._t(ggcat+ggpj+'pd-title');
+  $('#pd--stt')._t(ggcat+ggpj+'pd-stt');
+  $('#pd--p1')._t(ggcat+ggpj+'pd-p1');
+  $('#pd--p2')._t(ggcat+ggpj+'pd-p2');
+  $('#pd--p3')._t(ggcat+ggpj+'pd-p3');
+  $('#pd--p4')._t(ggcat+ggpj+'pd-p4');
+});
+
   //
   //     Regex data selection
   //      projeto/categoria/foto
@@ -1539,17 +1571,10 @@ container.addEventListener(
 
   $(".js-gridbtn").click(function() {
     var $main = $(".maingrid");
-    //var oldfotogrid = $main[0].lastChild.id;
     if ($main.is(":hidden")) {
       photoManager('slide', 'grid', '', '');
-      // $(".maingrid").css({ display: "flex", visibility: "visible" });
-      // $(".gridpj").css({ display: "none", visibility: "hidden" });
-      // $("#" + oldfotogrid).css({ display: "block", visibility: "visible" });
-      // $(".mainfoto").css({ display: "none", visibility: "hidden" });
     } else {
       photoManager('grid', 'slide', '', '');
-      // $(".maingrid").css({ display: "none", visibility: "hidden" });
-      // $(".mainfoto").css({ display: "block", visibility: "visible" });
     }
   });
 
@@ -1681,6 +1706,8 @@ container.addEventListener(
       }
       slides[slideIndex - 1].style.display = "block";
       $('.slcaption').text($.i18n(ggcat + ggpj +'ft'+ n +'leg'));
+      $('#proji18n')._t(ggcat+ggpj+'proj');
+      $('#projnamei18n')._t(ggcat+ggpj+'projname');
       var x = (ggcat + ggpj +'ft'+ ggft).toString();
       console.log(x, lbselected.indexOf(x),  lbselected);
       if (lbselected.indexOf(x) === -1){
