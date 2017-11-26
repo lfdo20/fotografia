@@ -618,9 +618,53 @@ body {
       align-content: flex-start;
   width: 100%;
   height: 100vh;
-  background: rgba(19, 48, 64, 1);
+  background: rgba(20, 31, 37, 1);
   z-index: 1;
   visibility: hidden;
+}
+
+.projdescription{
+position: absolute;
+left: 0;
+top: 0;
+display: inline-block;
+float: left;
+height: 100%;
+width: 0%;
+z-index: 25;
+background: rgba(251, 250, 249, 0.92);
+color: rgba(0, 0, 0, 0.0);
+padding: 3em 0 0 3em ;
+
+font-size: 19px;
+text-align: justify;
+line-height: 10px;
+text-decoration: none;
+line-height: 30px;
+font-family: "Roboto", sans-serif;
+overflow-y: hidden;
+/*transform: translatex(-100%);*/
+}
+::-webkit-scrollbar {
+width: 0px; /* remove scrollbar space */
+background: transparent; /* optional: just make scrollbar invisible */
+overflow-x: hidden;
+}
+
+#pd--tx{
+  font-weight: 600;
+  /*margin-bottom: 8px;*/
+}
+
+#pd--stt{
+  font-size: 25px;
+  margin-top: 10px;
+  margin-bottom: 60px;
+  font-weight: 500;
+}
+
+.pd--p{
+  font-weight: 400;
 }
 
 /* Coleções page style */
@@ -644,7 +688,7 @@ body {
       align-content: flex-start;
   width: 100%;
   height: 100vh;
-  background: purple;
+  background: rgb(61, 29, 68);
   z-index: 1;
   visibility: hidden;
 }
@@ -718,7 +762,7 @@ body {
   /*align-items: center;*/
   width: 100%;
   height: 100vh;
-  background: rgb(73, 161, 116);
+  background: rgb(59, 61, 51); /* Sempre alterar com .igb l951*/
   z-index: 1;
   visibility: hidden;
 }
@@ -730,7 +774,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  background-color: rgba(215, 255, 225, 0.2);
+  background-color: rgba(215, 255, 225, 0.05);
   -ms-flex-item-align: center;
       align-self: center;
   -webkit-box-pack: center;
@@ -745,6 +789,7 @@ body {
   height: 87vh;
   visibility: hidden;
   z-index: 2;
+  overflow-x: hidden;
   overflow-y: scroll;
 }
 ::-webkit-scrollbar {
@@ -778,7 +823,7 @@ body {
 .mainfoto {
   display: none;
   position: relative;
-  /*background-color: rgba(255, 255, 255, 0.1);*/
+  /*background-color: rgba(255, 255, 255, 0.05);*/
   -ms-flex-item-align: center;
       align-self: center;
   -webkit-box-pack: start;
@@ -836,7 +881,7 @@ body {
   position: absolute;
   top: 5%;
   bottom: 0px;
-  background-color: rgba(215, 255, 225, 0.2);
+  background-color: rgba(255, 255, 255, 0.05);
   -ms-flex-item-align: center;
       align-self: center;
   -webkit-box-pack: start;
@@ -847,7 +892,7 @@ body {
           align-items: center;
   margin-top: 6px;
   width: inherit;
-  height: 880px;
+  height: 90vh;
   visibility: hidden;
   z-index: 2;
   overflow-y: scroll;
@@ -865,7 +910,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  background-color: rgba(255, 255, 225, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   -ms-flex-item-align: center;
       align-self: center;
   -webkit-box-pack: center;
@@ -874,9 +919,9 @@ body {
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
-  margin-top: 6px;
+  margin-top: 12px; /* 6px */
   width: inherit; /* Inherit is an option */
-  height: 89.6vh; /*880px*/
+  height: 88.5vh; /*880px 89.6vh*/
   visibility: visible;
   z-index: 2;
   overflow-x: hidden;
@@ -894,7 +939,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  background-color: rgba(255, 255, 225, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   -ms-flex-item-align: center;
       align-self: center;
   -webkit-box-pack: center;
@@ -949,7 +994,7 @@ body {
 
 .igb {
   font-size: 54px;
-  color: rgba(73, 161, 116, 1);
+  color: rgb(59, 61, 51);
   width: 36px;
   height: 36px;
   line-height: 33px;
@@ -1018,11 +1063,12 @@ body {
   /*width: 980px;*/
   /*width: 95%;*/
   /*display: inline-block;  ???? */
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 0 5px;
-  padding-top: 10px;
+  padding-top: 0px;
   padding-bottom: 0px;
+
   /*transform: translateX(10px);*/
 }
 
@@ -1030,7 +1076,7 @@ body {
   /*width: 980px;*/
   /*width: 95%;*/
   /*display: inline-block;  ???? */
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 0 5px;
   padding-top: 10px;
@@ -1044,7 +1090,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 0 5px;
   padding-top: 10px;
@@ -1071,8 +1117,45 @@ body {
   float: left;
   width: 420px;
   margin: 0 20px 20px 0;
-  background-color: rgba(215, 255, 225, 0.6);
+  color: white;
   cursor: pointer;
+  overflow: hidden;
+
+
+
+}
+.item> img{
+  width: 420px;
+  height: auto;
+  -webkit-transform: scale(1.2);
+	transform: scale(1.2);
+  overflow: hidden;
+  z-index: 5;
+}
+
+.item img:hover{
+  -webkit-transform: scale(1.22);
+  transform: scale(1.22);
+
+  filter: grayscale(60%);
+  -webkit-transition: .3s ease-in-out;
+  transition: .3s ease-in-out;
+
+}
+
+.item > figcaption {
+  margin: 0px 0px;
+  width: auto;
+  font-size: 1em;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  letter-spacing: 1px;
+  z-index: 30;
+  position: absolute;
+  padding: 15px 15px;
+  bottom: 18px;
+  background-color: rgba(0,0,0,0.4);
+
 }
 
 .itemgallery {
@@ -1089,13 +1172,10 @@ body {
   float: left;
   width: 420px;
   margin: 0 15px 15px 0;
-  background-color: rgba(215, 255, 225, 0.6);
+  background-color: rgba(56, 33, 71,1);
 }
 
-.item img {
-  width: 420px;
-  height: auto;
-}
+
 .itemgallery img {
   width: 420px;
   height: auto;
@@ -1106,23 +1186,15 @@ body {
   height: auto;
 }
 
-.item > h5 {
-  padding: 16px 12px;
-  margin: 0px 0px;
-  font-size: 14px;
-  font-family: "Roboto", sans-serif;
-  /*'Convergence', sans-serif;*/
-  font-weight: 400;
-  letter-spacing: 1px;
-}
+
 .iteminsta > h5 {
   padding: 16px 12px;
   margin: 0px 0px;
   font-size: 14px;
   font-family: "Roboto", sans-serif;
-  /*'Convergence', sans-serif;*/
   font-weight: 400;
   letter-spacing: 1px;
+  color: rgba(255,255,255,0.8) ;
 }
 
 /* Infinite Scrool */
@@ -1134,6 +1206,49 @@ body {
   text-align: center;
   color: #777;
 }
+
+
+#borderinshadow{
+  /*
+    width: 100%;
+    position: absolute;
+    height: 89.8vh;
+    z-index: 1;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.7) -19%,rgba(246,246,246,0) 8%,rgba(209,209,209,0) 50%,rgba(245,245,245,0) 92%,rgba(254,254,254,0.7) 124%);
+    overflow-y: scroll;
+    top: 5.5%;
+}
+
+only bottom{*/
+    width: 100%;
+    position: absolute;
+    height: 10vh;
+    z-index: 50;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) -19%,rgba(246,246,246,0) 8%,rgba(209,209,209,0) 50%,rgba(245,245,245,0) -100%,rgba(0,0,0,0.6) 150%);
+    overflow-y: hidden;
+    top: 85.2%;
+}
+
+/*
+border top bottom
+
+    width: 100%;
+    position: absolute;
+    height: 89.6vh;
+    z-index: 1;
+    top: 5.5%;
+    border: 0.6px solid #ffffff;
+}
+*/
+
+
+
+
+
+
+
+
+
 
                                                   /* FOTOS CONFIG */
 /*

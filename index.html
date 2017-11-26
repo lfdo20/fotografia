@@ -20,8 +20,7 @@
     <script src="js/imagesloaded.pkgd.min.js"></script>
     <script src="js/masonry.pkgd.min.js"></script>
     <script type="text/javascript" src="js/instafeed.js"></script>
-    <!-- <script type="text/javascript" src="js/vibrant.min.js"></script> -->
-    <!-- <script src="gallery.js"></script> -->
+    <script src='js/color-thief.js'></script>
     <script src="index.js"></script>
 
 
@@ -87,14 +86,15 @@
     </div>
 
       <!-- Projetos Page -->
-    <div class="projetos js-projetos js-vis">
+    <div class="projetos js-projetos ff js-vis">
       <section class="projetosgrid ff js-vis">
         <div class="carregando">
         <div id="progress-bar-pages"></div>
         </div>
-        <div id="projetosgrid" class='js-vis'>
+        <div id="projetosgrid" class='js-vis' >
         </div>
       </section>
+      <!-- <div id="borderinshadow"></div> -->
     </div>
 
       <!-- Coleções Page -->
@@ -139,6 +139,14 @@
 
     <!-- Photo Page -->
     <div class="fotopage js-vis">
+      <div class="projdescription">
+        <h1 id="pd--tx" class='pd--p'>fgfg</h1>
+        <h2 id="pd--stt" class='pd--p'>dfdf</h2>
+        <p id="pd--p1" class='pd--p'>df</p>
+        <p id="pd--p2" class='pd--p'>df</p>
+        <p id="pd--p3" class='pd--p'>df</p>
+        <p id="pd--p4" class='pd--p'>df</p>
+      </div>
       <section class="mainfoto displaytoggle js-vis">
         <div class="foto">
           <div class="prev"></div>
@@ -146,10 +154,10 @@
           <div class="addbox"></div>
         </div>
         <div class="caption_container">
-          <span data-i18n="photocaption"> Photo Page </span>
+          <span class='slcaption'> Photo Page </span>
         </div>
       </section>
-      <section class="maingrid displaytoggle js-vis">
+      <section class="maingrid ff displaytoggle js-vis">
         <div class="carregando">
         <div id="progress-bar-pages"></div>
         </div>
@@ -159,34 +167,13 @@
           <i class="icon-grid iga js-gridbtn backbtn"></i>
           <i class="icon-grid igb js-gridbtn"></i>
           <i class="icon-chevron-thin-left js-photobackbtn photobackbtn"></i>
-          <span data-i18n="proj">Projeto</span>
+          <span id="proji18n">Projeto</span>
           <i class="icon-chevrons-right"></i>
-          <span data-i18n="projname"> Photo Page </span>
+          <span id="projnamei18n"> Photo Page </span>
         </div>
       </div>
     </div>
-
-    <!-- Grid Page -->
-
-    <!-- <div class="fotopage js-vis"> -->
-
-    <!--   <div class="footer">
-        <div class="fotomenu">
-          <i class="icon-grid iga js-gridbtn backbtn"></i>
-          <i class="icon-grid igb"></i>
-          <i class="icon-chevron-thin-left js-photobackbtn photobackbtn"></i>
-          <span data-i18n="proj">Projeto</span>
-          <i class="icon-chevrons-right"></i>
-          <span data-i18n="projname"> Photo Page </span>
-        </div>
-      </div>
-    </div> -->
-
     </div>
-    <!-- <script src="js/gapiload.js"></script>
-    <script async defer src="https://apis.google.com/js/api.js"
-      onload="this.onload=function(){};handleClientLoad()"
-      onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script> -->
+    </script>
   </body>
 </html>
