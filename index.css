@@ -625,15 +625,15 @@ body {
 
 .projdescription{
 position: absolute;
-left: -30%;
+left: 0;
 top: 0;
 display: inline-block;
 float: left;
 height: 100%;
-width: 30%;
+width: 0%;
 z-index: 25;
 background: rgba(251, 250, 249, 0.92);
-color: rgba(0, 0, 0, 0.84);
+color: rgba(0, 0, 0, 0.0);
 padding: 3em 0 0 3em ;
 
 font-size: 19px;
@@ -653,7 +653,7 @@ overflow-x: hidden;
 
 #pd--tx{
   font-weight: 600;
-  margin-bottom: 8px;
+  /*margin-bottom: 8px;*/
 }
 
 #pd--stt{
