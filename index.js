@@ -1,14 +1,44 @@
 $(document).ready(function() {
   // Globalvar
-  var cfolder = [], lbselected=[], ff, ffv;
+  var cfolder = [], lbselected=[], lbSelectedLinks=[], ff, ffv;
+/* notas:
+  > getcaptions() fazendo 2 requestes, como fazer a função aguardar pelo termino da outra?
 
-  if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+
+
+*/
+  if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
     ffv = true;
     console.log("ix ffox");
   }else{
     ffv= false;
     console.log("no ffox");
   }
+
+  // language load
+  $.i18n()
+    .load({
+      en: "./js/i18n/en.json",
+      de: "./js/i18n/de.json",
+      pt: "./js/i18n/pt.json",
+      es: "./js/i18n/es.json"
+    })
+    .done(function() {
+      $.when(getdrivefolders()).done(function() {
+        checkloc(url("?locale"));
+        checkpage();
+        console.log("Locale:", local);
+      });
+      $("body").i18n();
+    });
+
+  $(".switch-locale").on("click", "a", function(e) {
+    e.preventDefault();
+    $.i18n().locale = $(this).data("locale");
+    local = $(this).data("locale");
+    checkloc(local[0] + local[1]);
+    $("body").i18n();
+  });
 
   // Languages Handling order: pt > en > es > de
   var locxx = ["pt", "en", "es", "de"],
@@ -126,30 +156,6 @@ $(document).ready(function() {
     }
   }
 
-  // language load
-  $.i18n()
-    .load({
-      en: "./js/i18n/en.json",
-      de: "./js/i18n/de.json",
-      pt: "./js/i18n/pt.json",
-      es: "./js/i18n/es.json"
-    })
-    .done(function() {
-      $.when(getdrivefolders()).done(function() {
-        checkpage();
-        checkloc(url("?locale"));
-        console.log("Locale:", local, url());
-      });
-      $("body").i18n();
-    });
-
-  $(".switch-locale").on("click", "a", function(e) {
-    e.preventDefault();
-    $.i18n().locale = $(this).data("locale");
-    local = $(this).data("locale");
-    checkloc(local[0] + local[1]);
-    $("body").i18n();
-  });
 
   // history handling
   // Establish Variables
@@ -221,7 +227,7 @@ $(document).ready(function() {
     visibleStyle: { transform: "translateY(0)", opacity: 1 },
     hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
   });
-
+/*
   $.fn.masonryProjReveal = function($itemsproj) {
     let msnry = this.data("masonry");
     let itemSelector = msnry.options.itemSelector;
@@ -252,8 +258,8 @@ $(document).ready(function() {
         window.clearTimeout(timerprojsc);
       }
       timerprojsc = window.setTimeout(function() {
-        console.log("ttetet");
-        imageProjReveal();
+        //console.log("ttetet");
+        //imageProjReveal();
       }, 400);
     }
   });
@@ -268,7 +274,7 @@ $(document).ready(function() {
       $grid.masonryProjReveal($itemsproj);
     });
   }
-
+*/
   // Coleções Page Images Load
   function loadColecImages() {
     return $.Deferred(function() {
@@ -324,7 +330,7 @@ $(document).ready(function() {
     visibleStyle: { transform: "translateY(0)", opacity: 1 },
     hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
   });
-
+/*
   $.fn.masonryColecReveal = function($itemscolec) {
     let msnry = this.data("masonry");
     let itemSelector = msnry.options.itemSelector;
@@ -352,7 +358,7 @@ $(document).ready(function() {
         window.clearTimeout(timercolecsc);
       }
       timercolecsc = window.setTimeout(function() {
-        imageColecReveal();
+        //imageColecReveal();
       }, 400);
     }
   });
@@ -370,7 +376,7 @@ $(document).ready(function() {
     let itemscolec = convertColecData;
     return $(itemscolec);
   }
-
+*/
   // Instagram Pages code imagesload
   let instaimgs = [],
     instadata;
@@ -568,6 +574,12 @@ $(document).ready(function() {
   }
 
   function lightbox() {
+    $(".topbar").css("visibility", "visible");
+    $(".js-vis").css("visibility", "hidden");
+    $('.lightbox').css("visibility", "visible");
+    $(".fotobox").css({ display: "block", visibility: "visible" });
+    listSelected();
+
     //showPlate(".lightbox");
   }
 
@@ -627,7 +639,9 @@ $(document).ready(function() {
       colecoes();
     } else if (title === "Coleções Galeria") {
       photoManager('colecoes', 'grid', cat, pj);
-    } else {
+    } else if (title === "Lightbox") {
+      lightbox();
+    }else {
       if (plate !== undefined) {
         $(".topbar").css("visibility", "visible");
         $(".js-vis").css("visibility", "hidden");
@@ -777,24 +791,24 @@ $(document).ready(function() {
   var fields = "nextPageToken, files(id, name, webContentLink, webViewLink)";
   var mrecents = "recency"; // or : createdTime
   var pagesize = 8;
-  var nextPageToken = "";
+  //var nextPageToken = "";
   var projfeedstat = 0;
   let dataprojetos;
   /*  "+and+" + mimefoto + */
   var urlgapi =
     "https://www.googleapis.com/drive/v3/files?" +
-    "pageSize=" +
-    pagesize +
-    "&fields=" +
+    //"pageSize=" +
+    //pagesize +
+    "fields=" +
     fields +
-    "&orderBy=" +
-    mrecents +
+    "&orderBy=name" +
+    //mrecents +
     "&q=" +
     projetosgaleria +
     "&key=" +
-    api_key +
-    "&pageToken=" +
-    nextPageToken;
+    api_key;
+    //"&pageToken=" +
+    //nextPageToken;
 
   var fotocount = 0;
   function listProjFiles() {
@@ -804,43 +818,26 @@ $(document).ready(function() {
       let figdata = ' data-pj="';
       let figcat = '" data-cat="pj';
       let imgsrc = '"><img src="';
-      if (nextPageToken.length > 5 || $("#projetosgrid figure").length === 0) {
-        var promise = $.getJSON(urlgapi + nextPageToken, function(
-          data,
-          status
-        ) {
-          console.log("Gapi Projeto Retrieve"); // on success
+      //if (nextPageToken.length > 5 || $("#projetosgrid figure").length === 0) {
+        var promise = $.getJSON(urlgapi, function(data, status) {
+          console.log("Gapi Projeto Retrieve");
         });
-        promise
-          .done(function(data) {
+        promise.done(function(data) {
             //console.log(data.nextPageToken);
-            if (data.nextPageToken !== undefined) {
-              nextPageToken = data.nextPageToken;
+            //if (data.nextPageToken !== undefined) {
+            //  nextPageToken = data.nextPageToken;
               //console.log(nextPageToken);
-            } else {
-              nextPageToken = 0;
-            }
+          //  } else {
+          //    nextPageToken = 0;
+          //  }
             dataprojetos = data.files;
             //console.log(data.files, nextPageToken);
-            let items,
-              img1 = "";
+            let items, img1 = "";
             for (i = 0; i < dataprojetos.length; i++) {
               fotocount++;
-              cap =
-                '<figcaption data-i18n="pj1ft' +
-                fotocount +
-                'leg">Olár <figcaption>';
+              cap = '<figcaption data-i18n="pj' + fotocount + 'leg">Olár <figcaption>';
               //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
-              img1 +=
-                figimg +
-                figdata +
-                fotocount +
-                figcat +
-                imgsrc +
-                dataprojetos[i].webContentLink +
-                endimg +
-                cap +
-                endfig;
+              img1 += figimg + figdata + fotocount + figcat + imgsrc + dataprojetos[i].webContentLink + endimg + cap + endfig;
               projfeedstat += 1;
             }
             items = img1.toString();
@@ -853,29 +850,29 @@ $(document).ready(function() {
             items = "";
             self.resolve(items);
           });
-      }
+      //}
     });
   }
 
   // List Coleções Files
   var fotocccount = 0;
-  var nextCCPageToken = "";
+  //var nextCCPageToken = "";
   var datacolecoes;
   var colecfeedstat = 0;
   var urlccgapi =
     "https://www.googleapis.com/drive/v3/files?" +
-    "pageSize=" +
-    pagesize +
-    "&fields=" +
+    //"pageSize=" +
+    //pagesize +
+    "fields=" +
     fields +
-    "&orderBy=" +
-    mrecents +
+    "&orderBy=name" +
+    //mrecents +
     "&q=" +
     colecoesgaleria +
     "&key=" +
-    api_key +
-    "&pageToken=" +
-    nextCCPageToken;
+    api_key;
+    //"&pageToken=" +
+    //nextCCPageToken;
   function listColecFiles() {
     return $.Deferred(function() {
       var self = this;
@@ -883,23 +880,20 @@ $(document).ready(function() {
       let figdata = ' data-cc="';
       let figcat = '" data-cat="cc';
       let imgsrc = '"><img src="';
-      if (nextCCPageToken.length > 5 || $("#colecoesgrid figure").length === 0
-      ) {
-        var promise = $.getJSON(urlccgapi + nextCCPageToken, function(
-          data,
-          status
-        ) {
-          console.log("Gapi Coleções Retrieve"); // on success
+      // if (nextCCPageToken.length > 5 || $("#colecoesgrid figure").length === 0
+      // ) {
+        var promise = $.getJSON(urlccgapi, function(data, status) {
+            console.log("Gapi Coleções Retrieve");
         });
         promise
           .done(function(data) {
             //console.log(data.nextPageToken);
-            if (data.nextPageToken !== undefined) {
-              nextCCPageToken = data.nextPageToken;
+            //if (data.nextPageToken !== undefined) {
+              //nextCCPageToken = data.nextPageToken;
               //console.log(nextPageToken);
-            } else {
-              nextCCPageToken = 0;
-            }
+            //} else {
+              //nextCCPageToken = 0;
+            //}
             datacolecoes = data.files;
             //console.log(data.files, nextPageToken);
             let itemscolec,
@@ -907,21 +901,9 @@ $(document).ready(function() {
             //console.log(tproj, fig);
             for (i = 0; i < datacolecoes.length; i++) {
               fotocccount++;
-              cap =
-                '<figcaption data-i18n="pj1cc' +
-                fotocccount +
-                'leg">Olár <figcaption>';
+              cap = '<figcaption data-i18n="cc' + fotocccount + 'leg">Olár <figcaption>';
               //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
-              img1 +=
-                figimg +
-                figdata +
-                fotocccount +
-                figcat +
-                imgsrc +
-                datacolecoes[i].webContentLink +
-                endimg +
-                cap +
-                endfig;
+              img1 += figimg + figdata + fotocccount + figcat + imgsrc + datacolecoes[i].webContentLink + endimg + cap + endfig;
               colecfeedstat += 1;
             }
             itemscolec = img1.toString();
@@ -933,7 +915,7 @@ $(document).ready(function() {
             itemscolec = "";
             self.resolve(itemscolec);
           });
-      }
+      //}
     });
   }
 
@@ -1031,20 +1013,35 @@ $(document).ready(function() {
           $(container)
             .delay(10)
             .animate({ opacity: "1" }, "slow");
-            scrollpjgrid(pj, cat, container);
-            ffoxscroll('.maingrid');
+            if (ffv === true){
+              ffoxscrollgrid(pj, cat, '.maingrid');
+            }else{
+            checkbfscroll(pj, cat, container);
+          }
         });
     });
   }
 
+function checkbfscroll(pj, cat, container){
+  $maing =$(".maingrid").height();
+  $maingsh = $(".maingrid")[0].scrollHeight;
+  console.log(pj,cat,container, $maing, $maingsh);
+  if ($maing-80 < $maingsh){
+    pjgridReveal(pj, cat, container);
+    console.log('funcionou o escrool');
+    scrollpjgrid(pj, cat, container);
+  }
+}
+
   var timergridsc;
   function scrollpjgrid(pj, cat, container) {
+    console.log('ay');
     $(".maingrid").on("scroll.gridpj1", function() {
       let $pgthis = $(this);
       let pgheight = this.scrollHeight - $pgthis.height();
       let pgscroll = $pgthis.scrollTop();
       let pgisScrolledToEnd = pgscroll >= pgheight - 100;
-      //console.log(pgheight, $pgthis.height(), this.scrollHeight);
+      console.log('A:',pgheight,'B', $pgthis.height(), 'C', this.scrollHeight);
       if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
         if (timergridsc) {
           window.clearTimeout(timergridsc);
@@ -1089,11 +1086,14 @@ $(document).ready(function() {
     return this;
   };
 
-  var ftcount = {}, ftlist={};
+  var ftcount = {}, ftlist={}, loadnumber=4;
   function listGalleryFiles(pj, cat, container, data) {
-    if (window["nextPageToken" + cat + pj] === undefined) {
-      window["nextPageToken" + cat + pj] = "";
-    }
+    return $.Deferred(function() {
+      var self = this;
+    //console.log('FT List: ',cat + pj, ftlist);
+    // if (window["nextPageToken" + cat + pj] === undefined) {
+    //   window["nextPageToken" + cat + pj] = "";
+    // }
     //console.log(cat + pj, ftcount);
     if (ftcount.hasOwnProperty(cat + pj) === false) {
       ftcount[cat + pj] = "";
@@ -1103,24 +1103,16 @@ $(document).ready(function() {
     if (ftlist.hasOwnProperty(cat + pj) === false) {
       ftlist[cat + pj] = {g:[], s:[]};
       //console.log(cat + pj, ftlist);
-    } else {
-
-      // novo código para calcular e enviar novas fotos para galeria
-
-    }
-
-    return $.Deferred(function() {
-      var self = this;
-      //console.log('T3 : ', pj, cat, container);
-      if (
-        window["nextPageToken" + cat + pj].length > 5 ||
-        $(container + " figure").length === 0
-      ) {
+      //console.log('T0 : ', pj, cat, container, ftlist);
+      // if (
+      //   window["nextPageToken" + cat + pj].length > 5 ||
+      //   $(container + " figure").length === 0
+      // ) {
         var urlgapi =
           "https://www.googleapis.com/drive/v3/files?" +
-          "pageSize=" +
-          "8" +
-          "&fields=" +
+          //"pageSize=" +
+          //"" +
+          "fields=" +
           fields +
           "&orderBy=name" + //mrecents+
           "&q=" +
@@ -1130,47 +1122,80 @@ $(document).ready(function() {
             }
           }).id +
           "&key=" +
-          api_key +
-          "&pageToken=" +
-          window["nextPageToken" + cat + pj];
+          api_key //+
+          //"&pageToken=" +
+          //window["nextPageToken" + cat + pj];
         //console.log(window['nextPageToken'+cat+pj]);
         var promise = $.getJSON(urlgapi, function(data, status) {
           console.log("Gapi Gallery Retrieve"); // on success
         });
         promise.done(function(data) {
             //console.log(data.nextPageToken);
-            if (data.nextPageToken !== undefined) {
-              window["nextPageToken" + cat + pj] = data.nextPageToken;
-            } else {
-              window["nextPageToken" + cat + pj] = 0;
-            }
-            dataprojetos = data.files.sort((a, b) => a.name - b.name);
+            // if (data.nextPageToken !== undefined) {
+            //   window["nextPageToken" + cat + pj] = data.nextPageToken;
+            // } else {
+            //   window["nextPageToken" + cat + pj] = 0;
+            // }
+            var dataprojetos = data.files.sort((a, b) => a.name - b.name);
             //console.log(data.files, nextPageToken);
             let items;
             let img1 = "", img2 = "";
             let tproj = dataprojetos.length;
             let fig = $(container).length;
-            for (i = 0; i < dataprojetos.length; i++) {
-              ftcount[cat + pj]++;
-              let figimg = '<figure class="itemgallery js-slide item' + cat + pj + ' " data-pjcatft="' + pj + cat + ftcount[cat + pj] + '"><img src="';
-              cap = '<figcaption data-i18n="' + cat + pj + "ft" + ftcount[cat + pj] + 'leg">Olár <figcaption>';
-              img1 += figimg + dataprojetos[i].webContentLink + endimg + endfig;
+            for (var i = 0; i < dataprojetos.length; i++) {
+              //ftcount[cat + pj]++;
+              let figimg = '<figure class="itemgallery js-slide item' + cat + pj + ' " data-pjcatft="' + pj + cat + (i+1) + '"><img src="';
+              cap = '<figcaption data-i18n="' + cat + pj + "ft" + (i+1) + 'leg">Olár <figcaption>';
+              img1 = figimg + dataprojetos[i].webContentLink + endimg + endfig;
               ftlist[cat + pj].g.push(img1);
-              img2 += '<figure class="gSlides foto' + cat + pj + '"><img src=https://cors-anywhere.herokuapp.com/'+
-                dataprojetos[i].webContentLink + " crossOrigin='Anonymous'/></figure>";
-              ftlist[cat + pj].s.push(img1);
+              img2 = '<figure class="gSlides foto' + cat + pj + '"><img src='+
+                dataprojetos[i].webContentLink + "/></figure>";
+              ftlist[cat + pj].s.push(img2);
             }
-            items = img1.toString();
-            itemsfoto = img2.toString();
-            self.resolve(items, itemsfoto);
+            //items = img1.toString();
+            //itemsfoto = img2.toString();
+            //self.resolve(items, itemsfoto);
+            console.log('T1 :', ftlist);
+            returnft();
             items = "";
           }).fail(function() {
             console.log("No Data");
             items = "";
             self.resolve(items);
           });
+        }else{
+          returnft();
+        }
+
+        function returnft(){
+        if(ftlist.hasOwnProperty(cat + pj) === true){
+          //console.log(ftlist[cat+pj].g.length);
+        let img1='', img2='', items, itemsfoto;
+        for (var j = 0; j <loadnumber && ftcount[cat + pj] < ftlist[cat+pj].g.length; j++) {
+          ftcount[cat + pj]++;
+          //console.log(ftcount[cat+pj]);
+          img1+=ftlist[cat+pj].g[ftcount[cat + pj]-1];
+          img2+=ftlist[cat+pj].s[ftcount[cat + pj]-1];
+        }
+          items = img1.toString();
+          itemsfoto = img2.toString();
+          //console.log('T2: ', ftlist, items, itemsfoto);
+          self.resolve(items, itemsfoto);
+          items = "";
+        }
       }
-    });
+      });
+  }
+
+  function getGapiSelected(){
+    //procurar projetos cfolder
+
+
+    //baixar projetos do google
+
+
+
+
   }
 
   function getHomePhoto() {
@@ -1323,12 +1348,13 @@ $(document).ready(function() {
         configpj1a.sort((a, b) => a.pj - b.pj);
         configpj1b.sort((a, b) => a.pj - b.pj);
         cfolder = configpjb.concat(configpj1a, configpj1b);
-        console.log("Gapi Folders Retrieve");
+        //console.log("Gapi Folders Retrieve");
         self.resolve();
       });
     });
   }
   function waitfor() {
+    console.log('working?');
     return $.Deferred(function() {
       var self = this;
       setTimeout(function() {
@@ -1347,6 +1373,8 @@ $(document).ready(function() {
 
   // Captions from Drive
   function getCaptions() {
+  return $.Deferred(function() {
+    var self = this;
     var urlcaptions =
       "https://www.googleapis.com/drive/v3/files?q=" +
       cfolder[3].id + "&fields=" + fields + "&key=" + api_key;
@@ -1393,23 +1421,28 @@ $(document).ready(function() {
             es: capes
           })
           .done(function() {
+            capdone =true;
             console.log("Done Caps!");
+            self.resolve();
           })
           .fail(function() {
             console.log("Language Fail");
           });
       });
     });
+  });
   }
 
 
 // Photo Page grid
 
-//$('.fotopage').ready(function(){
 function fotopageready(){
   var lvcat = lastVisible[1];
   var lvpj = lastVisible[2];
+  $.when(getCaptions()).done(function(){
   console.log(lvcat, lvpj,'pd-title');
+  $('#proji18n').text($.i18n(lvcat+lvpj+'proj'));
+  $('#projnamei18n').text($.i18n(lvcat+lvpj+'projname'));
   $('#pd--tx').text($.i18n(lvcat+lvpj+'pd-title'));
   $('#pd--stt').text($.i18n(lvcat+lvpj+'pd-stt'));
   $('#pd--p1').text($.i18n(lvcat+lvpj+'pd-p1'));
@@ -1418,10 +1451,11 @@ function fotopageready(){
   $('#pd--p4').text($.i18n(lvcat+lvpj+'pd-p4'));
   $('.projdescription').hide().show(0);
   $('.projdescription').off('click');
+
   $('.projdescription').delay(100).animate({
     padding: '3em 0 0 3em',
     width: '+=30%'
-  },1000).animate({
+  },500).animate({
       color:  'rgba(0, 0, 0, 0.84)'
   },5);
 
@@ -1436,7 +1470,7 @@ function fotopageready(){
         padding: tp+'em 0 0 '+tp+'em'
       },100);
   });
-
+});
 }
 //);
 
@@ -1502,6 +1536,7 @@ function fotopageready(){
          $(".mainfoto").css({ display: "block", visibility: "visible" });
           break;
         case 'grid':
+        $('.projdescription').css({width: '0%', padding: '0em 0 0 0em'});
         $(".maingrid").css({ display: "flex", visibility: "visible" });
         $(".gridpj").css({ display: "none", visibility: "hidden" });
         $(".mainfoto").css({ display: "none", visibility: "hidden" });
@@ -1549,7 +1584,7 @@ function fotopageready(){
       ggcat = $(this).data('pjcatft').replace(rxgrid, "$2");
       ggpj = $(this).data('pjcatft').replace(rxgrid, "$1");
       var ft = $(this).data('pjcatft').replace(rxgrid, "$3");
-      console.log(ggcat, ggpj, ft);
+      //console.log(ggcat, ggpj, ft);
       $(".maingrid").css({ display: "none", visibility: "hidden" });
       $(".gridpj").css({ visibility: "hidden" });
       $(".mainfoto").css({ display: "block", visibility: "visible" });
@@ -1562,7 +1597,6 @@ function fotopageready(){
 
     $(".prev").click(function() {
       plusSlides(-1);
-
     });
 
     $(".next").click(function() {
@@ -1604,8 +1638,6 @@ function fotopageready(){
       }
       slides[slideIndex - 1].style.display = "block";
       $('.slcaption').text($.i18n(ggcat + ggpj +'ft'+ n +'leg'));
-      $('#proji18n').text($.i18n(ggcat+ggpj+'proj'));
-      $('#projnamei18n').text($.i18n(ggcat+ggpj+'projname'));
       var x = (ggcat + ggpj +'ft'+ ggft).toString();
       //console.log(x, lbselected.indexOf(x),  lbselected);
       if (lbselected.indexOf(x) === -1){
@@ -1619,13 +1651,110 @@ function fotopageready(){
     }
   }
 
+// Lighbox code
+var rxlb = /^([a-z]+)(\d+)([a-z]+)(\d+)/;
+var lbcat, lbpj, lbft;
+function listSelected(){
+  var img1='',img2='';
+  console.log(lbselected);
+  console.log(lbSelectedLinks);
+  console.log(cfolder);
+  console.log(ftlist);
+  console.log($('#grid'+'pj'+'1'+' >figure:nth-child('+'8'+') > img'));
+  $('.prev, .next').off();
+  if (lbselected !== null){
+    for (var i = 0; i < lbselected.length; i++) {
+      lbcat = lbselected[i].replace(rxlb, "$1");
+      lbpj = lbselected[i].replace(rxlb, "$2");
+      lbft = lbselected[i].replace(rxlb, "$4");
+      console.log(lbcat,lbpj, lbft);
+      let figimg = '<figure class="js-lbmini item' + lbcat + lbpj + ' " data-pjcatft="' + lbpj + lbcat + (i+1) + '"><img src="';
+      //cap = '<figcaption data-i18n="' + lbcat + lbpj + "ft" + (i+1) + 'leg">Olár <figcaption>';
+      img1 += figimg + lbSelectedLinks[i] + endimg + endfig;
+      //ftlist[lbcat + lbpj].g.push(img1);
+      img2 += '<figure class="lbSlides foto' + lbcat + lbpj + '"><img src='+ lbSelectedLinks[i] + "/></figure>";
+      //ftlist[lbcat + lbpj].s.push(img2);
+    }
+    var items = img1.toString();
+    var itemsfoto = img2.toString();
+    console.log(items, itemsfoto);
+    $('.fotobox').append(itemsfoto);
+    $('.lbmini').append(items);
+
+    //$(".mainbox").css({ display: "none", visibility: "hidden" });
+    $(".mainbox").css({ visibility: "hidden" });
+    $(".fotobox").css({ display: "block", visibility: "visible" });
+    var allslides = $(".lbSlides");
+    for (i = 0; i < allslides.length; i++) {
+      allslides[i].style.display = "none";
+    }
+    //currentSlide(ft);
+  //checkstored();
+  // getGapiSelected();
+}
+  /*
+
+
+
+
+  $(".prev").click(function() {
+    plusSlides(-1);
+  });
+
+  $(".next").click(function() {
+    plusSlides(+1);
+  });
+
+  function plusSlides(n) {
+    slideIndex = Number(slideIndex);
+    showSlides(slideIndex+=n);
+  }
+
+  function currentSlide(n) {
+    n= Number(n);
+    showSlides(slideIndex = n);
+  }
+
+  function showSlides(n) {
+    var i;
+    var slides = $(".foto" + ggcat+ggpj); //$('.gSlides'); / +cat+pj
+    //myImage= $('.gslides > figure');
+    ggft= n;
+    if (n > slides.length) {
+      slideIndex = 1;
+    }
+    if (n < 1) {
+      slideIndex = slides.length;
+    }
+    for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    slides[slideIndex - 1].style.display = "block";
+    $('.slcaption').text($.i18n(ggcat + ggpj +'ft'+ n +'leg'));
+    var x = (ggcat + ggpj +'ft'+ ggft).toString();
+    //console.log(x, lbselected.indexOf(x),  lbselected);
+    if (lbselected.indexOf(x) === -1){
+      $(".addbox").removeClass("lightboxrem");
+      $(".addbox").addClass("lightboxadd");
+    }else{
+      $(".addbox").addClass("lightboxrem");
+      $(".addbox").removeClass("lightboxadd");
+    }
+    //getcolor();
+  }
+*/
+}
+
+
   // Store Variables
 
   function checkstored(){
     if (!localStorage.selected === false){
       var items = JSON.parse(localStorage.getItem("selected"));
+      var itemsLinks = JSON.parse(localStorage.getItem("selectedLinks"));
       for (var i=0; i<items.length; i++) {
         lbselected.push(items[i]);
+        lbSelectedLinks.push(itemsLinks[i]);
       }
     }else {
       console.log('Nothing Stored');
@@ -1635,41 +1764,53 @@ function fotopageready(){
   $('.foto').on('click', '.lightboxadd', function(){
     if (localStorage){
       if ( !localStorage.selected === false){
-        var selected =[];
+        var selected =[], itemLinks=[];
         selected = JSON.parse(localStorage.getItem("selected"));
+        itemsLinks = JSON.parse(localStorage.getItem("selectedLinks"));
         selected.push(ggcat + ggpj +'ft'+ ggft);
         lbselected.push(ggcat + ggpj +'ft'+ ggft);
-        console.log('Image Saved : ', selected);
+        itemsLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
+        lbSelectedLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
         localStorage.setItem("selected", JSON.stringify(selected));
+        localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxrem");
         $(".addbox").removeClass("lightboxadd");
         console.log('Image Saved : ', lbselected)
       }else{
-        var selected =[];
+        var selected =[], itemsLinks=[];
         selected.push(ggcat + ggpj +'ft'+ ggft);
         lbselected.push(ggcat + ggpj +'ft'+ ggft);
-        console.log('Image Saved : ', selected);
+        lbSelectedLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
+        itemsLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
         localStorage.setItem("selected", JSON.stringify(selected));
+        localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxrem");
         $(".addbox").removeClass("lightboxadd");
-        //console.log('Image Saved : ', lbselected)
+        console.log('Image Saved : ', lbselected)
       }
     }
     else if (sessionStorage){
-        if ( !sessionStorage.selected){
-          var selected =[];
+        if ( !sessionStorage.selected === false){
+          var selected =[], itemsLinks=[];
           selected = JSON.parse(sessionStorage.getItem("selected"));
+          itemsLinks = JSON.parse(localStorage.getItem("selectedLinks"));
           selected.push(ggcat + ggpj +'ft'+ ggft);
           lbselected.push(ggcat + ggpj +'ft'+ ggft);
+          itemsLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
+          lbSelectedLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
           sessionStorage.setItem("selected", JSON.stringify(selected));
+          sessionStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
           $(".addbox").addClass("lightboxrem");
           $(".addbox").removeClass("lightboxadd");
           console.log('Image Saved : ', lbselected)
         }else{
-          var selected =[];
+          var selected =[], itemsLinks=[] ;
           selected.push(ggcat + ggpj +'ft'+ ggft);
           lbselected.push(ggcat + ggpj +'ft'+ ggft);
+          itemsLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
+          lbSelectedLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
           sessionStorage.setItem("selected", JSON.stringify(selected));
+          sessionStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
           $(".addbox").addClass("lightboxrem");
           $(".addbox").removeClass("lightboxadd");
           console.log('Image Saved : ', lbselected)
@@ -1684,11 +1825,15 @@ $('.foto').on('click', '.lightboxrem', function(){
   if (localStorage){
     if ( !localStorage.selected === false){
       var remove = ggcat + ggpj +'ft'+ ggft;
-      var selected =[];
+      var selected =[], itemLinks=[];
       selected = JSON.parse(localStorage.getItem("selected"));
+      itemsLinks = JSON.parse(localStorage.getItem("selectedLinks"));
       selected.splice(selected.indexOf(remove), 1);
+      itemLinks.splice(selected.indexOf(remove), 1);
       lbselected.splice(lbselected.indexOf(remove), 1);
+      lbSelectedLinks.splice(lbSelectedLinks.indexOf(remove), 1);
       localStorage.setItem("selected", JSON.stringify(selected));
+      localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
       $(".addbox").addClass("lightboxadd");
       $(".addbox").removeClass("lightboxrem");
       console.log('Image Removed : ', JSON.parse(localStorage.getItem("selected")));
@@ -1696,14 +1841,18 @@ $('.foto').on('click', '.lightboxrem', function(){
   }else if(sessionStorage){
     if ( !sessionStorage.selected === false){
       var remove = ggcat + ggpj +'ft'+ ggft;
-      var selected =[];
+      var selected =[], itemLinks=[];
       selected = JSON.parse(sessionStorage.getItem("selected"));
+      itemsLinks = JSON.parse(sessionStorage.getItem("selectedLinks"));
       selected.splice(selected.indexOf(remove), 1);
+      itemLinks.splice(selected.indexOf(remove), 1);
       lbselected.splice(lbselected.indexOf(remove), 1);
+      lbSelectedLinks.splice(lbSelectedLinks.indexOf(remove), 1);
       sessionStorage.setItem("selected", JSON.stringify(selected));
+      sessionStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
       $(".addbox").addClass("lightboxadd");
       $(".addbox").removeClass("lightboxrem");
-      console.log('Image Removed : ', JSON.parse(localStorage.getItem("selected")));
+      console.log('Image Removed : ', JSON.parse(sessionStorage.getItem("selected")));
     }
   }
 });
@@ -1772,12 +1921,38 @@ function  getcolor() {
   } else {
   }
 
+  var timergridffsc
+  function ffoxscrollgrid(pj, cat, ff){
+  if (ffv === true) {
+  var cont = document.querySelectorAll(ff)[0];
+  if ( cont.scrollHeight > cont.offsetHeight ||cont.scrollHeight === cont.offsetHeight) {
+      pjgridReveal(pj, cat, cont);
+  }
+  cont.addEventListener("wheel", function(event) {
+      if (event.deltaY > 0)
+        cont.scrollBy({ top: 380, left: 0, behavior: "smooth" });
+      else cont.scrollBy({ top: -380, left: 0, behavior: "smooth" });
+      if ( cont.scrollHeight > cont.offsetHeight ||cont.scrollHeight === cont.offsetHeight) {
+        if (timergridffsc) {
+          window.clearTimeout(timergridffsc);
+        }
+        timergridffsc = window.setTimeout(function() {
+          pjgridReveal(pj, cat, cont);
+          //console.log(pj,cat,container);
+        }, 400);
+      }
+    },
+    false
+  );
+  }
+  }
+
     function ffoxscroll(ff){
     if (ffv === true) {
+      //var $thi = document.querySelectorAll('.maingrid');
     var container = document.querySelectorAll(ff)[0];
-    container.addEventListener(
-      "wheel",
-      function(event) {
+
+    container.addEventListener("wheel", function(event) {
         if (event.deltaY > 0)
           container.scrollBy({ top: 380, left: 0, behavior: "smooth" });
         else container.scrollBy({ top: -380, left: 0, behavior: "smooth" });
