@@ -749,8 +749,9 @@ overflow-x: hidden;
   visibility: hidden;
 }
 
-.mainbox{
-  display: flex;
+.lbmain{
+  display: inline-flex;
+  flex-flow: column wrap;
   position: relative;
   /*background-color: rgba(255, 255, 255, 0.05);*/
   -ms-flex-item-align: center;
@@ -770,7 +771,7 @@ overflow-x: hidden;
   z-index: 1;
 }
 
-.fotobox{
+.lbfoto{
   display: flex;
   /*background-color: rgba(255, 255, 255, 0.1);*/
   -webkit-box-flex: 1;
@@ -811,14 +812,14 @@ overflow-x: hidden;
 position: absolute;
 left: 0;
 top: 0;
-display: flex;
+display: flex; /*flex;*/
 flex-flow: column wrap;
 float: left;
 height: 100%;
-width: 30%;
+width: 0%;
 z-index: 25;
 background: rgba(251, 250, 249, 0.92);
-overflow-y: hidden;
+cursor: pointer;
 /*transform: translatex(-100%);*/
 }
 ::-webkit-scrollbar {
@@ -826,13 +827,14 @@ width: 0px; /* remove scrollbar space */
 background: transparent; /* optional: just make scrollbar invisible */
 overflow-x: hidden;
 overflow-y: hidden;
+
 }
 
 #lb--tx{
   font-weight: 600;
   font-size: 3em;
   line-height: 1.1em;
-  margin: 40px 0 10px 0;
+  margin: 15px 0 10px 0;
 }
 
 #lb--stt{
@@ -852,8 +854,9 @@ overflow-y: hidden;
 
 .lbinfo{
   display: inline-block;
+  opacity: 0;
   flex: 0 1 auto;
-  padding: 2em 0 0 1em ;
+  padding: 0 0 0 2em ;
   cursor: pointer;
   font-size: 19px;
   text-align: justify;
@@ -866,12 +869,13 @@ overflow-y: hidden;
 
 .lbmini{
   position: absolute;
+  opacity: 0.0;
   bottom: 0;
   left: 0;
   margin: 0;
   padding: 0;
   width: 100%;
-  max-height: 40vh;
+  max-height: 70vh;
   display: flex;
   flex-flow: row wrap;
   align-content: space-around;
@@ -893,6 +897,265 @@ overflow-y: hidden;
 .lbmini > figure> img{
 min-width: 100%;
 max-height: 70px;
+}
+
+.lbprev{
+  /*background: rgba(0, 0, 0, 0.5);*/
+  cursor: pointer;
+  position: absolute;
+  width: 50%;
+  height: 75%;
+  padding: 0px;
+  color: white;
+  transition: 0.6s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  left: 0px;
+  align-self: flex-start;
+}
+
+.lbnext {
+  /*background: rgba(0, 0, 0, 0.5);*/
+  cursor: pointer;
+  position: absolute;
+  width: 50%;
+  height: 75%;
+  padding: 0px;
+  color: white;
+  transition: 0.6s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  align-self: flex-start;
+  right: 0;
+}
+
+.lbfooter {
+  position: relative;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.1);
+  width: 94.6vh;
+  height: 22vh;
+  overflow: hidden;
+  visibility: hidden;
+
+}
+
+.lbfotomenu {
+  /*display: inline;*/
+  width: 600px;
+  height: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0 0 0 -5px;
+  z-index: 5;
+}
+
+.lbdel{
+  position: absolute;
+  right: 5px;
+  top: 0;
+  border: 1px solid black;
+  width: 36px;
+  height: 36px;
+  text-align: left;
+}
+
+
+.lbdel:hover{
+  border: 1px solid white;
+}
+
+.lbxx{
+  font-family: "Roboto", sans-serif;
+  font-size: 40px;
+  font-weight: 100;
+  line-height: 30px;
+  margin: 0 0;
+  text-align: center;
+  color: black;
+  -webkit-transform: scale(1, 0.8);
+          transform: scale(1, 0.8);
+
+}
+
+.lbxx:hover {
+  font-family: "Roboto", sans-serif;
+  font-size: 40px;
+  text-shadow: 1px 1px 3px black;
+  text-align: center;
+  line-height: 30px;
+  margin: 0 0;
+  color: white;
+  -webkit-transform: scale(1, 0.8);
+          transform: scale(1, 0.8);
+}
+
+.lbversion{
+  position: relative;
+  left: 1px;
+  top: 10px;
+  border: 1px solid black;
+  width: 56px;
+  height: 56px;
+  text-align: center;
+  margin: 8px;
+}
+
+.lbversion:first-child{
+margin: 8px 8px 8px 4px;
+}
+
+.lbversion:hover{
+border: 1px solid white;
+
+}
+
+.lbversion > h1{
+  font-family: "Roboto", sans-serif;
+  font-size: 40px;
+  font-weight: 100;
+  line-height: 52px;
+  margin: 0 0;
+  text-align: center;
+  color: black;
+  -webkit-transform: scale(1, 0.8);
+          transform: scale(1, 0.8);
+}
+
+.lbformat{
+  position: absolute;
+  display: inline-block;
+  left: 0px;
+  bottom: 56px;
+  border: 1px solid black;
+  width: 96px;
+  height: 36px;
+  text-align: center;
+  margin: 0 0 0 5px;
+}
+
+.lbformat:hover{
+  border: 1px solid white;
+  cursor: pointer;
+}
+
+.lbformat>h1{
+  font-family: "Roboto", sans-serif;
+  font-size: 32px;
+  font-weight: 100;
+  line-height: 38px;
+  margin: 0;
+}
+
+#lbmessage{
+  position: absolute;
+  top: 5px;
+  left: 4px;
+  width: 300px;
+  height: 145px;
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 100;
+  line-height: 38px;
+  text-align: left;
+}
+
+.lbsend{
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  border: 1px solid black;
+  width: 96px;
+  height: 38px;
+  text-align: center;
+  margin: 0 0 8px 4px;
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 100;
+  line-height: 40px;
+}
+
+.lbsend:hover{
+  border: 1px solid white;
+  cursor: pointer;
+}
+
+.lbsend >h1{
+  margin: 0;
+}
+
+.lbsend >h1:hover{
+  color: white;
+  margin: 0;
+}
+
+.lbformatmenu{
+  position: relative;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.6);
+  width: 94.6vh;
+  height: 22vh;
+  overflow: hidden;
+  visibility: hidden;
+  z-index: 15;
+}
+
+
+.lbsendmenu{
+  position: relative;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.6);
+  width: 94.6vh;
+  height: 22vh;
+  overflow: hidden;
+  visibility: hidden;
+  z-index: 15;
+}
+
+#lbformatprint{
+  position: absolute;
+  display: inline-flex;
+  height: 40px;
+  left: 0;
+  top: 90px;
+  margin: 5px;
+
+}
+
+#lbformatprint>h4{
+  font-family: "Roboto", sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 40px;
+  margin:0 0 0 3px;
+
+}
+
+
+#lbfortmatdigital{
+  position: absolute;
+  display: inline-flex;
+  height: 40px;
+  left: 0;
+  top: 120px;
+  font-family: "Roboto", sans-serif;
+  font-size: 22px;
+  font-weight: 100;
+  line-height: 45px;
+  margin: 5px;
+
+}
+
+#lbfortmatdigital>h4{
+  font-family: "Roboto", sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 44px;
+  margin:0 0 0 3px;
 }
 
 
