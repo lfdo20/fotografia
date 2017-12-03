@@ -20,7 +20,6 @@
     <script src="js/imagesloaded.pkgd.min.js"></script>
     <script src="js/masonry.pkgd.min.js"></script>
     <script type="text/javascript" src="js/instafeed.js"></script>
-    <script src='js/color-thief.js'></script>
     <script src="index.js"></script>
 
 
@@ -117,9 +116,101 @@
     </div>
 
       <!-- lightbox Page -->
-    <div class="lightbox js-lightboxbtn js-vis">
-      <div class="logo">
-      <h1 data-i18n="mlb"> Leandro Lightbox</h1>
+    <div class="lightbox js-vis">
+      <div class="lblist">
+        <div class="lbinfo ff">
+        <h1 id="lb--tx">Lightbox</h1>
+        <h2 id="lb--stt">Variações e Pagamentos</h2>
+        <p id="lb--p1" class='lb--p'>df</p>
+        <p id="lb--p2" class='lb--p'>df</p>
+        <p id="lb--p3" class='lb--p'>df</p>
+        <p id="lb--p4" class='lb--p'>df</p>
+        </div>
+        <div class="lbmini ff"></div>
+      </div>
+      <section class="lbmain js-vis">
+        <div class="lbfoto lbfotopv js-vis">
+          <div class="prev"></div>
+          <div class="next"></div>
+        </div>
+        <div class="lbfoto js-lbfoto js-vis">
+        </div>
+        <div class="lbfoto ver js-vis">
+        </div>
+        <div class="lbfooter js-vis">
+          <div class="lbfotomenu js-lbfootvis js-vis">
+            <div class="lbformat js-lbformat">
+              <h1 data-i18n='lbformat'>Format</h1>
+            </div>
+            <div class="lbsend js-lbsend">
+              <h1 data-i18n='lbsend'>Send Nudes</h1>
+            </div>
+            <div class="lbdel js-lbdel">
+              <h1 class="lbxx">x</h1>
+            </div>
+          </div>
+          <div class="lbformatmenu js-lbformatmenu js-lbfootvis js-vis">
+            <div class="lbsizes">
+            <svg class='js-size' data-size='3000px' width="73" height="49">
+              <rect width="73" height="49" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+            </svg>
+            <svg class='js-size' data-size='2200px' width="59" height="39.5">
+              <rect width="59" height="39.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+            </svg>
+            <svg class='js-size' data-size='1600px' width="41.4" height="29.5">
+              <rect width="41.4" height="29.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+            </svg>
+            <svg class='js-size' data-size='1000px' width="35.4" height="25.5">
+              <rect width="35.4" height="25.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+            </svg>
+            <svg width="200" height="46">
+              <line x1="0" y1="23" x2="290" y2="23" style="stroke:rgb(255,255,255);stroke-width:2"/>
+            </svg>
+            <svg class='js-size' data-size='25x37' width="73" height="49">
+            <rect width="73" height="49" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+            </svg>
+            <svg class='js-size' data-size='20x30' width="59" height="39.5">
+              <rect width="59" height="39.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+            </svg>
+            <svg class='js-size' data-size='15x21' width="41.4" height="29.5">
+              <rect width="41.4" height="29.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+            </svg>
+            <svg class='js-size' data-size='13x18' width="35.4" height="25.5">
+              <rect width="35.4" height="25.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+            </svg>
+            </div>
+            <div class="lbsizesfont">
+              <h4 style='width:73px'> 3000 </h4>
+              <h4 style='width:59px'> 2200 </h4>
+              <h4 style='width:41.4px'> 1600 </h4>
+              <h4 style='width:35.4px'> 1000 </h4>
+              <h4 style='width:73px'> 25x37 </h4>
+              <h4 style='width:59px'> 20x30 </h4>
+              <h4 style='width:41.4px'> 15x21 </h4>
+              <h4 style='width:35.4px'> 13x18 </h4>
+            </div>
+            <span id="lbformatprint">
+            <h4>Print</h4>
+            </span>
+            <span id="lbfortmatdigital">
+            <h4>Digital</h4>
+            </span>
+            <span class="lbformatsend js-lbformatsend">
+              <h1 data-i18n='lbformatok'>Ok</h1>
+            </span>
+          </div>
+          <div class="lbsendmenu js-lbsendmenu js-lbfootvis js-vis">
+            <input type="text" id='lbname' placeholder="  John Silva" required autofocus>
+            <input type="text" id="lbemail" placeholder="  johns@domain.com" required>
+            <textarea placeholder="  Insert Your Message.." name="messagebox" id="lbmessage"></textarea>
+            <div class="lbsend js-lbsendx">
+              <h1 data-i18n='lbmessageok'>Send Nudes</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="noselected js-noselected js-vis">
+      <h1 data-i18n="lbnoselected">No Selected</h1>
       </div>
     </div>
 
