@@ -750,7 +750,7 @@ overflow-x: hidden;
 }
 
 .lbmain{
-  display: inline-flex;
+  display: none;
   flex-flow: column wrap;
   position: relative;
   /*background-color: rgba(255, 255, 255, 0.05);*/
@@ -767,8 +767,9 @@ overflow-x: hidden;
   /*max-width: 100%;*/
   max-height: 87vh;
   visibility: hidden;
-  margin-top: 100px;
+  margin-top: 80px;
   z-index: 1;
+  visibility: hidden;
 }
 
 .lbfoto{
@@ -783,6 +784,40 @@ overflow-x: hidden;
       align-self: flex-start;
       align-items: center;
       justify-content: center;
+  z-index:10;
+}
+
+.lbfotopv{
+  z-index:20;
+}
+
+.ver{
+  position: absolute;
+  /*display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  width: auto;
+  height: auto;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+      align-items: center;
+      justify-content: center;*/
+  z-index: 15;
+}
+
+.ver > figure{
+  display: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ver > figure > img{
+  box-sizing: border-box;
+  max-height: 88vh;
+  max-width: 90vw;
+  padding: 5px;
+  vertical-align: middle;
 }
 
 .lbSlides {
@@ -797,12 +832,12 @@ overflow-x: hidden;
   margin: 0 auto;
   text-align: center;
   z-index: -5;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .lbSlides > img{
   box-sizing: border-box;
-  max-height: 88vh;
+  max-height: 65vh;
   max-width: 90vw;
   padding: 5px;
   vertical-align: middle;
@@ -813,7 +848,7 @@ position: absolute;
 left: 0;
 top: 0;
 display: flex; /*flex;*/
-flex-flow: column wrap;
+flex-flow: row wrap;
 float: left;
 height: 100%;
 width: 0%;
@@ -839,8 +874,7 @@ overflow-y: hidden;
 
 #lb--stt{
   font-size: 1.2em;
-  margin-top: 1px;
-  margin: 8px 0 30px 0;
+  margin: 8px 0 15px 0;
   font-weight: 500;
   line-height: normal;
 }
@@ -849,14 +883,19 @@ overflow-y: hidden;
   display: inline-block;
   font-weight: 400;
   width: 90%;
-  text-align: left;
+  text-align: justify;
+  font-size: 0.9em;
+  line-height: 1.05em;
+  margin: 15px 0 10px 0;
+  text-justify: auto;
+  text-align-last: left;
 }
 
 .lbinfo{
   display: inline-block;
   opacity: 0;
   flex: 0 1 auto;
-  padding: 0 0 0 2em ;
+  padding: 0 0 0 1.2em ;
   cursor: pointer;
   font-size: 19px;
   text-align: justify;
@@ -865,10 +904,11 @@ overflow-y: hidden;
   line-height: 30px;
   font-family: "Roboto", sans-serif;
   color: black;
+  overflow-y: scroll;
 }
 
 .lbmini{
-  position: absolute;
+  position: relative;
   opacity: 0.0;
   bottom: 0;
   left: 0;
@@ -899,41 +939,15 @@ min-width: 100%;
 max-height: 70px;
 }
 
-.lbprev{
-  /*background: rgba(0, 0, 0, 0.5);*/
-  cursor: pointer;
-  position: absolute;
-  width: 50%;
-  height: 75%;
-  padding: 0px;
-  color: white;
-  transition: 0.6s ease;
-  user-select: none;
-  -webkit-user-select: none;
-  left: 0px;
-  align-self: flex-start;
-}
-
-.lbnext {
-  /*background: rgba(0, 0, 0, 0.5);*/
-  cursor: pointer;
-  position: absolute;
-  width: 50%;
-  height: 75%;
-  padding: 0px;
-  color: white;
-  transition: 0.6s ease;
-  user-select: none;
-  -webkit-user-select: none;
-  align-self: flex-start;
-  right: 0;
+.lbfotopv > div{
+  height: 70%;
 }
 
 .lbfooter {
   position: relative;
   bottom: 0px;
-  background-color: rgba(255, 255, 255, 0.1);
-  width: 94.6vh;
+  background-color: rgba(255, 255, 255, 0.05);
+  width: 100%;
   height: 22vh;
   overflow: hidden;
   visibility: hidden;
@@ -942,23 +956,24 @@ max-height: 70px;
 
 .lbfotomenu {
   /*display: inline;*/
-  width: 600px;
-  height: 50px;
+  visibility: hidden;
+  height: 22vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding: 0 0 0 -5px;
+  -webkit-box-align: flex-start;
+      -ms-flex-align: flex-start;
+          align-items: flex-start;
+  padding: 5px;
   z-index: 5;
 }
 
 .lbdel{
   position: absolute;
+  background: rgba(0,0,0,0.2);
   right: 5px;
-  top: 0;
-  border: 1px solid black;
+  top: 5px;
+  border: 1px solid white;
   width: 36px;
   height: 36px;
   text-align: left;
@@ -966,7 +981,8 @@ max-height: 70px;
 
 
 .lbdel:hover{
-  border: 1px solid white;
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
 }
 
 .lbxx{
@@ -976,18 +992,13 @@ max-height: 70px;
   line-height: 30px;
   margin: 0 0;
   text-align: center;
-  color: black;
+  color: white;
   -webkit-transform: scale(1, 0.8);
           transform: scale(1, 0.8);
 
 }
 
 .lbxx:hover {
-  font-family: "Roboto", sans-serif;
-  font-size: 40px;
-  text-shadow: 1px 1px 3px black;
-  text-align: center;
-  line-height: 30px;
   margin: 0 0;
   color: white;
   -webkit-transform: scale(1, 0.8);
@@ -996,17 +1007,21 @@ max-height: 70px;
 
 .lbversion{
   position: relative;
+  opacity:1;
   left: 1px;
-  top: 10px;
   border: 1px solid black;
-  width: 56px;
+  width: auto;
   height: 56px;
   text-align: center;
-  margin: 8px;
+  margin: 0px 10px 0px 0px;
+  cursor: pointer;
 }
 
-.lbversion:first-child{
-margin: 8px 8px 8px 4px;
+.lbversion>img{
+  max-width: auto;
+  max-height: 56px;
+  margin: 0px;
+  overflow: hidden;
 }
 
 .lbversion:hover{
@@ -1014,140 +1029,147 @@ border: 1px solid white;
 
 }
 
-.lbversion > h1{
-  font-family: "Roboto", sans-serif;
-  font-size: 40px;
-  font-weight: 100;
-  line-height: 52px;
-  margin: 0 0;
-  text-align: center;
-  color: black;
-  -webkit-transform: scale(1, 0.8);
-          transform: scale(1, 0.8);
+.lbverdisabled{
+  cursor:auto;
+  background: rgba(255,255,255,1);
 }
+
+.lbverdisabled:hover{
+border: 1px solid black;
+}
+
+.lbverdisabled >img {
+  filter: grayscale(100%);
+  filter: contrast(50%) grayscale(100%);
+  opacity: 0.5;
+  border: 1px solid black !important;
+}
+
 
 .lbformat{
   position: absolute;
   display: inline-block;
-  left: 0px;
   bottom: 56px;
-  border: 1px solid black;
+  border: 1px solid white;
   width: 96px;
   height: 36px;
   text-align: center;
-  margin: 0 0 0 5px;
+  background: rgba(0,0,0,0.2);
 }
 
 .lbformat:hover{
   border: 1px solid white;
   cursor: pointer;
+  background: rgba(255,255,255,0.2);
 }
 
 .lbformat>h1{
   font-family: "Roboto", sans-serif;
-  font-size: 32px;
-  font-weight: 100;
-  line-height: 38px;
-  margin: 0;
-}
-
-#lbmessage{
-  position: absolute;
-  top: 5px;
-  left: 4px;
-  width: 300px;
-  height: 145px;
-  font-family: "Roboto", sans-serif;
-  font-size: 18px;
-  font-weight: 100;
-  line-height: 38px;
-  text-align: left;
-}
-
-.lbsend{
-  position: absolute;
-  left: 0px;
-  bottom: 0px;
-  border: 1px solid black;
-  width: 96px;
-  height: 38px;
-  text-align: center;
-  margin: 0 0 8px 4px;
-  font-family: "Roboto", sans-serif;
-  font-size: 10px;
-  font-weight: 100;
-  line-height: 40px;
-}
-
-.lbsend:hover{
-  border: 1px solid white;
-  cursor: pointer;
-}
-
-.lbsend >h1{
-  margin: 0;
-}
-
-.lbsend >h1:hover{
   color: white;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 34px;
   margin: 0;
 }
 
 .lbformatmenu{
+  box-sizing: border-box;
   position: relative;
   bottom: 0px;
-  background-color: rgba(255, 255, 255, 0.6);
-  width: 94.6vh;
+  background-color: rgba(255, 255, 255, 0.01);
   height: 22vh;
+  padding:  10px 5px 5px 5px;
   overflow: hidden;
   visibility: hidden;
   z-index: 15;
 }
 
-
-.lbsendmenu{
+.lbsizes{
   position: relative;
-  bottom: 0px;
-  background-color: rgba(255, 255, 255, 0.6);
-  width: 94.6vh;
-  height: 22vh;
-  overflow: hidden;
-  visibility: hidden;
-  z-index: 15;
+  display: flex;
+  flex-flow: row wrap;
+  align-content: center;
+  justify-content: space-between;
+  left: 1px;
+  width: 248px;
+  height: 70%;
+  text-align: center;
+  margin: 0px 10px 0px 0px;
+  z-index: 10;
 }
+
+.lbsizesfont{
+  position: absolute;
+  display: flex;
+  flex-flow: row wrap;
+  align-content: center;
+  justify-content: space-between;
+  left: 1px;
+  width: 253px;
+  height: 70%;
+  text-align: center;
+  margin: 0px 0px 0px 0px;
+  z-index: 5;
+}
+
+.lbsizesfont>h4{
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 23px;
+  color: white;
+  transform: translateY(-5px);
+  margin: 0px 0;
+}
+
+.lbsizes >svg:nth-child(-n+4) {
+  background: rgba(0,0,0,0.3);
+  order: 1;
+  align-self: flex-end;
+  cursor: pointer;
+}
+.lbsizes >svg:nth-child(5) {
+  width: 100%;
+  order: 2;
+  cursor: pointer;
+}
+.lbsizes >svg:nth-last-child(-n+4) {
+  background: rgba(0,0,0,0.3);
+  order:3;
+  cursor: pointer;
+}
+
+.lbsizes >svg:nth-child(-n+4):hover, .lbsizes >svg:nth-last-child(-n+4):hover {
+  background: rgba(255,255,255,0.1);
+}
+
+
 
 #lbformatprint{
   position: absolute;
   display: inline-flex;
   height: 40px;
-  left: 0;
-  top: 90px;
+  top: 40%;
+  left: 260px;
   margin: 5px;
-
 }
 
 #lbformatprint>h4{
   font-family: "Roboto", sans-serif;
   font-size: 22px;
   font-weight: 400;
-  line-height: 40px;
+  line-height: 44px;
   margin:0 0 0 3px;
-
+  color: white;
 }
-
 
 #lbfortmatdigital{
   position: absolute;
   display: inline-flex;
   height: 40px;
-  left: 0;
-  top: 120px;
-  font-family: "Roboto", sans-serif;
-  font-size: 22px;
-  font-weight: 100;
-  line-height: 45px;
+  top: 8%;
+  left: 260px;
   margin: 5px;
-
 }
 
 #lbfortmatdigital>h4{
@@ -1156,7 +1178,140 @@ border: 1px solid white;
   font-weight: 400;
   line-height: 44px;
   margin:0 0 0 3px;
+  color: white;
 }
+
+.lbformatsend{
+  position: absolute;
+  bottom: 0px;
+  border: 1px solid white;
+  width: 96px;
+  height: 38px;
+  text-align: center;
+  margin: 0 0 5px 0;
+  cursor: pointer;
+  color: white;
+  background: rgba(0,0,0,0.2);
+}
+.lbformatsend:hover{
+  background: rgba(255,255,255, 0.2);
+}
+
+.lbformatsend>h1{
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 40px;
+  margin: 0;
+}
+
+.lbsendmenu{
+  box-sizing: border-box;
+  position: relative;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.1);
+  width: 100%;
+  height: 22vh;
+  overflow: hidden;
+  visibility: hidden;
+  padding: 5px;
+  z-index: 15;
+}
+
+#lbname{
+  position: absolute;
+  top: 5px;
+  left: 4px;
+  width: 300px;
+  height: 20px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 38px;
+  text-align: left;
+}
+#lbemail{
+  position: absolute;
+  top: 37px;
+  left: 4px;
+  width: 300px;
+  height: 20px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 38px;
+  text-align: left;
+}
+#lbmessage{
+  position: absolute;
+  top: 68px;
+  left: 4px;
+  width: 300px;
+  height: 85px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 18px;
+  text-align: left;
+  resize: none;
+}
+
+.lbsend{
+  position: absolute;
+  bottom: 0px;
+  border: 1px solid white;
+  width: 96px;
+  height: 38px;
+  text-align: center;
+  margin: 0 0 8px 0px;
+  background: rgba(0,0,0,0.2);
+}
+
+.lbsend:hover{
+  background: rgba(255,255,255,0.2);
+  border: 1px solid white;
+  cursor: pointer;
+}
+
+.lbsend >h1{
+  font-family: "Roboto", sans-serif;
+  color: white;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 36px;
+  margin: 0;
+}
+
+.lbsend >h1:hover{
+  color: white;
+  margin: 0;
+}
+
+.noselected {
+  display: none;
+  position: absolute;
+  top:42%;
+  text-align: center;
+  /*line-height: 150px;*/
+  width: 500px;
+  height: auto;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  cursor: pointer;
+}
+.noselected > h1 {
+  margin: 0;
+  /*padding: 0 0 ;*/
+  position: relative;
+  display: inline-block;
+  font-size: 2.5em;
+  font-weight: 100;
+  font-family: "Convergence", sans-serif;
+  color: white;
+  padding: 5px 15px 6px 15px;
+  border: 2px solid white;
+}
+
 
 
 
