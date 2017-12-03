@@ -750,7 +750,7 @@ overflow-x: hidden;
 }
 
 .lbmain{
-  display: inline-flex;
+  display: none;
   flex-flow: column wrap;
   position: relative;
   /*background-color: rgba(255, 255, 255, 0.05);*/
@@ -769,6 +769,7 @@ overflow-x: hidden;
   visibility: hidden;
   margin-top: 80px;
   z-index: 1;
+  visibility: hidden;
 }
 
 .lbfoto{
@@ -1006,6 +1007,7 @@ max-height: 70px;
 
 .lbversion{
   position: relative;
+  opacity:1;
   left: 1px;
   border: 1px solid black;
   width: auto;
@@ -1020,9 +1022,6 @@ max-height: 70px;
   max-height: 56px;
   margin: 0px;
   overflow: hidden;
-}
-
-.lbversion:first-child{
 }
 
 .lbversion:hover{

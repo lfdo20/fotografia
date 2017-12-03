@@ -1676,10 +1676,11 @@ function listSelected(){
   //console.log(cfolder);
   //console.log(ftlist);
   ff= '.lbinfo';
-  $('.prev, .next').off();
+  $('.prev, .next, .js-lbdel, .js-lbmini, .js-lbsend').off();
   if (lbselected.length !== 0){
-    if(lbsetupchoices.length ===0){
-      lblist();
+    $('.js-noselected').css({display: 'none',visibility: 'hidden'});
+    if ($('.lbmini > figure').length === 0){
+    lblist();
     }
     for (var i = 0; i < lbselected.length; i++) {
       lbcat = lbselected[i].replace(rxlb, "$1");
@@ -1720,6 +1721,7 @@ function listSelected(){
 
     $.when(getLbVersions()).done(function(){
       //$(".js-lbfotomenu").css({ visibility: "hidden" });
+      console.log('ai');
     lbcurrentSlide(0);
     });
 
@@ -1727,6 +1729,8 @@ function listSelected(){
   // NOTE:  so é necessário o getcaptions se houver um load direto, que já acontece, porém não a tempo do load do elemento, se conseguir sincronizar não é necessário outro e pode-se colocar o getLbVersions no lugar do getcaptions abaixo, checkstored, tb só é necessário se for load direto da pagina.
   //checkstored();
   //getLbVersions();
+  //console.log($('.lbmini > figure').length);
+
 function lblist(){
   $.when(getCaptions()).done(function(){
   $('#lb--tx').text($.i18n('lb-tx'));
@@ -1745,10 +1749,10 @@ function lblist(){
   },400).animate({
       color:  'rgba(0, 0, 0, 0.84)'
   },5);
-  $('.lbinfo').delay(650).animate({
+  $('.lbinfo').delay(450).animate({
     padding: '1.5em 0em 0em 1.2em',
     opacity: 1
-  },5);
+  },100);
 
   $('.lblist').on('click', function(){
       var box = $('.lblist');
@@ -1786,7 +1790,7 @@ function lblist(){
       //console.log('Fois?!');
     $('.lbmini').animate({
       opacity: '1'
-    },300);
+    },200);
 
 
   $(".js-lbmini").click(function() {
@@ -1798,24 +1802,6 @@ function lblist(){
     lbcurrentSlide(n);
   });
 });
-
-
-  $('.lbfoto').imagesLoaded().done(function(){
-    $(".lbfoto").css({ display: "block", visibility: "visible" });
-    $('.lbmain, .lbfooter').css({visibility: 'visible'});
-    $('.lbfotomenu').css({display: 'flex', visibility: 'visible'});
-
-    $('.js-lbsend').click(function(){
-      $('.js-lbfootvis').css({display: 'none',visibility: 'hidden'});
-      $('.lbsendmenu').css({display: 'flex', visibility: 'visible'});
-
-
-      $('.js-lbsendx').on('click', function(){
-        $('.lbsendmenu').css({display: 'none',visibility: 'hidden'});
-        $('.lbfotomenu').css({display: 'flex',visibility: 'visible'});
-      });
-    });
-  });
 
   $(".prev").click(function() {
     // $('.lbfotomenu').remove('figure');
@@ -1872,10 +1858,28 @@ function lblist(){
     lbft = lbselected[slideIndex].replace(rxlb, "$4");
     //console.log(n, lbselected[slideIndex], lbsetupchoices);
     getversions();
-    console.log(lbsetupchoices);
+    //console.log(lbsetupchoices);
     storageAdd(lbsetupchoices);
   //var rxlbver = /^([a-z]+)(\d+)([a-z]+)(\d+)_(\w)/;
 }
+
+$('.js-lbfoto').imagesLoaded().done(function(){
+
+  $(".lbfoto").css({ display: "block", visibility: "visible" });
+  $('.lbmain').css({display: 'inline-flex'}).animate({visibility: 'visible'},50);
+
+
+  $('.js-lbsend').click(function(){
+    $('.js-lbfootvis').css({display: 'none',visibility: 'hidden'});
+    $('.lbsendmenu').css({display: 'flex', visibility: 'visible'});
+
+    $('.js-lbsendx').on('click', function(){
+      $('.lbsendmenu').css({display: 'none',visibility: 'hidden'});
+      $('.lbfotomenu').css({display: 'flex',visibility: 'visible'});
+    });
+  });
+});
+
 
 $('.js-lbdel').click(function(){
   console.log(lbcat,lbpj,lbft);
@@ -1899,7 +1903,7 @@ function getversions(){
 
       if ((lbverlinks.find((obj) => obj.name === (lbselected[slideIndex]+lbverf[i]))) !== undefined){
         lbverlink.push(lbverlinks.find((obj) => obj.name === (lbselected[slideIndex]+lbverf[i])).webContentLink);
-        lbfotover += '<figure class="lbfotovers" data-lbver='+ lbver[i]+'><img src="'+lbverlink[i] +'"/></figure>';
+        lbfotover += '<figure class="lbfotovers js-vis" data-lbver='+ lbver[i]+'><img src="'+lbverlink[i] +'"/></figure>';
         disabled=' js-lbversion';
       }else{
         lbverlink.push($('.lbSlides > img')[slideIndex].src);
@@ -1910,6 +1914,15 @@ function getversions(){
 
     $('.lbfotomenu').prepend(lbimg);
     $('.ver').prepend(lbfotover);
+    $('.lbfotomenu > figure').css({opacity: '0'});
+    $('.lbfotomenu, .lbfooter').css({visibility: 'visible'});
+    $('.lbfotomenu').imagesLoaded().done(function(){
+      $('.lbfotomenu').children().delay(0).css({
+        opacity: '1'
+      });
+
+  });
+
     checkformat();
 
     function checkformat(){
@@ -1979,6 +1992,7 @@ function getversions(){
     });
 }else {
   console.log('No Data');
+  $('.js-noselected').css({display: 'flex',visibility: 'visible'});
 }
 }
 
