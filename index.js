@@ -766,14 +766,16 @@ $(document).ready(function() {
   $(".igb").hover(
     function() {
       $(".iga").css({
-        color: "white",
-        border: "1px solid white"
+        opacity: '0.3'
+        //color: "white",
+        //border: "1px solid white"
       });
     },
     function() {
       $(".iga").css({
-        color: "black",
-        border: "1px solid black"
+        opacity: '1',
+        color: "white",
+        border: "1px solid white"
       });
     }
   );
@@ -1475,10 +1477,13 @@ function fotopageready(){
   },5);
 
   $('.projdescription').on('click', function(){
-    var box = $('.projdescription');
+      var box = $('.projdescription');
+      var setinha = $('.setinha');
       var targetWidth = box.width() > 0 ? 0 : 350;
       var tp = box.width() > 0 ? 0.5 : 3;
       var cor = box.width() > 0 ? 0.0 : 0.84;
+      var scor = box.width() > 0 ? 0.8 : 0.0;
+      setinha.css({ visibility: 'visible', background: 'rgba(255, 255, 255, '+scor+')'});
       box.animate({
         color:  'rgba(0, 0, 0, '+cor+')',
         width: targetWidth + "px",
@@ -1588,9 +1593,6 @@ function fotopageready(){
       }
   }
 
-  //      $1 - $2 - $3
-  //      .replace(regpj, '$1')
-
   var rxgrid = /^(\d+)([a-z]+)(\d+)/;
   var ggcat, ggpj, ggft;
   function gslides() {
@@ -1618,17 +1620,8 @@ function fotopageready(){
       plusSlides(+1);
     });
 
-    //var scCounter=1;
     function plusSlides(n) {
       slideIndex = Number(slideIndex);
-      // if (scCounter <6){
-      //   scCounter++
-      //   console.log('teste click não', scCounter);
-      // }else{
-      //   console.log('teste click foi');
-      //   pjgridReveal(lastVisible[2], lastVisible[1], '#grid'+lastVisible[1]+lastVisible[2]);
-      //   scCounter=1;
-      // }
       showSlides(slideIndex+=n);
     }
 
@@ -1655,7 +1648,11 @@ function fotopageready(){
       slides[slideIndex - 1].style.display = "block";
       $('.slcaption').text($.i18n(ggcat + ggpj +'ft'+ n +'leg'));
       var x = (ggcat + ggpj +'ft'+ ggft).toString();
-      //console.log(x, lbselected.indexOf(x),  lbselected);
+
+      var foto = $('.gSlides').children().eq([slideIndex - 1]).attr('src');
+      console.log(foto);
+      $('.imagebk').css({background: 'url('+foto+') center'});
+
       if (lbselected.indexOf(x) === -1){
         $(".addbox").removeClass("lightboxrem");
         $(".addbox").addClass("lightboxadd");
@@ -1667,7 +1664,10 @@ function fotopageready(){
     }
   }
 
-// Lighbox code
+// NOTE: /////////////////////////////////////////////////
+/////////////////////   LIGHTBOX  ////////////////////////
+//////////////////////////////////////////////////////////
+
 var rxlb = /^([a-z]+)(\d+)([a-z]+)(\d+)/;
 var lbcat, lbpj, lbft, lbsetupchoices=[];
 function listSelected(){
