@@ -648,7 +648,7 @@ top: 0;
 display: inline-block;
 float: left;
 height: 100%;
-width: 0%;
+width: 0px;
 z-index: 25;
 background: rgba(251, 250, 249, 0.92);
 color: rgba(0, 0, 0, 0.0);
@@ -661,11 +661,11 @@ line-height: 10px;
 text-decoration: none;
 line-height: 30px;
 font-family: "Roboto", sans-serif;
-
-
-/*transform: translatex(-100%);*/
 }
 
+.pdinf{
+  overflow-y: hidden;
+}
 
 #pd--tx{
   font-weight: 600;
@@ -829,7 +829,7 @@ font-family: "Roboto", sans-serif;
 
 .ver > figure > img{
   box-sizing: border-box;
-  max-height: 88vh;
+  max-height: 65vh;
   max-width: 90vw;
   padding: 5px;
   vertical-align: middle;
@@ -866,7 +866,7 @@ display: flex; /*flex;*/
 flex-flow: row wrap;
 float: left;
 height: 100%;
-width: 0%;
+width: 0px;
 z-index: 25;
 background: rgba(251, 250, 249, 0.92);
 cursor: pointer;
@@ -1357,6 +1357,7 @@ border: 1px solid black;
 
 }
 
+/*
 .imagebk{
   position: absolute;
   width: 80vw;
@@ -1369,7 +1370,7 @@ border: 1px solid black;
   transform: scale(1.3);
   opacity: 0.9;
   overflow-y: hidden;
-}
+}*/
 
 .maingrid {
   position: absolute;
@@ -1751,20 +1752,22 @@ border: 1px solid black;
 .item> img{
   width: 420px;
   height: auto;
-  -webkit-transform: scale(1.2);
-	transform: scale(1.2);
+  -webkit-transform: scale(1);
+	transform: scale(1);
+  filter: contrast(100%) brightness(100%) saturate(90%);
+  filter:none;
+  -webkit-transition: .3s cubic-bezier(.54,.32,.52,.72);
+  transition: .3s cubic-bezier(.54,.32,.52,.72);
   overflow: hidden;
   z-index: 5;
 }
 
 .item img:hover{
-  -webkit-transform: scale(1.22);
-  transform: scale(1.22);
-
-  filter: grayscale(60%);
-  -webkit-transition: .3s ease-in-out;
-  transition: .3s ease-in-out;
-
+  -webkit-transform: scale(1.01);
+  transform: scale(1.01);
+  filter: contrast(108%) brightness(115%) saturate(115%);
+  -webkit-transition: .3s cubic-bezier(.54,.32,.52,.72);
+  transition: .3s cubic-bezier(.54,.32,.52,.72);
 }
 
 .item > figcaption {
@@ -1803,6 +1806,23 @@ border: 1px solid black;
 .itemgallery img {
   width: 420px;
   height: auto;
+}
+
+.hovereffect img{
+  -webkit-transform: scale(1);
+	transform: scale(1);
+  filter: contrast(100%) brightness(100%) saturate(90%);
+  filter:none;
+  -webkit-transition: .3s cubic-bezier(.54,.32,.52,.72);
+  transition: .3s cubic-bezier(.54,.32,.52,.72);
+}
+
+.hovereffect img:hover{
+  -webkit-transform: scale(1.01);
+  transform: scale(1.01);
+  filter: contrast(108%) brightness(115%) saturate(115%);
+  -webkit-transition: .3s cubic-bezier(.54,.32,.52,.72);
+  transition: .3s cubic-bezier(.54,.32,.52,.72);
 }
 
 .iteminsta img {
