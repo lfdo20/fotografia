@@ -5,7 +5,8 @@
     <meta name="google-site-verification" content="WmAL3JfrGWUnm9iyxz2CGfJUtMIsOhllwgowV41jRv0" />
     <title>Leando LFdO Photos</title>
     <link rel="stylesheet" type="text/css" href="index.css"/>
-    <script>if ( typeof window.JSON === 'undefined' ) { document.write('<script src="../js/json2.js"><\/script>'); }</script>
+    <script> if ( typeof window.JSON === 'undefined' ) { document.write('<script src="../js/json2.js"><\/script>'); }
+    </script>
     <link href="https://fonts.googleapis.com/css?family=Convergence" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"/>
@@ -44,227 +45,247 @@
         </div>
       </div>
 
-      <!-- Enter Page -->
-    <div class="enterpage js-vis" >
-      <figure class='epbg'></figure>
-      <figure class='epbg'></figure>
-      <figure class='epbg'></figure>
-      <figure class='epbg'></figure>
-      <figure class='epbg'></figure>
-      <figure class='epbg'></figure>
-      <figure class='epbg'></figure>
-      <div class="logo">
-        <h1>leandro LFdO</h1>
-        <div id="progress-bar"></div>
+        <!-- Enter Page -->
+      <div class="enterpage js-vis" >
+        <figure class='epbg'></figure>
+        <figure class='epbg'></figure>
+        <figure class='epbg'></figure>
+        <figure class='epbg'></figure>
+        <figure class='epbg'></figure>
+        <figure class='epbg'></figure>
+        <figure class='epbg'></figure>
+        <div class="logo">
+          <h1>leandro LFdO</h1>
+          <div id="progress-bar"></div>
+        </div>
+
       </div>
 
-    </div>
+        <!-- Menu Page -->
+      <div class="menupage js-vis">
+          <div class="menubtnx js-menubtnx">
+            <h1 class="aa">X</h1>
+          </div>
 
-      <!-- Menu Page -->
-    <div class="menupage js-vis">
-        <div class="menubtnx js-menubtnx">
+        <div class="menu">
+          <ul>
+            <li class="js-projetosbtn" data-i18n="mproj">projetos</li>
+            <li class="js-colecoesbtn" data-i18n="mcol">coleções</a></li>
+            <li class="js-instabtn" data-i18n="minsta">instagram</li>
+            <li class="js-secretbtn" data-i18n="msc">secretos</li>
+            <li class="js-lightboxbtn" data-i18n="mlb">lightbox</li>
+            <li class="js-biobtn" data-i18n="mbio">bio</li>
+          </ul>
+        </div>
+        <div class="social">
+          <ul>
+            <li class="facebook"><a target="_blank" href="https://web.facebook.com/lfdo20"><i class="fa fa-facebook-official fa-2x"></i></a></li>
+            <li class="instagram"><a target="_blank" href="https://www.instagram.com/lfdo20/"><i class="fa fa-instagram fa-2x"></i></a></li>
+            <li class="twitter"><a target="_blank" href="https://www.twitter.com/lfdo/"><i class="fa fa-twitter fa-2x"></i></a></li>
+          </ul>
+        </div>
+      </div>
+
+        <!-- Projetos Page -->
+      <div class="projetos js-projetos ff js-vis">
+        <section class="projetosgrid ff js-vis">
+          <div class="carregando">
+          <div id="progress-bar-pages"></div>
+          </div>
+          <div id="projetosgrid" class='js-vis' >
+          </div>
+        </section>
+        <!-- <div id="borderinshadow"></div> -->
+      </div>
+
+        <!-- Coleções Page -->
+      <div class="colecoes js-colecoes js-vis">
+        <section class="colecoesgrid ff js-vis">
+          <div class="carregando">
+          <div id="progress-bar-pages"></div>
+          </div>
+          <div id="colecoesgrid" class='js-vis'>
+          </div>
+        </section>
+      </div>
+
+        <!-- Insta Page -->
+      <div class="insta js-insta js-vis">
+        <section class="instagrid ff js-vis">
+          <div id='instafeed'>
+          </div>
+        </section>
+      </div>
+
+        <!-- lightbox Page -->
+      <div class="lightbox js-vis">
+        <div class="lblist">
+          <div class="lbinfo ff">
+          <h1 id="lb--tx">Lightbox</h1>
+          <h2 id="lb--stt">Variações e Pagamentos</h2>
+          <p id="lb--p1" class='lb--p'>df</p>
+          <p id="lb--p2" class='lb--p'>df</p>
+          <p id="lb--p3" class='lb--p'>df</p>
+          <p id="lb--p4" class='lb--p'>df</p>
+          </div>
+          <div class="lbmini ff"></div>
+          <div class='setinha js-slb js-vis'></div>
+        </div>
+        <section class="lbmain js-vis">
+          <div class="lbfoto lbfotopv js-vis">
+            <div class="prev"></div>
+            <div class="next"></div>
+          </div>
+          <div class="lbfoto js-lbfoto js-vis">
+          </div>
+          <div class="lbfoto ver js-vis">
+          </div>
+          <div class="lbfooter js-vis">
+            <div class="lbfotomenu js-lbfootvis js-vis">
+              <div class="lbformat js-lbformat">
+                <h1 data-i18n='lbformat'>Format</h1>
+              </div>
+              <div class="lbsend js-lbsend">
+                <h1 data-i18n='lbsend'>Send Nudes</h1>
+              </div>
+              <div class="lbdel js-lbdel">
+                <h1 class="lbxx">x</h1>
+              </div>
+            </div>
+            <div class="lbformatmenu js-lbformatmenu js-lbfootvis js-vis">
+              <div class="lbsizes">
+              <svg class='js-size' data-size='3000px' width="73" height="49">
+                <rect width="73" height="49" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+              </svg>
+              <svg class='js-size' data-size='2200px' width="59" height="39.5">
+                <rect width="59" height="39.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+              </svg>
+              <svg class='js-size' data-size='1600px' width="41.4" height="29.5">
+                <rect width="41.4" height="29.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+              </svg>
+              <svg class='js-size' data-size='1000px' width="35.4" height="25.5">
+                <rect width="35.4" height="25.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+              </svg>
+              <svg width="200" height="46">
+                <line x1="0" y1="23" x2="290" y2="23" style="stroke:rgb(255,255,255);stroke-width:2"/>
+              </svg>
+              <svg class='js-size' data-size='25x37' width="73" height="49">
+              <rect width="73" height="49" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+              </svg>
+              <svg class='js-size' data-size='20x30' width="59" height="39.5">
+                <rect width="59" height="39.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+              </svg>
+              <svg class='js-size' data-size='15x21' width="41.4" height="29.5">
+                <rect width="41.4" height="29.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+              </svg>
+              <svg class='js-size' data-size='13x18' width="35.4" height="25.5">
+                <rect width="35.4" height="25.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
+              </svg>
+              </div>
+              <div class="lbsizesfont">
+                <h4 style='width:73px'> 3000 </h4>
+                <h4 style='width:59px'> 2200 </h4>
+                <h4 style='width:41.4px'> 1600 </h4>
+                <h4 style='width:35.4px'> 1000 </h4>
+                <h4 style='width:73px'> 25x37 </h4>
+                <h4 style='width:59px'> 20x30 </h4>
+                <h4 style='width:41.4px'> 15x21 </h4>
+                <h4 style='width:35.4px'> 13x18 </h4>
+              </div>
+              <span id="lbformatprint">
+              <h4>Print</h4>
+              </span>
+              <span id="lbfortmatdigital">
+              <h4>Digital</h4>
+              </span>
+              <span class="lbformatsend js-lbformatsend">
+                <h1 data-i18n='lbformatok'>Ok</h1>
+              </span>
+            </div>
+            <div class="lbsendmenu js-lbsendmenu js-lbfootvis js-vis">
+              <input type="text" id='lbname' placeholder="  John Silva" required autofocus>
+              <input type="text" id="lbemail" placeholder="  johns@domain.com" required>
+              <textarea placeholder="  Insert Your Message.." name="messagebox" id="lbmessage"></textarea>
+              <div class="lbsend js-lbsendx">
+                <h1 data-i18n='lbmessageok'>Send Nudes</h1>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="noselected js-noselected js-vis">
+        <h1 data-i18n="lbnoselected">No Selected</h1>
+        </div>
+      </div>
+
+        <!-- bio Page -->
+      <div class="bio js-vis">
+        <div class="menubtnx js-biobtnx">
           <h1 class="aa">X</h1>
         </div>
-
-      <div class="menu">
-        <ul>
-          <li class="js-projetosbtn" data-i18n="mproj">projetos</li>
-          <li class="js-colecoesbtn" data-i18n="mcol">coleções</a></li>
-          <li class="js-instabtn" data-i18n="minsta">instagram</li>
-          <li class="js-lightboxbtn" data-i18n="mlb">lightbox</li>
-          <li class="js-biobtn" data-i18n="mbio">bio</li>
-        </ul>
+        <div class="biocontent">
+        <h1 data-i18n='bioname'> Leandro LFdO</h1>
+        <h2 data-i18n='biosub'> Leandro LFdO</h2>
+        <p data-i18n='biotexta'> Olar texto</p>
+        <p data-i18n='biotextb'> Olar texto</p>
+        <p data-i18n='biotextc'> Olar texto</p>
+        </div>
       </div>
-      <div class="social">
-        <ul>
-          <li class="facebook"><a target="_blank" href="https://web.facebook.com/lfdo20"><i class="fa fa-facebook-official fa-2x"></i></a></li>
-          <li class="instagram"><a target="_blank" href="https://www.instagram.com/lfdo20/"><i class="fa fa-instagram fa-2x"></i></a></li>
-          <li class="twitter"><a target="_blank" href="https://www.twitter.com/lfdo/"><i class="fa fa-twitter fa-2x"></i></a></li>
-        </ul>
-      </div>
-    </div>
 
-      <!-- Projetos Page -->
-    <div class="projetos js-projetos ff js-vis">
-      <section class="projetosgrid ff js-vis">
-        <div class="carregando">
-        <div id="progress-bar-pages"></div>
-        </div>
-        <div id="projetosgrid" class='js-vis' >
-        </div>
-      </section>
-      <!-- <div id="borderinshadow"></div> -->
-    </div>
-
-      <!-- Coleções Page -->
-    <div class="colecoes js-colecoes js-vis">
-      <section class="colecoesgrid ff js-vis">
-        <div class="carregando">
-        <div id="progress-bar-pages"></div>
-        </div>
-        <div id="colecoesgrid" class='js-vis'>
-        </div>
-      </section>
-    </div>
-
-      <!-- Insta Page -->
-    <div class="insta js-insta js-vis">
-      <section class="instagrid ff js-vis">
-        <div id='instafeed'>
-        </div>
-      </section>
-    </div>
-
-      <!-- lightbox Page -->
-    <div class="lightbox js-vis">
-      <div class="lblist">
-        <div class="lbinfo ff">
-        <h1 id="lb--tx">Lightbox</h1>
-        <h2 id="lb--stt">Variações e Pagamentos</h2>
-        <p id="lb--p1" class='lb--p'>df</p>
-        <p id="lb--p2" class='lb--p'>df</p>
-        <p id="lb--p3" class='lb--p'>df</p>
-        <p id="lb--p4" class='lb--p'>df</p>
-        </div>
-        <div class="lbmini ff"></div>
-      </div>
-      <section class="lbmain js-vis">
-        <div class="lbfoto lbfotopv js-vis">
-          <div class="prev"></div>
-          <div class="next"></div>
-        </div>
-        <div class="lbfoto js-lbfoto js-vis">
-        </div>
-        <div class="lbfoto ver js-vis">
-        </div>
-        <div class="lbfooter js-vis">
-          <div class="lbfotomenu js-lbfootvis js-vis">
-            <div class="lbformat js-lbformat">
-              <h1 data-i18n='lbformat'>Format</h1>
-            </div>
-            <div class="lbsend js-lbsend">
-              <h1 data-i18n='lbsend'>Send Nudes</h1>
-            </div>
-            <div class="lbdel js-lbdel">
-              <h1 class="lbxx">x</h1>
-            </div>
+      <!-- Photo Page -->
+      <div class="fotopage js-vis">
+        <!-- <div class='imagebk'></div> -->
+        <div class="projdescription">
+          <div class="pdinf">
+            <h1 id="pd--tx" class='pd--p'>fgfg</h1>
+            <h2 id="pd--stt" class='pd--p'>dfdf</h2>
+            <p id="pd--p1" class='pd--p'>df</p>
+            <p id="pd--p2" class='pd--p'>df</p>
+            <p id="pd--p3" class='pd--p'>df</p>
+            <p id="pd--p4" class='pd--p'>df</p>
           </div>
-          <div class="lbformatmenu js-lbformatmenu js-lbfootvis js-vis">
-            <div class="lbsizes">
-            <svg class='js-size' data-size='3000px' width="73" height="49">
-              <rect width="73" height="49" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
-            </svg>
-            <svg class='js-size' data-size='2200px' width="59" height="39.5">
-              <rect width="59" height="39.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
-            </svg>
-            <svg class='js-size' data-size='1600px' width="41.4" height="29.5">
-              <rect width="41.4" height="29.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
-            </svg>
-            <svg class='js-size' data-size='1000px' width="35.4" height="25.5">
-              <rect width="35.4" height="25.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
-            </svg>
-            <svg width="200" height="46">
-              <line x1="0" y1="23" x2="290" y2="23" style="stroke:rgb(255,255,255);stroke-width:2"/>
-            </svg>
-            <svg class='js-size' data-size='25x37' width="73" height="49">
-            <rect width="73" height="49" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
-            </svg>
-            <svg class='js-size' data-size='20x30' width="59" height="39.5">
-              <rect width="59" height="39.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
-            </svg>
-            <svg class='js-size' data-size='15x21' width="41.4" height="29.5">
-              <rect width="41.4" height="29.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
-            </svg>
-            <svg class='js-size' data-size='13x18' width="35.4" height="25.5">
-              <rect width="35.4" height="25.5" style="fill:rgba(0,0,0, 0);stroke-width:3;stroke:rgb(255,255,255)"/>
-            </svg>
-            </div>
-            <div class="lbsizesfont">
-              <h4 style='width:73px'> 3000 </h4>
-              <h4 style='width:59px'> 2200 </h4>
-              <h4 style='width:41.4px'> 1600 </h4>
-              <h4 style='width:35.4px'> 1000 </h4>
-              <h4 style='width:73px'> 25x37 </h4>
-              <h4 style='width:59px'> 20x30 </h4>
-              <h4 style='width:41.4px'> 15x21 </h4>
-              <h4 style='width:35.4px'> 13x18 </h4>
-            </div>
-            <span id="lbformatprint">
-            <h4>Print</h4>
-            </span>
-            <span id="lbfortmatdigital">
-            <h4>Digital</h4>
-            </span>
-            <span class="lbformatsend js-lbformatsend">
-              <h1 data-i18n='lbformatok'>Ok</h1>
-            </span>
+          <div class='setinha js-vis'></div>
+        </div>
+        <section class="mainfoto displaytoggle js-vis">
+          <div class="foto">
+            <div class="prev"></div>
+            <div class="next"></div>
+            <div class="addbox"></div>
+            <div class="boxmessage js-add" data-i18n='addboxmessage'></div>
+            <div class="boxmessage js-rem" data-i18n='remboxmessage'></div>
           </div>
-          <div class="lbsendmenu js-lbsendmenu js-lbfootvis js-vis">
-            <input type="text" id='lbname' placeholder="  John Silva" required autofocus>
-            <input type="text" id="lbemail" placeholder="  johns@domain.com" required>
-            <textarea placeholder="  Insert Your Message.." name="messagebox" id="lbmessage"></textarea>
-            <div class="lbsend js-lbsendx">
-              <h1 data-i18n='lbmessageok'>Send Nudes</h1>
-            </div>
+          <div class="caption_container">
+            <span class='slcaption'> Photo Page </span>
+          </div>
+        </section>
+        <section class="maingrid ff displaytoggle js-vis">
+          <div class="carregando">
+          <div id="progress-bar-pages"></div>
+          </div>
+        </section>
+        <div class="footer">
+          <div class="fotomenu">
+            <i class="icon-grid iga js-gridbtn backbtn"></i>
+            <i class="icon-grid igb js-gridbtn"></i>
+            <i class="icon-chevron-thin-left js-photobackbtn photobackbtn"></i>
+            <span id="proji18n">Projeto</span>
+            <i class="icon-chevrons-right"></i>
+            <span id="projnamei18n"> Photo Page </span>
           </div>
         </div>
-      </section>
-      <div class="noselected js-noselected js-vis">
-      <h1 data-i18n="lbnoselected">No Selected</h1>
       </div>
-    </div>
 
-      <!-- bio Page -->
-    <div class="bio js-vis">
-      <div class="menubtnx js-biobtnx">
-        <h1 class="aa">X</h1>
-      </div>
-      <div class="biocontent">
-      <h1 data-i18n='bioname'> Leandro LFdO</h1>
-      <h2 data-i18n='biosub'> Leandro LFdO</h2>
-      <p data-i18n='biotexta'> Olar texto</p>
-      <p data-i18n='biotextb'> Olar texto</p>
-      <p data-i18n='biotextc'> Olar texto</p>
-      </div>
-    </div>
-
-    <!-- Photo Page -->
-    <div class="fotopage js-vis">
-      <div class="projdescription">
-        <h1 id="pd--tx" class='pd--p'>fgfg</h1>
-        <h2 id="pd--stt" class='pd--p'>dfdf</h2>
-        <p id="pd--p1" class='pd--p'>df</p>
-        <p id="pd--p2" class='pd--p'>df</p>
-        <p id="pd--p3" class='pd--p'>df</p>
-        <p id="pd--p4" class='pd--p'>df</p>
-      </div>
-      <section class="mainfoto displaytoggle js-vis">
-        <div class="foto">
-          <div class="prev"></div>
-          <div class="next"></div>
-          <div class="addbox"></div>
+      <!-- Private Albums -->
+      <div class="private js-vis">
+        <div class="passborder">
+          <div class="pass">
+          <h1 data-i18n='pvtype'>leandro LFdO</h1>
+          <input type="password" id='pvpass' placeholder="password" required autofocus>
         </div>
-        <div class="caption_container">
-          <span class='slcaption'> Photo Page </span>
         </div>
-      </section>
-      <section class="maingrid ff displaytoggle js-vis">
-        <div class="carregando">
-        <div id="progress-bar-pages"></div>
-        </div>
-      </section>
-      <div class="footer">
-        <div class="fotomenu">
-          <i class="icon-grid iga js-gridbtn backbtn"></i>
-          <i class="icon-grid igb js-gridbtn"></i>
-          <i class="icon-chevron-thin-left js-photobackbtn photobackbtn"></i>
-          <span id="proji18n">Projeto</span>
-          <i class="icon-chevrons-right"></i>
-          <span id="projnamei18n"> Photo Page </span>
+          <div id="progress-bar"></div>
         </div>
       </div>
     </div>
-    </div>
-    </script>
+    <!-- </script> -->
   </body>
 </html>
