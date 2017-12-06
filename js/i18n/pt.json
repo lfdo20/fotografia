@@ -7,7 +7,8 @@
         "mproj":"projetos",
         "mcol":"coleções",
         "minsta":"instagram",
-        "mlb":"seleções",
+        "mlb":"compras",
+        "msc":"secretos",
         "mbio":"biografia",
         "bioname" : "Leandro LFdO",
         "biosub" : "Fotógrafo . Designer . Desenvolvedor Web ",
@@ -27,8 +28,11 @@
         "lbformatok" : "",
         "lbnoselected" : "Desculpe, não temos dados das fotos selecionadas.",
         "lbformat" : "Formatos",
-        "lbsend" : "Nudes",
+        "lbsend" : "Enviar",
         "lbformatok" : "Selecionar",
         "lbmessageok" : "Enviar",
+        "pvtype": "Digite sua senha :",
+        "addboxmessage" : "Adicionada ao carrinho",
+        "remboxmessage" : "Removida do carrinho",
         "" : ""
 }
