@@ -1424,7 +1424,6 @@ border: 1px solid black;
 .mainfoto {
   display: none;
   position: relative;
-  /*background-color: rgba(255, 255, 255, 0.05);*/
   -ms-flex-item-align: center;
       align-self: center;
   -webkit-box-pack: start;
@@ -1433,9 +1432,7 @@ border: 1px solid black;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  /*margin-top: 54px;*/
   width: auto;
-  /*max-width: 100%;*/
   max-height: 87vh;
   visibility: hidden;
   margin-top: -30px;
@@ -1563,7 +1560,6 @@ border: 1px solid black;
 .footer {
   position: absolute;
   bottom: 0px;
-  /*background-color: rgba(255, 255, 255, 0.6);*/
   width: auto;
   height: 60px;
   overflow: hidden;
@@ -1631,7 +1627,6 @@ border: 1px solid black;
 .fotomenu > span {
   font-size: 20px;
   font-family: "Roboto", sans-serif;
-  /*'Convergence', sans-serif;*/
   font-weight: 400;
   font-variant-caps: all-petite-caps;
   letter-spacing: 1px;

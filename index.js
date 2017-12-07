@@ -871,7 +871,6 @@ colcoessc */
   var fields = "nextPageToken, files(id, name, webContentLink, webViewLink)";
   var mrecents = "recency"; // or : createdTime
   var pagesize = 8;
-  //var nextPageToken = "";
   var projfeedstat = 0;
   let dataprojetos;
   /*  "+and+" + mimefoto + */
@@ -898,39 +897,30 @@ colcoessc */
       let figdata = ' data-pj="';
       let figcat = '" data-cat="pj';
       let imgsrc = '"><img src="';
-      //if (nextPageToken.length > 5 || $("#projetosgrid figure").length === 0) {
-        var promise = $.getJSON(urlgapi, function(data, status) {
-          console.log("Gapi Projeto Retrieve");
+      var promise = $.getJSON(urlgapi, function(data, status) {console.log("Gapi Projeto Retrieve"); });
+
+      promise.done(function(data) {
+          //console.log(data.nextPageToken);
+          dataprojetos = data.files;
+          //console.log(data.files, nextPageToken);
+          let items, img1 = "";
+          for (i = 0; i < dataprojetos.length; i++) {
+            fotocount++;
+            cap = '<figcaption data-i18n="pj' + fotocount + 'leg">Olár <figcaption>';
+            //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
+            img1 += figimg + figdata + fotocount + figcat + imgsrc + dataprojetos[i].webContentLink + endimg + cap + endfig;
+            projfeedstat += 1;
+          }
+          items = img1.toString();
+          //console.log(img1);
+          self.resolve(items);
+          items = "";
+        })
+        .fail(function() {
+          console.log("No Data");
+          items = "";
+          self.resolve(items);
         });
-        promise.done(function(data) {
-            //console.log(data.nextPageToken);
-            //if (data.nextPageToken !== undefined) {
-            //  nextPageToken = data.nextPageToken;
-              //console.log(nextPageToken);
-          //  } else {
-          //    nextPageToken = 0;
-          //  }
-            dataprojetos = data.files;
-            //console.log(data.files, nextPageToken);
-            let items, img1 = "";
-            for (i = 0; i < dataprojetos.length; i++) {
-              fotocount++;
-              cap = '<figcaption data-i18n="pj' + fotocount + 'leg">Olár <figcaption>';
-              //console.log(i, ft, projfeedstat, nextitems + projfeedstat);
-              img1 += figimg + figdata + fotocount + figcat + imgsrc + dataprojetos[i].webContentLink + endimg + cap + endfig;
-              projfeedstat += 1;
-            }
-            items = img1.toString();
-            //console.log(img1);
-            self.resolve(items);
-            items = "";
-          })
-          .fail(function() {
-            console.log("No Data");
-            items = "";
-            self.resolve(items);
-          });
-      //}
     });
   }
 
@@ -1179,7 +1169,8 @@ colcoessc */
     $itemsproj.hide(); // hide by default
     this.append($itemsproj); // append to container
     $itemsproj.imagesLoaded().progress(function(imgLoad, image) {
-      let $itemproj = $(image.img).parents(itemSelector); // get item dom : image is imagesLoaded class, not <img>, <img> is image.img
+      let $itemproj = $(image.img).parents(itemSelector);
+      // get item dom : image is imagesLoaded class, not <img>, <img> is image.img
       $itemproj.show(); // un-hide item
       msnry.appended($itemproj); // masonry does its thing
       $itemsproj = "";
@@ -1192,9 +1183,6 @@ colcoessc */
     return $.Deferred(function() {
       var self = this;
     //console.log('FT List: ',cat + pj, ftlist);
-    // if (window["nextPageToken" + cat + pj] === undefined) {
-    //   window["nextPageToken" + cat + pj] = "";
-    // }
     //console.log(cat + pj, ftcount);
     if (ftcount.hasOwnProperty(cat + pj) === false) {
       ftcount[cat + pj] = "";
@@ -1205,10 +1193,6 @@ colcoessc */
       ftlist[cat + pj] = {g:[], s:[]};
       //console.log(cat + pj, ftlist);
       //console.log('T0 : ', pj, cat, container, ftlist);
-      // if (
-      //   window["nextPageToken" + cat + pj].length > 5 ||
-      //   $(container + " figure").length === 0
-      // ) {
         var urlgapi =
           "https://www.googleapis.com/drive/v3/files?" +
           //"pageSize=" +
@@ -1224,19 +1208,11 @@ colcoessc */
           }).id +
           "&key=" +
           api_key //+
-          //"&pageToken=" +
-          //window["nextPageToken" + cat + pj];
         //console.log(window['nextPageToken'+cat+pj]);
         var promise = $.getJSON(urlgapi, function(data, status) {
           console.log("Gapi Gallery Retrieve"); // on success
         });
         promise.done(function(data) {
-            //console.log(data.nextPageToken);
-            // if (data.nextPageToken !== undefined) {
-            //   window["nextPageToken" + cat + pj] = data.nextPageToken;
-            // } else {
-            //   window["nextPageToken" + cat + pj] = 0;
-            // }
             var dataprojetos = data.files.sort((a, b) => a.name - b.name);
             //console.log(data.files, nextPageToken);
             let items;
@@ -1451,26 +1427,7 @@ colcoessc */
     });
   }
 
-  // NOTE: Não satisfeito com essa solução, pesquisar sobre async / await
-  /*
-  function waitfor() {
-    console.log('working?');
-    return $.Deferred(function() {
-      var self = this;
-      setTimeout(function() {
-        if (cfolder.length < 10) {
-          setTimeout(function() {
-            $.when(getdrivefolders()).done(function() {
-              self.resolve();
-            });
-          }, 100);
-        } else {
-          self.resolve();
-        }
-      }, 300);
-    });
-  }
-  */
+  // NOTE: Pesquisar sobre async / await
 
   // Captions from Drive
   function getCaptions() {
@@ -1683,7 +1640,6 @@ colcoessc */
          $(".mainfoto").css({ display: "block", visibility: "visible" });
           break;
         case 'grid':
-        //$('.projdescription').css({width: '0%', padding: '0em 0 0 0em'});
         $(".gridpj").css({ display: "none", visibility: "hidden" });
         $(".mainfoto").css({ display: "none", visibility: "hidden" });
         $(".maingrid").css({ display: "flex", visibility: "visible" });
@@ -1878,11 +1834,7 @@ function findSecret(){
       });
     },200);
   }
-  //var scpassdecode = scpass.
- //configfile.senhas.
-  //console.log(configfile.senhas.pv1);
 }
-
 
   /*
   ██      ██  ██████  ██   ██ ████████ ██████   ██████  ██   ██
@@ -1947,12 +1899,7 @@ function listSelected(){
       lbcurrentSlide(0);
     });
 
-
     // NOTE:  so é necessário o getcaptions se houver um load direto, que já acontece, porém não a tempo do load do elemento, se conseguir sincronizar não é necessário outro e pode-se colocar o getLbVersions no lugar do getcaptions abaixo, checkstored, tb só é necessário se for load direto da pagina.
-
-    //checkstored();
-    //getLbVersions();
-    //console.log($('.lbmini > figure').length);
 
     function lblist(){
       $.when(getCaptions()).done(function(){
@@ -2073,8 +2020,6 @@ function listSelected(){
 
     function lbshowSlides(n) {
       //console.log(lbcat, lbpj, lbft);
-      //$('.lbfotomenu').remove('figure');
-      //$('.lbfotovers').remove();
       if (lbselected.length === 0){
         $('.js-noselected').css({display: 'block'});
       }else{
@@ -2116,10 +2061,6 @@ function listSelected(){
         $('.js-lbfootvis').css({display: 'none',visibility: 'hidden'});
         $('.lbsendmenu').css({display: 'flex', visibility: 'visible'});
 
-        // $('.js-lbsendx').on('click', function(){
-        //   $('.lbsendmenu').css({display: 'none',visibility: 'hidden'});
-        //   $('.lbfotomenu').css({display: 'flex',visibility: 'visible'});
-        // });
 
         $('.js-lbsendx').click(function(){
           lbuser.name = $('#lbname').val();
