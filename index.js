@@ -257,54 +257,32 @@ $(document).ready(function() {
     visibleStyle: { transform: "translateY(0)", opacity: 1 },
     hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
   });
-/*
-  $.fn.masonryProjReveal = function($itemsproj) {
-    let msnry = this.data("masonry");
-    let itemSelector = msnry.options.itemSelector;
-    $itemsproj.hide();
-    this.append($itemsproj);
-    $("body").i18n();
-    $itemsproj.imagesLoaded().progress(function(imgLoad, image) {
-      let $item = $(image.img).parents(itemSelector);
-      $item.show();
-      msnry.appended($item);
-      //console.log($item, $itemsproj);
-      loadgallery();
-    });
-    return this;
-  };
 
-  var timerprojsc;
-  $(".projetosgrid").on("scroll.projScroll", function() {
-    //console.log('teste1');
-    let $pgthis = $(this);
-    let pgheight = this.scrollHeight - $pgthis.height();
-    let pgscroll = $pgthis.scrollTop();
-    let pgisScrolledToEnd = pgscroll >= pgheight - 100;
-    //console.log(pgheight, $pgthis.height(), this.scrollHeight);
-    if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
-      if (timerprojsc) {
-        //console.log('teste2');
-        window.clearTimeout(timerprojsc);
-      }
-      timerprojsc = window.setTimeout(function() {
-        //console.log("ttetet");
-        //imageProjReveal();
-      }, 400);
-    }
+  // function endDetect(container){
+  //     console.log(container);
+  //     var cont = document.querySelectorAll(container)[0];
+  //     console.log(cont);
+  //     cont.scrollBy({ top: 380, left: 0, behavior: "smooth" });
+  //     // document.getElementById(container).scrollBy(0, 200);
+  //     //console.log($('#grid'+cat+pj).children().length);
+  //     // $(container).addClass('gNoloadingin').delay(500).queue(function(){
+  //     //   $(this).addClass('gNoloadingout').delay(500).queue(function(){$(this).removeClass('gNoloadingin gNoloadingout').dequeue();
+  //     // }).dequeue();
+  //     // });
+  //   }
+
+
+  $(".projetosgrid").on("scroll.pjgrid", function() {
+    var container = $('.projetosgrid');
+    timeoutdiscard(container, 100, scrollend);
+    // if (timergridsc) {
+    //   window.clearTimeout(timergridsc);
+    // }
+    // timergridsc = window.setTimeout(function() {
+    //   endDetect('.projetosgrid');
+    // }, 1400);
+    // timeoutdiscard('.projetosgrid', endDetect);
   });
-
-
-  function imageProjReveal() {
-    $.when(listProjFiles()).done(function(itemsproj) {
-      let $itemsproj = new function(){
-        return $(itemsproj);
-      }
-      //console.log("test b:", $itemsproj);
-      $grid.masonryProjReveal($itemsproj);
-    });
-  }
-*/
 
 /*
 ██████  ██████  ██      ███████  ██████  ██████  ███████ ███████
@@ -312,7 +290,7 @@ $(document).ready(function() {
 ██      ██    ██ ██      █████   ██      ██    ██ █████   ███████
 ██      ██    ██ ██      ██      ██      ██    ██ ██           ██
 ██████  ██████  ███████ ███████  ██████  ██████  ███████ ███████
-colcoessc */
+colecoessec */
 
   function loadColecImages() {
     return $.Deferred(function() {
@@ -346,7 +324,9 @@ colcoessc */
               .delay(10)
               .animate({ opacity: "1" }, "slow");
               loadgallery();
+              if (ffv===true){
               ffoxscroll('.colecoesgrid');
+              }
             self.resolve();
           });
       });
@@ -368,54 +348,19 @@ colcoessc */
     visibleStyle: { transform: "translateY(0)", opacity: 1 },
     hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
   });
-/*
-  $.fn.masonryColecReveal = function($itemscolec) {
-    let msnry = this.data("masonry");
-    let itemSelector = msnry.options.itemSelector;
-    $itemscolec.hide();
-    this.append($itemscolec);
-    $("body").i18n();
-    $itemscolec.imagesLoaded().progress(function(imgLoad, image) {
-      let $item = $(image.img).parents(itemSelector);
-      $item.show();
-      msnry.appended($item);
-      loadgallery();
-    });
-    return this;
-  };
 
-  // Coleções Grid Config
-  var timercolecsc;
   $(".colecoesgrid").on("scroll.ccgrid", function() {
-    let $pgthis = $(this);
-    let pgheight = this.scrollHeight - $pgthis.height();
-    let pgscroll = $pgthis.scrollTop();
-    let pgisScrolledToEnd = pgscroll >= pgheight - 100;
-    if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
-      if (timercolecsc) {
-        window.clearTimeout(timercolecsc);
-      }
-      timercolecsc = window.setTimeout(function() {
-        //imageColecReveal();
-      }, 400);
-    }
+    var container = $('.colecoesgrid');
+    timeoutdiscard(container, 100, scrollend);
+    // if (timergridsc) {
+    //   window.clearTimeout(timergridsc);
+    // }
+    // timergridsc = window.setTimeout(function() {
+    //   endDetect('.colecoesgrid');
+    // }, 400);
   });
 
-  function imageColecReveal() {
-    $.when(listColecFiles()).done(function(itemscolec) {
-      convertColecData = itemscolec;
-      let $itemscolec = convePim();
-      //console.log("test b:", convertProjData, $itemscolec);
-      $ccgrid.masonryColecReveal($itemscolec);
-    });
-  }
-  let convertColecData;
-  function convePim() {
-    let itemscolec = convertColecData;
-    return $(itemscolec);
-  }
-*/
-  // Instagram Pages code imagesload
+
 
   /*
   ██ ███    ██ ███████ ████████  █████
@@ -423,8 +368,9 @@ colcoessc */
   ██ ██ ██  ██ ███████    ██    ███████
   ██ ██  ██ ██      ██    ██    ██   ██
   ██ ██   ████ ███████    ██    ██   ██
-  */
+  instasec */
 
+// Instagram Pages code imagesload
   let instaimgs = [], instadata;
   let feed = new Instafeed({
     get: "user",
@@ -441,6 +387,7 @@ colcoessc */
     success: function(data) {
       let images = data.data;
       let result;
+      //console.log(data);
       instaimgs = [];
       for (i = 0; i < images.length; i++) {
         let image = images[i];
@@ -464,7 +411,11 @@ colcoessc */
           $("#instafeed")
             .delay(10)
             .animate({ opacity: "1" }, "slow");
-            ffoxscroll('.instagrid');
+            if (ffv===true){
+              ffoxscrollinsta('.instagrid');
+            }else{
+              instascroll();
+            }
         });
       });
     }
@@ -522,20 +473,39 @@ colcoessc */
   }
 
   // load more insta scroll
-  var oldinstafeed;
-  $(".instagrid").on("scroll.insta", function() {
-    let $ifthis = $(this);
-    let ifheight = this.scrollHeight - $ifthis.height();
-    let ifscroll = $ifthis.scrollTop();
-    let ifisScrolledToEnd = ifscroll >= ifheight;
-    oldinstafeed = "";
-    if (ifisScrolledToEnd) {
-      if (oldinstafeed !== itemsinsta && instafeedstat < 500) {
-        imageInstaReveal();
-        oldinstafeed = itemsinsta;
+  //var lastInstaScrollTop = 0;
+  function instascroll(){
+    var oldinstafeed;
+    $(".instagrid").on("scroll.insta", function(e) {
+      let $ifthis = $(this);
+      let ifheight = this.scrollHeight - $ifthis.height();
+      let ifscroll = $ifthis.scrollTop();
+      let ifisScrolledToEnd = ifscroll >= ifheight-100;
+      oldinstafeed = "";
+      if (ifisScrolledToEnd) {
+        if (oldinstafeed !== itemsinsta && instafeedstat < 500) {
+          timeoutdiscard('', 20, imageInstaReveal);
+          //imageInstaReveal();
+          oldinstafeed = itemsinsta;
+        }
+        if (instafeedstat >= instaimgs.length){
+
+        //var st = container.scrollTop();
+          //if (st > lastInstaScrollTop){
+          //if(e.originalEvent.wheelDelta < 0) {
+            console.log('Up');
+            var container = $('.instagrid');
+            console.log('fim');
+            timeoutdiscard(container, 200, scrollend);
+          }
+
       }
-    }
-  });
+
+
+    });
+  }
+
+
 
   function imageInstaReveal() {
     let $itemsinsta = getInstaImages();
@@ -649,19 +619,19 @@ colcoessc */
         "visibility",
         "visible"
       );
+      addbox(cat);
     } else {
       $(".maingrid").append(
         '<div id="grid' + cat + pj + '" class="js-vis grid'+cat+'"></div>'
       );
-      $("#grid" + cat + pj)
-        .siblings()
-        .css("display", "none");
+      $("#grid" + cat + pj).siblings().css("display", "none");
       $(".js-vis").css({ visibility: "hidden" });
-      $(".fotopage, .topbar, .maingrid, #grid" + cat + pj).css(
-        "visibility",
-        "visible"
-      );
+      $(".fotopage, .topbar, .maingrid, #grid" + cat + pj).css({visibility: "visible"});
       $('.maingrid').css({display: 'flex'});
+
+        if (cat==='sc'){
+          $('.js-photobackbtn').css({cursor: 'auto', opacity: '0.3' }).off('click');
+        }
       createGallery(pj, cat, "#grid" + cat + pj);
     }
   }
@@ -749,8 +719,11 @@ colcoessc */
 
   // Logo TOP Click
   $(".logotop").click(function() {
-    $(".menupage").css("visibility", "hidden");
-    $(".topbar").css("visibility", "visible");
+    //$('.itemgallery').removeClass('hovereffect').queue(function(){
+      $(".menupage").css("visibility", "hidden");
+      $(".topbar").css("visibility", "visible");
+    //});
+
     enterpage();
   });
 
@@ -990,374 +963,6 @@ colcoessc */
     });
   }
 
-  /*
-   ██████   █████  ██      ██      ███████ ██████  ██    ██
-  ██       ██   ██ ██      ██      ██      ██   ██  ██  ██
-  ██   ███ ███████ ██      ██      █████   ██████    ████
-  ██    ██ ██   ██ ██      ██      ██      ██   ██    ██
-   ██████  ██   ██ ███████ ███████ ███████ ██   ██    ██
-  gallerysec */
-
-  // List Gallery Files
-  function loadgallery() {
-    $(".js-pj").on("click", function(e) {
-      if (e.handled !== true) {
-        var pj = $(this).data("pj");
-        $(".projetosgrid").off("scroll");
-        History.pushState(
-          {
-            state: 7,
-            plate: ".fotopage, .maingrid, .gridpj",
-            cat: "pj",
-            pj: pj,
-            rand: Math.random()
-          },
-          "Projetos Galeria",
-          "?locale=" + $.i18n().locale + "&page=photo" + "&cat=pj" + "&pj=" + pj
-        );
-        e.handled = true;
-        return false;
-      }
-    });
-
-    $(".js-cc").on("click", function(e) {
-      if (e.handled !== true) {
-        var cc = $(this).data("cc");
-        $(".projetosgrid").off("scroll");
-        History.pushState(
-          {
-            state: 8,
-            plate: ".fotopage, .maingrid, .gridcc",
-            cat: "cc",
-            pj: cc,
-            rand: Math.random()
-          },
-          "Coleções Galeria",
-          "?locale=" + $.i18n().locale + "&page=photo" + "&cat=cc" + "&pj=" + cc
-        );
-        e.handled = true;
-        return false;
-      }
-    });
-  }
-
-  function createGallery(pj, cat, container, data) {
-    //console.log("T2 : ", pj, cat, container);
-    progressbar(".carregando #progress-bar-pages", 5);
-    window["$grid" + cat + pj] = $(container).imagesLoaded(function() {
-      window["$grid" + cat + pj].masonry({
-        columnWidth: 420,
-        initLayout: false,
-        itemSelector: ".item" + cat + pj,
-        isFitWidth: true,
-        percentPsotion: false,
-        resize: true,
-        transitionDuration: "0.3s",
-        stagger: "0.05s",
-        gutter: 20,
-        isAnimated: !Modernizr.csstransitions,
-        visibleStyle: { transform: "translateY(0)", opacity: 1 },
-        hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
-      });
-    });
-
-    $.when(listGalleryFiles(pj, cat, container, data)).done(function(itemsproj, itemsfoto) {
-      progressbar(".carregando #progress-bar-pages", 15);
-      $(container).css("display", "none");
-      $(container).css("opacity", "0");
-      $(container).append(itemsproj);
-      $(".foto").append(itemsfoto);
-      gslides();
-      //console.log('T4 :',pj,cat, container, itemsproj);
-      $(container)
-        .imagesLoaded()
-        .progress(function(instance, image) {
-          if (image.isLoaded) {
-            var width = new Number(
-              instance.progressedCount * (100 / instance.images.length));
-            width = width.toFixed();
-            progressbar(".carregando #progress-bar-pages", width);
-          }
-        })
-        .done(function() {
-          $(container).css("display", "flex");
-          window["$grid" + cat + pj].masonry("reloadItems");
-          window["$grid" + cat + pj].masonry("layout");
-          adjustgridheight('.maingrid', '#grid'+cat+pj, cat, pj);
-          //console.log("T5 :", pj, cat, container);
-        })
-        .then(function() {
-          $("body").i18n();
-          //console.log("T6 :", pj, cat, container);
-          $(container)
-            .delay(10)
-            .animate({ opacity: "1" }, "slow");
-            if (ffv === true){
-              ffoxscrollgrid(pj, cat, '.maingrid');
-            }else{
-            checkbfscroll(pj, cat, container);
-          }
-        });
-    });
-  }
-
-  function checkbfscroll(pj, cat, container){
-    var $maing =$('.maingrid');
-    var fckh, i = 0;
-    function ckheight() {
-      var gridsh = document.getElementById("grid"+cat+pj).scrollHeight;
-      var maingh = $maing.height();
-      console.log(pj,cat,container, maingh, gridsh);
-      if (maingh > gridsh){
-        pjgridReveal(pj, cat, container);
-        scrollpjgrid(pj, cat, container);
-      }
-      if(i < 3){ i++;
-      }else {
-        //adjustgridheight('.maingrid', '#grid'+cat+pj, cat, pj);
-        clearInterval(fckh);}
-    }
-    fckh = setInterval(ckheight, 1800);
-
-  }
-
-  var timergridsc;
-  function scrollpjgrid(pj, cat, container) {
-    console.log('ay');
-    $(".maingrid").on("scroll.gridpj1", function() {
-      let $pgthis = $(this);
-      let pgheight = this.scrollHeight - $pgthis.height();
-      let pgscroll = $pgthis.scrollTop();
-      let pgisScrolledToEnd = pgscroll >= pgheight - 100;
-      //console.log('A:',pgheight,'B', $pgthis.height(), 'C', this.scrollHeight);
-      if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
-        if (timergridsc) {
-          window.clearTimeout(timergridsc);
-        }
-        timergridsc = window.setTimeout(function() {
-          pjgridReveal(pj, cat, container);
-          //console.log(pj,cat,container);
-        }, 400);
-      }
-    });
-  }
-
-  function pjgridReveal(pj, cat, container) {
-    $.when(listGalleryFiles(pj, cat, container)).done(function(
-      itemsproj, itemsfoto) {
-      convertpjgridData = itemsproj;
-      //console.log("test b:", convertProjData);
-      let $itemsproj = convertItemsPjGrid();
-      window["$grid" + cat + pj].pjgridReveal($itemsproj);
-      $(".foto").append(itemsfoto);
-      gslides();
-    });
-  }
-
-  // NOTE: essa função pode ser eliminadam verificar na pagina de projetos onde já foi feito.
-
-  let convertpjgridData;
-  function convertItemsPjGrid() {
-    let itemsproj = convertpjgridData;
-    return $(itemsproj);
-  }
-
-  $.fn.pjgridReveal = function($itemsproj) {
-    //console.log($itemsproj);
-    let msnry = this.data("masonry");
-    let itemSelector = msnry.options.itemSelector;
-    $itemsproj.hide(); // hide by default
-    this.append($itemsproj); // append to container
-    $itemsproj.imagesLoaded().progress(function(imgLoad, image) {
-      let $itemproj = $(image.img).parents(itemSelector);
-      // get item dom : image is imagesLoaded class, not <img>, <img> is image.img
-      $itemproj.show(); // un-hide item
-      msnry.appended($itemproj); // masonry does its thing
-      $itemsproj = "";
-    });
-    return this;
-  };
-
-  var ftcount = {}, ftlist={}, loadnumber=4;
-  function listGalleryFiles(pj, cat, container, data) {
-    return $.Deferred(function() {
-      var self = this;
-    //console.log('FT List: ',cat + pj, ftlist);
-    //console.log(cat + pj, ftcount);
-    if (ftcount.hasOwnProperty(cat + pj) === false) {
-      ftcount[cat + pj] = "";
-      //console.log(cat + pj, ftcount);
-      progressbar(".carregando #progress-bar-pages", 10);
-    }
-    if (ftlist.hasOwnProperty(cat + pj) === false) {
-      ftlist[cat + pj] = {g:[], s:[]};
-      //console.log(cat + pj, ftlist);
-      //console.log('T0 : ', pj, cat, container, ftlist);
-        var urlgapi =
-          "https://www.googleapis.com/drive/v3/files?" +
-          //"pageSize=" +
-          //"" +
-          "fields=" +
-          fields +
-          "&orderBy=name" + //mrecents+
-          "&q=" +
-          cfolder.find(el => {
-            if (el.category === cat && pj.toString() === el.pj) {
-              return el;
-            }
-          }).id +
-          "&key=" +
-          api_key //+
-        //console.log(window['nextPageToken'+cat+pj]);
-        var promise = $.getJSON(urlgapi, function(data, status) {
-          console.log("Gapi Gallery Retrieve"); // on success
-        });
-        promise.done(function(data) {
-            var dataprojetos = data.files.sort((a, b) => a.name - b.name);
-            //console.log(data.files, nextPageToken);
-            let items;
-            let img1 = "", img2 = "";
-            let tproj = dataprojetos.length;
-            let fig = $(container).length;
-            for (var i = 0; i < dataprojetos.length; i++) {
-              //ftcount[cat + pj]++;
-              let figimg = '<figure class="itemgallery hovereffect js-slide item' + cat + pj + ' " data-pjcatft="' + pj + cat + (i+1) + '"><img src="';
-              cap = '<figcaption data-i18n="' + cat + pj + "ft" + (i+1) + 'leg">Olár <figcaption>';
-              img1 = figimg + dataprojetos[i].webContentLink + endimg + endfig;
-              ftlist[cat + pj].g.push(img1);
-              img2 = '<figure class="gSlides foto' + cat + pj + '"><img src='+
-                dataprojetos[i].webContentLink + "/></figure>";
-              ftlist[cat + pj].s.push(img2);
-            }
-            //items = img1.toString();
-            //itemsfoto = img2.toString();
-            //self.resolve(items, itemsfoto);
-            console.log('T1 :', ftlist);
-            returnft();
-            items = "";
-          }).fail(function() {
-            console.log("No Data");
-            items = "";
-            self.resolve(items);
-          });
-        }else{
-          returnft();
-        }
-
-        function returnft(){
-        if(ftlist.hasOwnProperty(cat + pj) === true){
-          //console.log(ftlist[cat+pj].g.length);
-        let img1='', img2='', items, itemsfoto;
-        for (var j = 0; j <loadnumber && ftcount[cat + pj] < ftlist[cat+pj].g.length; j++) {
-          ftcount[cat + pj]++;
-          //console.log(ftcount[cat+pj]);
-          img1+=ftlist[cat+pj].g[ftcount[cat + pj]-1];
-          img2+=ftlist[cat+pj].s[ftcount[cat + pj]-1];
-        }
-          items = img1.toString();
-          itemsfoto = img2.toString();
-          //console.log('T2: ', ftlist, items, itemsfoto);
-          self.resolve(items, itemsfoto);
-          items = "";
-        }
-      }
-      });
-  }
-
-  // Home Photos
-  function getHomePhoto() {
-    progressbar("#progress-bar", 5);
-    $(".js-enterpagebtn").off();
-    var urlhomephotos =
-      "https://www.googleapis.com/drive/v3/files?q=" +
-      cfolder[2].id +
-      "+and+" +
-      mimefoto +
-      "&fields=" +
-      fields +
-      "&key=" +
-      api_key;
-    var promise = $.getJSON(urlhomephotos, function(data, status) {
-      console.log("Gapi Retrieve Home"); // on success
-    });
-    promise
-      .done(function(data) {
-        progressbar("#progress-bar", 15);
-        var datahomephotos = data.files;
-        //console.log(datahomephotos, datahomephotos.length);
-        for (var i = 0; i < datahomephotos.length; i++) {
-          $(".enterpage > figure:nth-child(" + (i + 1) + ")").css(
-            "background",
-            "url(" + datahomephotos[i].webContentLink + ")"
-          );
-          //  console.log(datahomephotos[i].webContentLink);
-        }
-      })
-      .then(function() {
-        $(".enterpage")
-          .imagesLoaded({ background: ".epbg" }, function() {
-            $(".enterpage > figure").css("animation-play-state", "running");
-            $(".enterpage .logo").addClass("js-enterpagebtn");
-
-            // Enterpage logo
-            $(".js-enterpagebtn").click(function() {
-              ff = ".projetosgrid";
-              History.pushState(
-                {
-                  state: 2,
-                  plate: ".projetos, .projetosgrid, #projetosgrid",
-                  rand: Math.random()
-                },
-                "Projetos",
-                "?locale=" + $.i18n().locale + "&page=projetos"
-              );
-            });
-          })
-          .progress(function(instance, image) {
-            if (image.isLoaded) {
-              var width = new Number(
-                instance.progressedCount * (100 / instance.images.length)
-              );
-              width = width.toFixed();
-              progressbar("#progress-bar", width);
-            }
-          });
-      });
-  }
-  // Progress Bar
-  function progressbar(elem, width) {
-    if (width === 10 && elem === "#progress-bar") {
-      $("#progress-bar").css("background-color", "black");
-    } else if (width === 10 && elem === ".carregando #progress-bar-pages") {
-      $("#progress-bar-pages").css("background-color", "white");
-    }
-    if (elem === ".carregando #progress-bar-pages") {
-      $(".carregando #progress-bar-pages #progress").css(
-        "visibility",
-        "visible"
-      );
-      $(".carregando").css("display", "inherit");
-      $(elem).css({
-        width: width * 0.4 * 10,
-        opacity: (100 - width) * 0.1 * 0.1
-      });
-      if (width >= 90) {
-        $(".carregando #progress-bar-pages #progress").css(
-          "visibility",
-          "hidden"
-        );
-        $(".carregando").css("display", "none");
-      }
-    } else {
-      $(elem).css("visibility", "visible");
-      $(elem).css("display", "inherit");
-      $(elem).css({
-        width: width * 0.4 * 10,
-        opacity: (100 - width) * 0.1 * 0.1
-      });
-    }
-  }
-
   // Drive Folders project config
   // mainfolder in q var
   // cfolder[0] 00.CC / cfolder[1] 00.PJ / cfolder[2] 00.home / cfolder[3] 00.legendas
@@ -1491,6 +1096,425 @@ colcoessc */
     });
   }
 
+  /*
+   ██████   █████  ██      ██      ███████ ██████  ██    ██
+  ██       ██   ██ ██      ██      ██      ██   ██  ██  ██
+  ██   ███ ███████ ██      ██      █████   ██████    ████
+  ██    ██ ██   ██ ██      ██      ██      ██   ██    ██
+   ██████  ██   ██ ███████ ███████ ███████ ██   ██    ██
+  gallerysec */
+
+  // List Gallery Files
+  function loadgallery() {
+    $(".js-pj").on("click", function(e) {
+      if (e.handled !== true) {
+        var pj = $(this).data("pj");
+        $(".projetosgrid").off("scroll");
+        History.pushState(
+          {
+            state: 7,
+            plate: ".fotopage, .maingrid, .gridpj",
+            cat: "pj",
+            pj: pj,
+            rand: Math.random()
+          },
+          "Projetos Galeria",
+          "?locale=" + $.i18n().locale + "&page=photo" + "&cat=pj" + "&pj=" + pj
+        );
+        e.handled = true;
+        return false;
+      }
+    });
+
+
+
+
+    $(".js-cc").on("click", function(e) {
+      if (e.handled !== true) {
+        var cc = $(this).data("cc");
+        $(".projetosgrid").off("scroll");
+        History.pushState(
+          {
+            state: 8,
+            plate: ".fotopage, .maingrid, .gridcc",
+            cat: "cc",
+            pj: cc,
+            rand: Math.random()
+          },
+          "Coleções Galeria",
+          "?locale=" + $.i18n().locale + "&page=photo" + "&cat=cc" + "&pj=" + cc
+        );
+        e.handled = true;
+        return false;
+      }
+    });
+
+    $( ".js-cc, .js-pj" ).hover(
+      function() {
+        var cat= $(this).data('cat');
+        var pj= $(this).data(cat);
+        console.log(cat);
+        $('.item[data-'+cat+'="'+pj+'"][data-cat="'+cat+'"]').addClass('hovereffect');
+      }, function() {
+        var pj= $(this).data('pj');
+        var cat= $(this).data('cat');
+        setTimeout(function(){
+          $('.item[data-'+cat+'="'+pj+'"][data-cat="'+cat+'"]').removeClass('hovereffect');
+        },300);
+
+      }
+    );
+  }
+
+  function createGallery(pj, cat, container, data) {
+    console.log("T2 : ", pj, cat, container);
+    progressbar(".carregando #progress-bar-pages", 5);
+    window["$grid" + cat + pj] = $(container).imagesLoaded(function() {
+      window["$grid" + cat + pj].masonry({
+        columnWidth: 420,
+        initLayout: false,
+        itemSelector: ".item" + cat + pj,
+        isFitWidth: true,
+        percentPsotion: false,
+        resize: true,
+        transitionDuration: "0.3s",
+        stagger: "0.05s",
+        gutter: 20,
+        isAnimated: !Modernizr.csstransitions,
+        visibleStyle: { transform: "translateY(0)", opacity: 1 },
+        hiddenStyle: { transform: "translateY(100px)", opacity: 0 }
+      });
+    });
+
+    $.when(listGalleryFiles(pj, cat, container, data)).done(function(itemsproj, itemsfoto) {
+      //console.log(itemsproj, itemsfoto);
+      progressbar(".carregando #progress-bar-pages", 15);
+      $(container).css("display", "none");
+      $(container).css("opacity", "0");
+      $(container).append(itemsproj);
+      $(".foto").append(itemsfoto);
+      gslides();
+      addbox(cat);
+      //console.log('T4 :',pj,cat, container, itemsproj);
+      $(container)
+        .imagesLoaded()
+        .progress(function(instance, image) {
+          if (image.isLoaded) {
+            var width = new Number(
+              instance.progressedCount * (100 / instance.images.length));
+            width = width.toFixed();
+            progressbar(".carregando #progress-bar-pages", width);
+          }
+        })
+        .done(function() {
+          $(container).css("display", "flex");
+          window["$grid" + cat + pj].masonry("reloadItems");
+          window["$grid" + cat + pj].masonry("layout");
+          adjustgridheight('.maingrid', '#grid'+cat+pj, cat, pj);
+          //console.log("T5 :", pj, cat, container);
+        })
+        .then(function() {
+          $("body").i18n();
+          //console.log("T6 :", pj, cat, container);
+          $(container)
+            .delay(10)
+            .animate({ opacity: "1" }, "slow");
+            checkbfscroll(pj, cat, container);
+            checkSecretOut(cat, pj);
+        });
+    });
+  }
+
+  function checkSecretOut(cat, pj){
+    //console.log('sec out 1');
+    if (cat === 'sc'){
+      //console.log('sec out 2', cat, pj);
+      $('.menupage').on('click', '.js-projetosbtn, .js-colecoesbtn, .js-intabtn, .js-secretbtn, .js-lightboxbtn', function(event) {
+        $('.foto'+cat+pj).remove();
+        $('#grid'+cat+pj).remove();
+        $('.js-photobackbtn').css({cursor: 'pointer', opacity: '1' });
+        photobackbtn();
+        addbox(cat);
+        console.log(ftlist, ftcount);
+        delete ftlist[cat+pj];
+        delete ftcount[cat+pj];
+        console.log(ftlist, ftcount);
+        //window["$grid" + cat + pj].masonry('destroy');
+        //$('.js-projetosbtn, .js-colecoesbtn, .js-intabtn, .js-secretbtn, .js-lightboxbtn').off();
+        $('.menupage').off();
+      })
+    }
+  }
+
+  function checkbfscroll(pj, cat, container){
+    var $maing = $('.maingrid');
+    var gridsh = $("#grid"+cat+pj)[0].clientHeight;
+    var maingh = $maing.height();
+
+    if (maingh > gridsh-80){
+      var fckh, i = 0;
+      function ckheight() {
+        gridsh = $("#grid"+cat+pj)[0].clientHeight;
+        console.log(pj,cat,container, maingh, gridsh);
+        if (maingh > gridsh-80){
+          pjgridReveal(pj, cat, container);
+        }
+        if (i<3){
+          i++;
+        }else{
+          clearInterval(fckh);
+          if (ffv === true){
+            ffoxscrollgrid(pj, cat, '.maingrid');
+          } else{
+            scrollpjgrid(pj, cat, container);
+          }
+        }
+      }
+      fckh = setInterval(ckheight, 2000);
+
+    }else {
+      if (ffv === true){
+        ffoxscrollgrid(pj, cat, '.maingrid');
+      } else{
+        scrollpjgrid(pj, cat, container);
+      }
+    }
+  }
+
+  var timergridsc;
+  function scrollpjgrid(pj, cat, container) {
+    //console.log('ay');
+    $(".maingrid").on("scroll.gridpj1", function() {
+      let $pgthis = $(this);
+      let pgheight = this.scrollHeight - $pgthis.height();
+      let pgscroll = $pgthis.scrollTop();
+      let pgisScrolledToEnd = pgscroll >= pgheight - 100;
+      //console.log('A:',pgheight,'B', $pgthis.height(), 'C', this.scrollHeight);
+      if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
+        if (timergridsc) {
+          window.clearTimeout(timergridsc);
+        }
+        timergridsc = window.setTimeout(function() {
+          pjgridReveal(pj, cat, container);
+          //console.log(pj,cat,container);
+        }, 80);
+        if (ftcount[cat+pj] >= ftlist[cat+pj].g.length) {
+          //var container = $('.colecoesgrid');
+          timeoutdiscard($pgthis, 400, scrollend);
+        }
+      }
+    });
+  }
+
+
+
+  function pjgridReveal(pj, cat, container) {
+    $.when(listGalleryFiles(pj, cat, container)).done(function(
+      itemsproj, itemsfoto) {
+      //convertpjgridData = itemsproj;
+      //console.log("test b:", convertProjData);
+      let $itemsproj = new function(){
+        return $(itemsproj);
+      }
+      //let $itemsproj = convertItemsPjGrid();
+      window["$grid" + cat + pj].pjgridReveal($itemsproj);
+      $(".foto").append(itemsfoto);
+      gslides();
+    });
+  }
+
+  // let convertpjgridData;
+  // function convertItemsPjGrid() {
+  //   let itemsproj = convertpjgridData;
+  //   return $(itemsproj);
+  // }
+
+  $.fn.pjgridReveal = function($itemsproj) {
+    //console.log($itemsproj);
+    let msnry = this.data("masonry");
+    let itemSelector = msnry.options.itemSelector;
+    $itemsproj.hide(); // hide by default
+    this.append($itemsproj); // append to container
+    $itemsproj.imagesLoaded().progress(function(imgLoad, image) {
+      let $itemproj = $(image.img).parents(itemSelector);
+      // get item dom : image is imagesLoaded class, not <img>, <img> is image.img
+      $itemproj.show(); // un-hide item
+      msnry.appended($itemproj); // masonry does its thing
+      $itemsproj = "";
+    });
+    return this;
+  };
+
+  var ftcount = {}, ftlist={}, loadnumber=5;
+  function listGalleryFiles(pj, cat, container, data) {
+    return $.Deferred(function() {
+      var self = this;
+    //console.log('FT List: ',cat + pj, ftlist);
+    //console.log(cat + pj, ftcount);
+    if (ftcount.hasOwnProperty(cat + pj) === false) {
+      ftcount[cat + pj] = "";
+      //console.log(cat + pj, ftcount);
+      progressbar(".carregando #progress-bar-pages", 10);
+    }
+    if (ftlist.hasOwnProperty(cat + pj) === false) {
+      ftlist[cat + pj] = {g:[], s:[]};
+      //console.log(cat + pj, ftlist);
+      //console.log('T0 : ', pj, cat, container, ftlist);
+        var urlgapi =
+          "https://www.googleapis.com/drive/v3/files?" +
+          //"pageSize=" +
+          //"" +
+          "fields=" +
+          fields +
+          "&orderBy=name" + //mrecents+
+          "&q=" +
+          cfolder.find(el => {
+            if (el.category === cat && pj.toString() === el.pj) {
+              return el;
+            }
+          }).id +
+          "&key=" +
+          api_key //+
+        //console.log(window['nextPageToken'+cat+pj]);
+        var promise = $.getJSON(urlgapi, function(data, status) {
+          console.log("Gapi Gallery Retrieve"); // on success
+        });
+        promise.done(function(data) {
+            var dataprojetos = data.files.sort((a, b) => a.name - b.name);
+            //console.log(data.files, nextPageToken);
+            let items;
+            let img1 = "", img2 = "";
+            let tproj = dataprojetos.length;
+            let fig = $(container).length;
+            for (var i = 0; i < dataprojetos.length; i++) {
+              //ftcount[cat + pj]++;
+              let figimg = '<figure class="itemgallery js-slide item' + cat + pj + ' " data-pjcatft="' + pj + cat + (i+1) + '"><img src="';
+              cap = '<figcaption data-i18n="' + cat + pj + "ft" + (i+1) + 'leg">Olár <figcaption>';
+              img1 = figimg + dataprojetos[i].webContentLink + endimg + endfig;
+              ftlist[cat + pj].g.push(img1);
+              img2 = '<figure class="gSlides foto' + cat + pj + '"><img src='+
+                dataprojetos[i].webContentLink + "/></figure>";
+              ftlist[cat + pj].s.push(img2);
+            }
+            //items = img1.toString();
+            //itemsfoto = img2.toString();
+            //self.resolve(items, itemsfoto);
+            //console.log('T1 :', ftlist);
+            returnft();
+            items = "";
+          }).fail(function() {
+            console.log("No Data");
+            items = "";
+            self.resolve(items);
+          });
+        }else{
+          returnft();
+        }
+
+        function returnft(){
+          if(ftlist.hasOwnProperty(cat + pj) === true){
+            //console.log(ftlist[cat+pj].g.length);
+            if (ftcount[cat + pj] < ftlist[cat+pj].g.length) {
+              let img1='', img2='', items, itemsfoto;
+              for (var j = 0; j <loadnumber && ftcount[cat + pj] < ftlist[cat+pj].g.length; j++) {
+                ftcount[cat + pj]++;
+                console.log(ftcount[cat+pj]);
+                img1+=ftlist[cat+pj].g[ftcount[cat + pj]-1];
+                img2+=ftlist[cat+pj].s[ftcount[cat + pj]-1];
+              }
+              items = img1.toString();
+              itemsfoto = img2.toString();
+              //console.log('T2: ', ftlist, items, itemsfoto);
+              self.resolve(items, itemsfoto);
+              if ($('.maingrid').children('.gNoloading').length !== 0) {
+                $('.gNoloading').remove();
+              }
+            }else if (centergrid===0 && $('#grid'+cat+pj).children().length === ftlist[cat+pj].g.length && $('.maingrid').children('.gNoloading').length === 0) {
+              $('.maingrid').append('<div class="gNoloading"><h3 data-i18n="gnoloading"></h3></div>');
+            }else{
+              //console.log($('#grid'+cat+pj).children().length);
+              // if (centergrid===0 && $('#grid'+cat+pj).children().length >= ftlist[cat+pj].g.length) {
+              //   $('.gNoloading').animate({
+              //     height: '+=200px'
+              //   },500).delay(800).animate({
+              //     height: '-=200px'
+              //   },500);
+              //}
+            }
+          }
+        }
+    });
+  }
+
+  /*
+  ██   ██  ██████  ███    ███ ███████
+  ██   ██ ██    ██ ████  ████ ██
+  ███████ ██    ██ ██ ████ ██ █████
+  ██   ██ ██    ██ ██  ██  ██ ██
+  ██   ██  ██████  ██      ██ ███████
+    homesec */
+
+  // Home Photos
+  function getHomePhoto() {
+    progressbar("#progress-bar", 5);
+    $(".js-enterpagebtn").off();
+    var urlhomephotos =
+      "https://www.googleapis.com/drive/v3/files?q=" +
+      cfolder[2].id +
+      "+and+" +
+      mimefoto +
+      "&fields=" +
+      fields +
+      "&key=" +
+      api_key;
+    var promise = $.getJSON(urlhomephotos, function(data, status) {
+      console.log("Gapi Retrieve Home"); // on success
+    });
+    promise
+      .done(function(data) {
+        progressbar("#progress-bar", 15);
+        var datahomephotos = data.files;
+        //console.log(datahomephotos, datahomephotos.length);
+        for (var i = 0; i < datahomephotos.length; i++) {
+          $(".enterpage > figure:nth-child(" + (i + 1) + ")").css(
+            "background",
+            "url(" + datahomephotos[i].webContentLink + ")"
+          );
+          //  console.log(datahomephotos[i].webContentLink);
+        }
+      })
+      .then(function() {
+        $(".enterpage")
+          .imagesLoaded({ background: ".epbg" }, function() {
+            $(".enterpage > figure").css("animation-play-state", "running");
+            $(".enterpage .logo").addClass("js-enterpagebtn");
+
+            // Enterpage logo
+            $(".js-enterpagebtn").click(function() {
+              ff = ".projetosgrid";
+              History.pushState(
+                {
+                  state: 2,
+                  plate: ".projetos, .projetosgrid, #projetosgrid",
+                  rand: Math.random()
+                },
+                "Projetos",
+                "?locale=" + $.i18n().locale + "&page=projetos"
+              );
+            });
+          })
+          .progress(function(instance, image) {
+            if (image.isLoaded) {
+              var width = new Number(
+                instance.progressedCount * (100 / instance.images.length)
+              );
+              width = width.toFixed();
+              progressbar("#progress-bar", width);
+            }
+          });
+      });
+  }
+
   // Gapi get Versions
   function getLbVersions() {
     return $.Deferred(function() {
@@ -1522,7 +1546,7 @@ colcoessc */
   // IDEA: load mais imgens da tela do slide, 2 imagens antes do fim, para isso tem que colocar a função de load, adicionar os items ocultos, e quando voltar pelo botão do grid o masonry ajustar layout
 
   // Photo Page grid
-  function fotopageready(cat, pj){
+  function loadinfopanel(cat, pj){
     var lvcat = lastVisible[1];
     var lvpj = lastVisible[2];
       //$.when(getCaptions()).done(function(){
@@ -1536,20 +1560,20 @@ colcoessc */
       $('#pd--p3').text($.i18n(lvcat+lvpj+'pd-p3'));
       $('#pd--p4').text($.i18n(lvcat+lvpj+'pd-p4'));
       $('.setinha').css({visibility: 'visible'});
-      var newpjcheck = $('.maingrid').has('#grid'+cat+pj).length;
-      console.log(newpjcheck);
-      if (newpjcheck === 0){
-        loadpjd();
+      var newLoadCheck = $('.maingrid').has('#grid'+cat+pj).length;
+      //console.log(newLoadCheck);
+      if (newLoadCheck === 0){
+        firstLoadAnimation();
       }
 
       //$('.projdescription').hide().show(0);
       $('.projdescription').off('click');
       $('.projdescription').on('click', function(){
-        projshowhide();
+        infopanelOpenClose();
       });
   }
 
-  function loadpjd(){
+  function firstLoadAnimation(){
     $('.projdescription').css({width:'0%', color: 'rgba(0,0,0,0)'});
     $('.projdescription').delay(100).animate({
       padding: '3em 0 0 3em',
@@ -1559,7 +1583,7 @@ colcoessc */
     },5);
   }
 
-  function projshowhide(){
+  function infopanelOpenClose(){
     var box = $('.projdescription');
     var setinha = $('.setinha');
     var targetWidth = box.width() > 0 ? 0 : 350;
@@ -1582,17 +1606,19 @@ colcoessc */
   //      .replace(regpj, '$1')
 
   // Full Screen photos
-  $(".js-photobackbtn").click(function() {
-    $('.itemgallery').removeClass('hovereffect');
-    $(".js-vis").css({ visibility: "hidden" });
-      photoManager('backbtn', 'projeto', '', '');
-  });
+  photobackbtn();
+  function photobackbtn(){
+    $(".js-photobackbtn").click(function() {
+      $(".js-vis").css({ visibility: "hidden" });
+        photoManager('backbtn', 'projeto', '', '');
+    });
+  }
 
   $(".js-gridbtn").click(function() {
     var $main = $(".maingrid");
-    var coisa = $('.foto'+lastVisible[1]+lastVisible[2]).prop('style');
-    //console.log(coisa.display, ggcat);
-    if (coisa.display === ''|| ggcat === undefined){
+    var atualgrid = $('.foto'+lastVisible[1]+lastVisible[2]).prop('style');
+    console.log(atualgrid.display, ggcat);
+    if (atualgrid.display === ''|| ggcat === undefined){
       setTimeout(function() {
         $('.item'+lastVisible[1]+lastVisible[2]).first().trigger('click');
       }, 100);
@@ -1623,14 +1649,12 @@ colcoessc */
       lastVisible[1] = cat;
       lastVisible[2] = pj;
     }
-    fotopageready(cat, pj);
+    loadinfopanel(cat, pj);
     if (orig === 'backbtn' && cat === 'pj'){
       dest = 'projeto';
     } else if (orig === 'backbtn' && cat === 'cc'){
       dest = 'colecoes';
     }
-
-    // NOTE: Verificar código para quando o usuário tiver vindo da pagina secreta
 
     console.log('Tmanager 2 ',orig, dest, cat, pj, lastVisible);
       switch (dest) {
@@ -1643,7 +1667,7 @@ colcoessc */
         $(".gridpj").css({ display: "none", visibility: "hidden" });
         $(".mainfoto").css({ display: "none", visibility: "hidden" });
         $(".maingrid").css({ display: "flex", visibility: "visible" });
-        $('.itemgallery').addClass('hovereffect');
+        //$('.itemgallery').addClass('hovereffect');
         if (orig === 'slide'){
           $("#grid"+cat+pj).css({ display: "block", visibility: "visible" });
         }else {
@@ -1681,6 +1705,21 @@ colcoessc */
   var ggcat, ggpj, ggft;
   function gslides() {
     $('.js-slide, .prev, .next').off();
+
+    $( ".js-slide" ).hover(
+      function() {
+        var foto = $(this).data('pjcatft');
+        console.log(foto);
+        $('.js-slide[data-pjcatft="'+foto+'"]').addClass('hovereffect');
+      }, function() {
+        var foto = $(this).data('pjcatft');
+        setTimeout(function(){
+          $('.js-slide[data-pjcatft="'+foto+'"]').removeClass('hovereffect');
+        },300);
+
+      }
+    );
+
     $(".js-slide").click(function() {
       ggcat = $(this).data('pjcatft').replace(rxgrid, "$2");
       ggpj = $(this).data('pjcatft').replace(rxgrid, "$1");
@@ -1731,7 +1770,7 @@ colcoessc */
         slides[i].style.display = "none";
       }
       slides[slideIndex - 1].style.display = "block";
-      $('.slcaption').text($.i18n(ggcat + ggpj +'ft'+ n +'leg'));
+      $('.slcaption').text($.i18n(ggcat + ggpj +'ft'+ ggft +'leg'));
       var x = (ggcat + ggpj +'ft'+ ggft).toString();
 
       var foto = $('.gSlides').children().eq([slideIndex - 1]).attr('src');
@@ -1747,9 +1786,14 @@ colcoessc */
       }
     }
 
+
     $(document).off('keypress');
     $(document).keypress(function(e){
       setTimeout(function(){
+        console.log(ggcat);
+        if (e.keyCode === 40 && (ggcat === undefined || ggcat === 'sc')){
+          return false;
+        }
         var key = e.keyCode;
         switch (key) {
           case 37:
@@ -1772,18 +1816,30 @@ colcoessc */
     $(document).keypress(function(e){
       if (e.keyCode === 27){
         console.log('teste');
-        projshowhide();
+        infopanelOpenClose();
       }
     });
-  }
+}
 
-  $('.foto').on('click', '.lightboxadd', function(){
-    storageAdd(ggcat,ggpj,ggft);
-  });
-
-  $('.foto').on('click', '.lightboxrem', function(){
-    storageDel(ggcat,ggpj,ggft);
-  });
+    function addbox(ggcat){
+      console.log(ggcat);
+      if (ggcat === 'sc') {
+        console.log('Foi SC');
+        $('.addbox').removeClass('.lightboxadd, .lightboxrem');
+        $('.addbox').css({cursor: 'auto'});
+        $('.addbox, .lightboxadd, .lightboxrem, .foto').off();
+        return;
+      }
+      console.log('não foi sc');
+      $('.foto').off();
+      $('.addbox').removeAttr('style');
+      $('.foto').on('click', '.lightboxadd', function(){
+        storageAdd(ggcat,ggpj,ggft);
+      });
+      $('.foto').on('click', '.lightboxrem', function(){
+        storageDel(ggcat,ggpj,ggft);
+      });
+    }
 
     /*
   ██████  ██████  ██ ██    ██  █████  ████████ ███████
@@ -1791,30 +1847,34 @@ colcoessc */
   ██████  ██████  ██ ██    ██ ███████    ██    █████
   ██      ██   ██ ██  ██  ██  ██   ██    ██    ██
   ██      ██   ██ ██   ████   ██   ██    ██    ███████
-  */
+  privatesc */
 
 var scpj, sccat;
 function findSecret(){
   var scdata, rxpass=/(^[a-z]+)(\w{2})(\d{2})/; // luiza lh 11
   var rxsc= /([a-z]+)(\d+)([a-z]{2})(\d+)/; //sc 1 lh 11;
-  $('#pvpass').keypress(function(e){
+
+  $('#pvpass').off();
+  $('#pvpass').focus().keypress(function(e){
     if(e.which == 13){
       var sc = $('#pvpass').val().replace(rxpass, '$1');
       var passck = $('#pvpass').val().replace(rxpass, '$2'+'$3');
-      console.log(sc, configfile.senhas);
+      //console.log(sc, configfile.senhas);
       if (configfile.senhas.hasOwnProperty(sc)){
         var scpass = configfile.senhas[sc];
         scdata = atob(scpass);
-        console.log(scpass, scdata);
+        //console.log(scpass, scdata);
         var scck = scdata.replace(rxsc, '$3'+'$4');
         scpj = scdata.replace(rxsc, '$1'+'$2');
-        console.log(scck, passck);
+        //console.log(scck, passck);
         if (scck === passck){
           sccat = scdata.replace(rxsc, '$1');
+          var cat =sccat;
           scpj = scdata.replace(rxsc, '$2');
+          var pj =scpj;
           scdata = configfile.secrets[scpj.replace(rxsc, '$1'+'$2')];
           console.log(sccat, scpj);
-          photo(sccat, scpj);
+          photoManager('secret','grid', sccat, scpj);
         }else {
           wrongpass();
         }
@@ -1898,8 +1958,6 @@ function listSelected(){
     $.when(getLbVersions()).done(function(){
       lbcurrentSlide(0);
     });
-
-    // NOTE:  so é necessário o getcaptions se houver um load direto, que já acontece, porém não a tempo do load do elemento, se conseguir sincronizar não é necessário outro e pode-se colocar o getLbVersions no lugar do getcaptions abaixo, checkstored, tb só é necessário se for load direto da pagina.
 
     function lblist(){
       $.when(getCaptions()).done(function(){
@@ -2057,18 +2115,14 @@ function listSelected(){
       $(".lbfoto").css({ display: "block", visibility: "visible" });
       $('.lbmain').css({display: 'inline-flex'}).animate({visibility: 'visible'},50);
 
-      $('.js-lbsend').click(function(){
+      $('.js-lbsend').one('click',function(){
         $('.js-lbfootvis').css({display: 'none',visibility: 'hidden'});
         $('.lbsendmenu').css({display: 'flex', visibility: 'visible'});
-
-
         $('.js-lbsendx').click(function(){
           lbuser.name = $('#lbname').val();
           lbuser.email = $('#lbemail').val();
           lbuser.message = $('#lbmessage').val();
           lbsetupchoices.push(lbuser);
-          $('.js-lbfootvis').css({display: 'none',visibility: 'hidden'});
-          $('.lbfotomenu').css({display: 'flex',visibility: 'visible'});
           var tbot = {
             'url' : 'https://api.telegram.org/bot',
             'token': '491578726:AAFkj7DwgnqTTx6bEQPVbN6gp5G9RpAa6b8',
@@ -2078,11 +2132,11 @@ function listSelected(){
           };
           var select=[],k='';
           var rxlbsc = /(\W+)(\w+)(\W{3})(\w+)(\W{3})(\w+)(\W+)(\"[\w]+\"|\""(?=\,|\}))(\W+)(\w+)(\W{3})([\w]+(?=\"))(\W+)/;
-          var rxlbsc2 = /(\W{2}\w+\W+)(\w+\s\w+)(\W{3}\w+\W{3})(.*?)(\W{3}\w+\W{2})("(.*?)"})/;
+          var rxlbsc2 = /(\W{2}\w+\W+)(.*?)(\W{3}\w+\W{3})(.*?)(\W{3}\w+\W{2})("(.*?)"})/;
           for(var i=0; i<lbsetupchoices.length-1; i++){
             var o = JSON.stringify(lbsetupchoices[i]);
             console.log(o);
-            k += o.replace(rxlbsc, '$2 : '+'$4 - '+'$10 : '+'$12 - '+'$6 :  '+'$8'+ '\n');
+            k += o.replace(rxlbsc, '$2 : '+'$4'+'\n'+'$10 : '+'$12 / '+'$6 :  '+'$8'+ '\n'+'\n');
           }
           var p = JSON.stringify(lbsetupchoices[lbsetupchoices.length-1]);
           var q = p.replace(rxlbsc2, '\n'+'$2'+'\n'+'$4'+'\n'+'$7');
@@ -2092,9 +2146,28 @@ function listSelected(){
           var message = encodeURI(k);
           var sendlb = tbot.url + tbot.token + tbot.url2 + tbot.chatId + tbot.url3 + message ;
           fetch(sendlb).then((resp) => resp.json()).then(function(dat){
-            console.log(dat);
+            console.log(dat, dat.ok);
+            if (dat.ok === true) {
+              $('.js-lbsend').css({border: '1px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0)', cursor: 'auto'});
+              $('.js-lbsend >h1').css({color: 'rgba(255,255,255,0.3)'});
+              $('.js-lbfootvis').css({display: 'none',visibility: 'hidden'});
+              $('.lbsendok').css({visibility: 'visible'});
+              $('.lbsendokm').css({display: 'block'});
+              $('.lbsendok').fadeTo('fast', '1').delay(2500).fadeTo('fast', 0).queue(function(){
+                $('.lbsendok').css({visibility: 'hidden'});
+                $('.lbfotomenu').css({display: 'flex',visibility: 'visible'});
+              });
+            }else{
+              $('.js-lbfootvis').css({display: 'none',visibility: 'hidden'});
+              $('.lbsendok').css({visibility: 'visible'});
+              $('.lbsendfail').css({display: 'block'});
+              $('.lbsendok').fadeTo('fast', '1').delay(2500).fadeTo('fast', '0').queue(function(){
+                $('.lbsendok').css({visibility: 'hidden'});
+                $('.lbfotomenu').css({display: 'flex',visibility: 'visible'});
+              });
+            }
           });
-          $('.js-lbsendx').off();
+
         });
       });
     });
@@ -2195,6 +2268,14 @@ function listSelected(){
     $('.js-noselected').css({display: 'flex',visibility: 'visible'});
   }
 }
+
+/*
+███████ ████████  ██████  ██████   █████   ██████  ███████
+██         ██    ██    ██ ██   ██ ██   ██ ██       ██
+███████    ██    ██    ██ ██████  ███████ ██   ███ █████
+     ██    ██    ██    ██ ██   ██ ██   ██ ██    ██ ██
+███████    ██     ██████  ██   ██ ██   ██  ██████  ███████
+storagesec */
 
   // Store Variables
   function checkstored(){
@@ -2333,60 +2414,90 @@ function listSelected(){
   ███████ ██   ██    ██     ██████   ██████     ██
   */
 
-  // Colored Image Background
-  /*
-  var myImage;
-  function  getcolor() {
-          console.log(myImage);
-            myImage[0].crossOrigin = 'Anonymous';
-            var imageT = new Image(800,600);
-            imageT.crossOrigin = 'Anonymous';
-            imageT.src = 'https://cors-anywhere.herokuapp.com/' +myImage[0].src;
-            console.log(myImage[0]);
-            $('.gslides').imagesLoaded().done(function() {
-            var colorthief = new ColorThief();
-              colorthief.getPalette(myImage[0], 8);
-              console.log(colorthief);
-            });
 
-      }
-  */
+
+  /*
+██    ██ ████████ ██ ██      ███████
+██    ██    ██    ██ ██      ██
+██    ██    ██    ██ ██      ███████
+██    ██    ██    ██ ██           ██
+ ██████     ██    ██ ███████ ███████
+utilsec */
+
+
 
   // Grid Responsiveness
+  var centergrid;
   function adjustgridheight(parent, child, cat, pj) {
-    console.log(parent, ftlist);
+    //console.log(parent, ftlist);
     if (parent === ".maingrid"){
       var itemstotal = ftlist[cat+pj].g.length;
       if(  880 > $(child).width() || $(child).width() < 1300){
-        console.log('4');
+        //console.log('4');
         itemspace =4;
       }else if (  1300 > $(child).width() || $(child).width() < 1740){
-        console.log('6');
+        //console.log('6');
         itemspace =6;
       }
     }else{
       if ($(child).height() < $(parent).height()-40){
-        console.log('issae');
+        //console.log('issae');
         var itemstotal=0,itemspace=1;
       }
     }
     //itemspace = $(child).width() > ?
-    console.log(
-      "Child height:" + $(child).height(),
-      "Parent height:" + $(parent).height()
-    );
-    console.log(
-      "Child width:" + $(child).width(),
-      "Parent width:" + $(parent).width()
-    );
+    // console.log(
+    //   "Child height:" + $(child).height(),
+    //   "Parent height:" + $(parent).height()
+    // );
+    // console.log(
+    //   "Child width:" + $(child).width(),
+    //   "Parent width:" + $(parent).width()
+    // );
     //&& $(child).width() > 1100
 
     if( itemstotal <= itemspace){
       $(parent).css("align-items", "center");
       $(child).css("align-self", "center");
+      centergrid=1;
     } else {
+      centergrid=0;
       $(parent).css("align-items", "flex-start");
       $(child).css("align-self", "flex-start");
+    }
+  }
+
+  // Progress Bar
+  function progressbar(elem, width) {
+    if (width === 10 && elem === "#progress-bar") {
+      $("#progress-bar").css("background-color", "black");
+    } else if (width === 10 && elem === ".carregando #progress-bar-pages") {
+      $("#progress-bar-pages").css("background-color", "white");
+    }
+    if (elem === ".carregando #progress-bar-pages") {
+      $(".carregando #progress-bar-pages #progress").css(
+        "visibility",
+        "visible"
+      );
+      $(".carregando").css("display", "inherit");
+      $(elem).css({
+        width: width * 0.4 * 10,
+        opacity: (100 - width) * 0.1 * 0.1
+      });
+      if (width >= 90) {
+        $(".carregando #progress-bar-pages #progress").css(
+          "visibility",
+          "hidden"
+        );
+        $(".carregando").css("display", "none");
+      }
+    } else {
+      $(elem).css("visibility", "visible");
+      $(elem).css("display", "inherit");
+      $(elem).css({
+        width: width * 0.4 * 10,
+        opacity: (100 - width) * 0.1 * 0.1
+      });
     }
   }
 
@@ -2400,19 +2511,22 @@ function listSelected(){
   function ffoxscrollgrid(pj, cat, ff){
     if (ffv === true) {
       var cont = document.querySelectorAll(ff)[0];
-      if ( cont.scrollHeight > cont.offsetHeight ||cont.scrollHeight === cont.offsetHeight) {
-          pjgridReveal(pj, cat, cont);
-      }
+      // if ( cont.scrollHeight > cont.offsetHeight ||cont.scrollHeight === cont.offsetHeight) {
+      //     pjgridReveal(pj, cat, cont);
+      // }
       cont.addEventListener("wheel", function(event) {
           if (event.deltaY > 0)
             cont.scrollBy({ top: 380, left: 0, behavior: "smooth" });
           else cont.scrollBy({ top: -380, left: 0, behavior: "smooth" });
           if ( cont.scrollHeight > cont.offsetHeight ||cont.scrollHeight === cont.offsetHeight) {
+
+            //timeoutdiscard(pj, cat,cont, 400, pjgridReveal)
             if (timergridffsc) {
               window.clearTimeout(timergridffsc);
             }
             timergridffsc = window.setTimeout(function() {
               pjgridReveal(pj, cat, cont);
+              ffoxscrollend(event, cont);
               //console.log(pj,cat,container);
             }, 400);
           }
@@ -2420,17 +2534,160 @@ function listSelected(){
     }
   }
 
+
+  // NOTE: arrumar essa joça que estragou denovo: pq diabos sobe e desce duas vezes ?
+  // console.log(container, centergrid);
+  // console.log(container[0].scrollTop, container[0].clientHeight, container[0].scrollHeight);
+  // var cst = container[0].scrollTop;
+  // var cch = container[0].clientHeight;
+  // var csh = container[0].scrollHeight;
+  //
+  // if ((cst+cch+100) >= csh){
+
+  //var lastScrollTop = 0;
+  var lastScrollTop = 0;
+  function scrollend(container){
+    console.log(container, centergrid);
+    var st = container.scrollTop();
+    if (st > lastScrollTop){
+        if (centergrid===0 || centergrid===undefined) {
+          timeoutdiscard(':', 100, scrollback);
+          function resolveAfter(x) {
+            return new Promise(resolve => {
+              setTimeout(() => {
+                //console.log('foi 2');
+                resolve(x);
+              }, 80);
+            });
+          }
+          async function scrollback() {
+            //console.log(container);
+            //pg.style.height = pgh+'px';
+            //console.log(pg.offsetHeight, pg.style.height);
+            //console.log(container[0].offsetHeight, container[0].offsetHeight-80);
+            container.animate({
+              "scrollTop": container.scrollTop() + 100
+            });
+            var x = await resolveAfter('foi3');
+            //console.log(x);
+            //pg.style.height = pgh+'px';
+            container.animate({
+              "scrollTop": container.scrollTop() - 90
+            });
+            //console.log(pg.offsetHeight, pg.style.height);
+            //console.log('foi 4');
+          }
+        }
+      //}
+    }
+    lastScrollTop = st;
+  }
+
+function ffoxscrollend(event, container){
+  if (event.deltaY > 0){
+    //console.log('foi', container.scrollHeight, container);
+    if ( (container.scrollTop + container.clientHeight +90) >= container.scrollHeight) {
+      //&& container !== '.instagrid'
+      //console.log(centergrid);
+      if (centergrid===0 || centergrid=== undefined) {
+        timeoutdiscard(':', 200, scrollback);
+
+        function resolveAfter(x) {
+          return new Promise(resolve => {
+            setTimeout(() => {
+              //console.log('foi 2');
+              resolve(x);
+            }, 200);
+          });
+        }
+
+        async function scrollback() {
+          //console.log('foi1', id);
+          //pg.style.height = pgh+'px';
+          //console.log(pg.offsetHeight, pg.style.height);
+          container.scrollBy({ top: 80, left: 0, behavior: "smooth" });
+          var x = await resolveAfter('foi3');
+          //console.log(x);
+          //pg.style.height = pgh+'px';
+          container.scrollBy({ top: -80, left: 0, behavior: "smooth" });
+          //console.log(pg.offsetHeight, pg.style.height);
+          //console.log('foi 4');
+        }
+
+      }
+    }
+  }
+
+}
+
+
   function ffoxscroll(ff){
-    if (ffv === true) {
+    if (ffv === true ) {
       //var $thi = document.querySelectorAll('.maingrid');
       var container = document.querySelectorAll(ff)[0];
-
       container.addEventListener("wheel", function(event) {
-        if (event.deltaY > 0)
+        if (event.deltaY > 0){
           container.scrollBy({ top: 380, left: 0, behavior: "smooth" });
-        else container.scrollBy({ top: -380, left: 0, behavior: "smooth" });
-      },false);
+          ffoxscrollend(event, container);
+        }else{
+          container.scrollBy({ top: -380, left: 0, behavior: "smooth" });
+        }
+    },false);
+  }
+  }
+
+  var oldinstafeedffox;
+  function ffoxscrollinsta(ff){
+    if (ffv === true ) {
+      var inscontainer = document.querySelectorAll(ff)[0];
+      inscontainer.addEventListener("wheel", function(event) {
+        if (event.deltaY > 0){
+          inscontainer.scrollBy({ top: 380, left: 0, behavior: "smooth" });
+          let ifthis = document.querySelectorAll('#instafeed')[0];
+          let ifheight = this.scrollHeight - this.clientHeight;
+          let ifscroll = this.scrollTop;
+          //console.log(this.scrollHeight, this.clientHeight, ifheight, ifscroll, this.scrollTop);
+          let ifisScrolledToEnd = ifscroll >= ifheight-100;
+          oldinstafeedffox = "";
+          if (ifisScrolledToEnd) {
+            if (oldinstafeedffox !== itemsinsta && instafeedstat < 500) {
+              timeoutdiscard('', 20, imageInstaReveal);
+              oldinstafeedffox = itemsinsta;
+            }
+            //console.log(instafeedstat, instaimgs.length);
+            if (instafeedstat >= instaimgs.length){
+                //var container = $('#instafeed');
+                //console.log('fim');
+                ffoxscrollend(event, inscontainer);
+              }
+          }
+        }else{
+          inscontainer.scrollBy({ top: -380, left: 0, behavior: "smooth" });
+        }
+    },false);
+  }
+  }
+
+// NOTE: refatorar esta função para utilizar um objeto de argumentos em id.. dessa forma poderá ser aplicado em todos os casos mesmo com diferentes parÂmetros. como na função ffosxrollgrid
+
+  var timergridsca, reseter=0;
+  function timeoutdiscard(id, timer, func){
+    if (reseter===0){
+      //console.log('tas', id);
+      if (timergridsca) {
+        reserter=1;
+        //console.log('tas2 tas tas');
+        window.clearTimeout(timergridsca);
+      }
+    }else{
+      return;
     }
+    timergridsca = window.setTimeout(function() {
+      //console.log('tas tas tas  tas  tas  tas');
+      func(id);
+      reserter=0;
+    }, timer);
+
   }
 
 });
