@@ -110,7 +110,7 @@ body {
 
 .langsa > ul > li {
   display: inline-block;
-  font-size: 16px;
+  font-size: 1em;
   font-family: "Roboto", sans-serif;
   line-height: 28px;
   background-color: rgba(255, 255, 255, 0);
@@ -153,7 +153,7 @@ body {
   font-family: "Roboto", sans-serif;
   line-height: 28px;
   background-color: rgba(255, 255, 255, 0);
-  padding: 0px 6px;
+  padding: 0px 0.375em;
   margin: 0 0;
   letter-spacing: 2px;
 }
@@ -195,18 +195,18 @@ body {
 .logo {
   text-align: center;
   /*line-height: 150px;*/
-  width: 400px;
-  height: 150px;
+  width: 40%;
+  max-height: auto;
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 2;
   cursor: pointer;
 }
 .logo > h1 {
-  margin: 39.5px 0;
+  margin: 0.8em 0;
   /*padding: 0 0 ;*/
   position: relative;
   display: inline-block;
-  font-size: 47px;
+  font-size: 5vh;
   font-weight: 100;
   font-family: "Convergence", sans-serif;
   color: white;
@@ -221,7 +221,7 @@ body {
   -webkit-transform: translateY(-75px);
           transform: translateY(-75px);
   text-align: center;
-  width: 400px;
+  min-width: 40%;
   height: 150px;
 }
 
@@ -503,8 +503,8 @@ body {
           align-items: center;
   text-align: center;
   line-height: 10px;
-  width: 550px;
-  height: 550px;
+  width: 56%;
+  height: 56%;
   /*background-color: rgba(255, 255, 255, 0.7);*/
   border-radius: 0 50px 0 50px;
   border: 2px solid rgb(5, 20, 131);
@@ -863,7 +863,7 @@ flex-flow: row wrap;
 float: left;
 height: 100%;
 width: 0px;
-z-index: 25;
+z-index: 28;
 background: rgba(251, 250, 249, 0.92);
 cursor: pointer;
 /*transform: translatex(-100%);*/
@@ -871,7 +871,7 @@ cursor: pointer;
 ::-webkit-scrollbar {
 width: 0px; /* remove scrollbar space */
 background: transparent; /* optional: just make scrollbar invisible */
-overflow-x: hidden;
+/*overflow-x: hidden;*/
 overflow-y: hidden;
 
 }
@@ -915,7 +915,7 @@ overflow-y: hidden;
   line-height: 30px;
   font-family: "Roboto", sans-serif;
   color: black;
-  overflow-y: scroll;
+  overflow-y: hidden;
 }
 
 .lbmini{
@@ -1466,16 +1466,27 @@ border: 1px solid black;
   padding-bottom: 90px;
 }
 
-.gloading{
-  position: absolute;
-  display: visible;
-  bottom: 60px;
+.gload{
+  position: fixed;
+  display: none;
+  opacity: 1;
+  bottom: 8%;
   width: 87vw;
-  background: rgba(255, 255, 255, 0.5);
-
+  background: rgba(255, 255, 255, 0);
+  font-size: 1em;
+  height: auto;
+  font-weight: 100;
+  font-family: "Convergence", sans-serif;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 25;
+}
+.gload >h3{
+  margin: 0;
+  padding: 10px;
 }
 
-.gNoloadingin{
+/*.gNoloadingin{
   -moz-transform: translateY(-200px);
     -o-transform: translateY(-200px);
     -webkit-transform: translateY(-200px);
@@ -1497,7 +1508,7 @@ border: 1px solid black;
     -o-transition: all 500ms cubic-bezier(.54,.32,.52,.72);
     -webkit-transition: all 500ms cubic-bezier(.54,.32,.52,.72);
     transition: all 500ms cubic-bezier(.54,.32,.52,.72);
-}
+}*/
 
 .gSlides {
   display: absolute;
@@ -1980,6 +1991,93 @@ border: 1px solid black;
   */
 }
 
+
+/* Decoração Informação */
+
+.infodecor{
+  display: flex; /* none no deploy */
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-43.8vh);
+  margin: 0 auto;
+  width: 80vw;
+  height: 88.5vh;
+  background: rgba(252, 252, 252, 0.96);
+  z-index: 25;
+  border-radius: 25px ;
+}
+.infodecor>section{
+  width: 80%;
+  height: 80%;
+  box-sizing: border-box;
+  position: relative;
+  margin: 0 auto;
+  padding: 0 25px;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
+}
+
+.infodecor>h4{
+  padding: 6px 0 6px 30px;;
+  position: absolute;
+  margin: 0;
+  font-size: 1.4em;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: black;
+}
+
+.idimg{
+margin: 10px 5px;
+}
+.idimg>img {
+  width: 12vw;
+  height: auto;
+}
+#id1{
+  margin-top: 70px;
+}
+#id2{
+  margin-top: 30px;
+  margin-bottom: 10px
+}
+#id2>img{
+  width: 18vw;
+}
+#id3{
+  margin-bottom: 55px;
+}
+#id3>img{
+  width: 18vw;
+}
+
+#id5{
+  margin-bottom: 40px;
+}
+#idf6{
+  top: 1em;
+}
+#idf6b{
+  top: 2.2em;
+}
+#idf7{
+  bottom: 1.5vh;
+  cursor: pointer;
+}
+
+#idf7>a:hover{
+  color: rgba(68, 49, 131, 0.97);
+}
+#idf7>a{
+  text-decoration: none;
+  color: black;
+}
+
 /* Password Page */
 .private{
   position: absolute;
@@ -2116,14 +2214,78 @@ border: 1px solid black;
 
 
 @media (max-width: 360px) {
+.logo{
+  min-width: 75%;
+}
+.langsb > ul > li, .langsa > ul > li {
+  display: block;
+  font-size: 0.8em;
+  padding: 0 0.3em;
+}
+.logotop > h1 {
+  font-size: 1.0em;
+  padding: .3em 10px .3em 10px;
+  margin: 10px 0;
+}
+.projetosgrid, .colecoesgrid, .instagrid, .maingrid{
+  top: 6%;
+  height: 85.5vh;
+}
+.menu{
+  width: 75%;
+  padding-top: .5em;
+}
+.menubtnx .aa {
+  font-size: 4em;
+}
 
+.menu > ul > li {
+  font-size: 2em;
+  letter-spacing: .2em;
+  line-height: 1.5em;
+}
+.enterpage > figure {
+  background-size: contain;
+  background-position: center center ;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
 }
 
 @media (max-width: 640px) and (orientation: landscape) {
 
 }
+@media (max-width: 940px){
+  .idimg>img {
+    width: 22vw;
+    height: auto;
+  }
 
-@media (min-width: 1200px) {
+  .infodecor>section{
+    padding: 0 0;
+    width: 90%
+  }
+}
+@media (min-width:940px) and (max-width: 1200px){
+  .idimg>img {
+    width: 19vw;
+    height: auto;
+  }
+}
+
+@media (min-width: 1500px) {
+  .infodecor{
+    display: flex;
+    max-width: 60vw;
+  }
+  .infodecor>section{
+    padding: 0 75px;
+  }
+  .idimg>img {
+    max-width: 12vw;
+    height: auto;
+  }
 
 }
 
