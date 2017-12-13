@@ -172,6 +172,9 @@ $(document).ready(function() {
       ff = ".maingrid";
         photoManager('load', 'grid', url("?cat"), url("?pj"));
         break;
+      case "slide":
+        photoManager('load', 'slide', url("?cat"), url("?pj"), url("?ft"));
+        break;
       case "secret":
       History.pushState(
         { state: 9, plate: ".private", rand: Math.random() },
@@ -617,7 +620,7 @@ colecoessec */
   }
 
   function photo(cat, pj) {
-    var cat = cat;
+    //var cat = cat;
     if ($("#grid" + cat + pj + " figure").length > 0) {
       $("#grid" + cat + pj)
         .siblings()
@@ -637,12 +640,14 @@ colecoessec */
       );
       $("#grid" + cat + pj).siblings().css("display", "none");
       $(".js-vis").css({ visibility: "hidden" });
-      $(".fotopage, .topbar, .maingrid, #grid" + cat + pj).css({visibility: "visible"});
+      if (url('?page')!=='slide'){
+        $(".fotopage, .topbar, .maingrid, #grid" + cat + pj).css({visibility: "visible"});
+      }
       $('.maingrid').css({display: 'flex'});
 
-        if (cat==='sc'){
-          $('.js-photobackbtn').css({cursor: 'auto', opacity: '0.3' }).off('click');
-        }
+      if (cat==='sc'){
+        $('.js-photobackbtn').css({cursor: 'auto', opacity: '0.3' }).off('click');
+      }
       createGallery(pj, cat, "#grid" + cat + pj);
     }
   }
@@ -1323,7 +1328,7 @@ colecoessec */
   function pjgridReveal(pj, cat, container) {
     if(ftcount[cat+pj] < ftlist[cat+pj].g.length){
 
-      console.log(ftcount[cat+pj], ftlist[cat+pj].g.length);
+      //console.log(ftcount[cat+pj], ftlist[cat+pj].g.length);
       $('.gload').fadeIn(200, function(){
         window.setTimeout(function(){
             $('.gload').fadeOut();
@@ -1640,7 +1645,7 @@ colecoessec */
     var $main = $(".maingrid");
     var atualgrid = $('.foto'+lastVisible[1]+lastVisible[2]).prop('style');
     //console.log(atualgrid.display, ggcat);
-    if (atualgrid.display === ''|| ggcat === undefined){
+    if (atualgrid.display === '' || ggcat === undefined){
       setTimeout(function() {
         $('.item'+lastVisible[1]+lastVisible[2]).first().trigger('click');
       }, 100);
@@ -1663,14 +1668,19 @@ colecoessec */
   });
 
   var lastVisible = [[],[],[],[]];
-  function photoManager(orig, dest, cat, pj) {
+  function photoManager(orig, dest, cat, pj, ft) {
     console.log('Tmanager 1 ',orig, dest, cat, pj, lastVisible);
     var mcat,mpj;
     if ( !cat && !pj ){
       cat = lastVisible[1];
       pj = lastVisible[2]
+    }else if (orig==='load' && dest==='slide'){
+      lastVisible[0] = orig;
+      lastVisible[1] = cat;
+      lastVisible[2] = pj;
+      lastVisible[3] = ft;
     }else{
-      lastVisible =[[],[],[]];
+      lastVisible =[[],[],[],[]];
       lastVisible[0] = orig;
       lastVisible[1] = cat;
       lastVisible[2] = pj;
@@ -1680,27 +1690,32 @@ colecoessec */
       dest = 'projeto';
     } else if (orig === 'backbtn' && cat === 'cc'){
       dest = 'colecoes';
+    } else if (orig==='load'&& dest==='slide'){
+      dest= 'grid';
     }
 
     console.log('Tmanager 2 ',orig, dest, cat, pj, lastVisible);
       switch (dest) {
         case 'slide':
-         $(".maingrid").css({visibility: "hidden" }); //display: "none",
+        $(".maingrid").css({visibility: "hidden" }); //display: "none",
         $(".gridpj, .js-gridg").css({ visibility: "hidden" });
-         $(".mainfoto").css({ display: "block", visibility: "visible" });
+        $(".mainfoto").css({ display: "block", visibility: "visible" });
           break;
         case 'grid':
-        console.log('test');
-        $(".gridpj").css({ display: "none", visibility: "hidden" });
-        $(".mainfoto").css({ display: "none", visibility: "hidden" });
-        $(".maingrid").css({ display: "flex", visibility: "visible" });
+        //console.log('test');
+        if (orig === 'load' && lastVisible[3]!==undefined) {
+        }else{
+          $(".gridpj").css({ display: "none", visibility: "hidden" });
+          $(".mainfoto").css({ display: "none", visibility: "hidden" });
+          $(".maingrid").css({ display: "flex", visibility: "visible" });
+        }
         //$('.itemgallery').addClass('hovereffect');
         if (orig === 'slide'){
           $("#grid"+cat+pj).css({ display: "block", visibility: "visible" });
           $('.js-gridg').css({visibility: "visible" });
         }else {
           photo(cat, pj);
-      }
+        }
           break;
         case 'projeto':
           History.pushState(
@@ -1748,6 +1763,8 @@ colecoessec */
       }
     );
 
+
+
     $(".js-slide").click(function() {
       ggcat = $(this).data('pjcatft').replace(rxgrid, "$2");
       ggpj = $(this).data('pjcatft').replace(rxgrid, "$1");
@@ -1763,6 +1780,14 @@ colecoessec */
       }
       currentSlide(ft);
     });
+
+    // auto click if load slide from url
+    if (lastVisible[0] === 'load' && lastVisible[3] !== undefined){
+      setTimeout(function() {
+        $(".fotopage, .topbar, .mainfoto, .maingrid, #grid" + lastVisible[1] + lastVisible[2]).css({visibility: "visible"});
+        $('.item'+lastVisible[1]+lastVisible[2]).eq(lastVisible[3]).trigger('click');
+      }, 50);
+    }
 
     $(".prev").click(function() {
       plusSlides(-1);
@@ -1833,7 +1858,7 @@ colecoessec */
             break;
           case 40:
              if ($('.addbox').hasClass('lightboxadd')){
-               console.log(ggcat, ggpj, ggft);
+               //console.log(ggcat, ggpj, ggft);
                storageAdd(ggcat,ggpj,ggft);
              } else if($('.addbox').hasClass('lightboxrem')){
                storageDel(ggcat,ggpj,ggft);
@@ -1844,22 +1869,22 @@ colecoessec */
     });
     $(document).keypress(function(e){
       if (e.keyCode === 27){
-        console.log('teste');
+        //console.log('teste');
         infopanelOpenClose();
       }
     });
 }
 
     function addbox(ggcat){
-      console.log(ggcat);
+      //console.log(ggcat);
       if (ggcat === 'sc') {
-        console.log('Foi SC');
+        //console.log('Foi SC');
         $('.addbox').removeClass('.lightboxadd, .lightboxrem');
         $('.addbox').css({cursor: 'auto'});
         $('.addbox, .lightboxadd, .lightboxrem, .foto').off();
         return;
       }
-      console.log('não foi sc');
+      //console.log('não foi sc');
       $('.foto').off();
       $('.addbox').removeAttr('style');
       $('.foto').on('click', '.lightboxadd', function(){
