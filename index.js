@@ -1263,31 +1263,25 @@ colecoessec */
   }
 
   function checkbfscroll(pj, cat, container){
-    var $maing = $('.maingrid');
-    var gridsh = $("#grid"+cat+pj)[0].clientHeight;
-    var maingh = $maing.height();
+    //var $maing = $('.maingrid');
+    //var gridsh = $("#grid"+cat+pj)[0].clientHeight;
+    //var maingh = $maing.height();
 
     //if (maingh > gridsh-80){
       var fckh, i = 0;
       function ckheight() {
-        gridsh = $("#grid"+cat+pj)[0].clientHeight;
+        //gridsh = $("#grid"+cat+pj)[0].clientHeight;
         //console.log(pj,cat,container, maingh, gridsh);
-        if (maingh > gridsh-80){
+        if (ftcount[cat+pj] < ftlist[cat+pj].g.length){
           pjgridReveal(pj, cat, container);
-        }
-        if (i<3){
-          i++;
+        //}
+        //if (i<3){
+        //  i++;
         }else{
           clearInterval(fckh);
         }
       }
       fckh = setInterval(ckheight, 1600);
-      // if (ffv === true){
-      //   ffoxscrollgrid(pj, cat, '.maingrid');
-      // } else{
-      //   scrollpjgrid(pj, cat, container);
-      // }
-    //}else {
       if (ffv === true){
         ffoxscrollgrid(pj, cat, '.maingrid');
       } else{
@@ -1298,7 +1292,6 @@ colecoessec */
 
   var timergridsc;
   function scrollpjgrid(pj, cat, container) {
-    //console.log('ay');
     $(".maingrid").on("scroll.gridpj1", function() {
       let $pgthis = $(this);
       let pgheight = this.scrollHeight - $pgthis.height();
@@ -1306,13 +1299,13 @@ colecoessec */
       let pgisScrolledToEnd = pgscroll >= pgheight - 100;
       //console.log('A:',pgheight,'B', $pgthis.height(), 'C', this.scrollHeight);
       if (pgisScrolledToEnd || this.scrollHeight < $pgthis.height() - 80) {
-        if (timergridsc) {
-          window.clearTimeout(timergridsc);
-        }
-        timergridsc = window.setTimeout(function() {
-          pjgridReveal(pj, cat, container);
-          //console.log(pj,cat,container);
-        }, 80);
+        // if (timergridsc) {
+        //   window.clearTimeout(timergridsc);
+        // }
+        // timergridsc = window.setTimeout(function() {
+        //   pjgridReveal(pj, cat, container);
+        //   //console.log(pj,cat,container);
+        // }, 80);
         console.log(ftcount[cat+pj], ftlist[cat+pj].g.length);
         if (ftcount[cat+pj] >= ftlist[cat+pj].g.length) {
 
@@ -1326,16 +1319,16 @@ colecoessec */
 
 
   function pjgridReveal(pj, cat, container) {
-    if(ftcount[cat+pj] < ftlist[cat+pj].g.length){
-
-      //console.log(ftcount[cat+pj], ftlist[cat+pj].g.length);
-      $('.gload').fadeIn(200, function(){
-        window.setTimeout(function(){
-            $('.gload').fadeOut();
-        }, 400);
-      })
-
-    }
+    // if(ftcount[cat+pj] < ftlist[cat+pj].g.length){
+    //
+    //   console.log(ftcount[cat+pj], ftlist[cat+pj].g.length);
+    //   $('.gload').fadeIn(200, function(){
+    //     window.setTimeout(function(){
+    //         $('.gload').fadeOut();
+    //     }, 400);
+    //   })
+    //
+    // }
     $.when(listGalleryFiles(pj, cat, container)).done(function(
       itemsproj, itemsfoto) {
       //convertpjgridData = itemsproj;
@@ -1349,12 +1342,6 @@ colecoessec */
       gslides();
     });
   }
-
-  // let convertpjgridData;
-  // function convertItemsPjGrid() {
-  //   let itemsproj = convertpjgridData;
-  //   return $(itemsproj);
-  // }
 
   $.fn.pjgridReveal = function($itemsproj) {
     //console.log($itemsproj);
@@ -1372,7 +1359,7 @@ colecoessec */
     return this;
   };
 
-  var ftcount = {}, ftlist={}, loadnumber=5;
+  var ftcount = {}, ftlist={}, loadnumber=5, gOrder;
   function listGalleryFiles(pj, cat, container, data) {
     return $.Deferred(function() {
       var self = this;
@@ -1387,13 +1374,18 @@ colecoessec */
       ftlist[cat + pj] = {g:[], s:[]};
       //console.log(cat + pj, ftlist);
       //console.log('T0 : ', pj, cat, container, ftlist);
+      if (cat==='cc') {
+        gOrder = 'recency';
+      }else{
+        gOrder = 'name'
+      }
         var urlgapi =
           "https://www.googleapis.com/drive/v3/files?" +
           //"pageSize=" +
           //"" +
           "fields=" +
           fields +
-          "&orderBy=name" + //mrecents+
+          "&orderBy=" + gOrder+
           "&q=" +
           cfolder.find(el => {
             if (el.category === cat && pj.toString() === el.pj) {
@@ -2596,34 +2588,24 @@ utilsec */
           else
             cont.scrollBy({ top: -380, left: 0, behavior: "smooth" });
             //console.log($('#grid'+cat+pj).children().length);
-          if ( cont.scrollHeight > cont.offsetHeight ||cont.scrollHeight === cont.offsetHeight) {
-
-            //timeoutdiscard(pj, cat,cont, 400, pjgridReveal)
+          if ( ftcount[cat+pj] < ftlist[cat+pj].g.length) {
             if (timergridffsc) {
               window.clearTimeout(timergridffsc);
             }
             timergridffsc = window.setTimeout(function() {
               pjgridReveal(pj, cat, cont);
               //console.log(ftcount[cat+pj], ftlist[cat+pj].g.length);
-              if (ftcount[cat+pj] >= ftlist[cat+pj].g.length) {
-              ffoxscrollend(event, cont);
-            }
+
               //console.log(pj,cat,container);
             }, 400);
+          }else{
+            if (ftcount[cat+pj] >= ftlist[cat+pj].g.length) {
+            ffoxscrollend(event, cont);
+          }
           }
         }, false);
     }
   }
-
-
-  // NOTE: arrumar essa joça que estragou denovo: pq diabos sobe e desce duas vezes ?
-  // console.log(container, centergrid);
-  // console.log(container[0].scrollTop, container[0].clientHeight, container[0].scrollHeight);
-  // var cst = container[0].scrollTop;
-  // var cch = container[0].clientHeight;
-  // var csh = container[0].scrollHeight;
-  //
-  // if ((cst+cch+100) >= csh){
 
   //var lastScrollTop = 0;
   var lastScrollTop = 0;
