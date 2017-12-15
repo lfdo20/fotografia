@@ -815,24 +815,6 @@ colecoessec */
     langcolor();
   });
 
-  // photo page Buttons
-  $(".igb").hover(
-    function() {
-      $(".iga").css({
-        opacity: '0.3'
-        //color: "white",
-        //border: "1px solid white"
-      });
-    },
-    function() {
-      $(".iga").css({
-        opacity: '1',
-        color: "white",
-        border: "1px solid white"
-      });
-    }
-  );
-
   /*
    ██████   █████  ██████  ██
   ██       ██   ██ ██   ██ ██
