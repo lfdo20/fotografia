@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leando LFdO Photos</title>
     <link rel="stylesheet" type="text/css" href="index.css"/>
-    </script>
     <link href="https://fonts.googleapis.com/css?family=Convergence" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"/>
     <script src="js/jquery-3.2.1.min.js"></script>
@@ -21,6 +20,7 @@
     <script type="text/javascript" src="js/instafeed.js"></script>
     <script src="index.js"></script>
   </head>
+
   <body>
     <div class="wrap">
       <div class="langsb">
@@ -65,7 +65,7 @@
         <div class="menu">
           <ul>
             <li class="js-projetosbtn" data-i18n="mproj">projetos</li>
-            <li class="js-colecoesbtn" data-i18n="mcol">coleções</a></li>
+            <li class="js-colecoesbtn" data-i18n="mcol">coleções</li>
             <li class="js-instabtn" data-i18n="minsta">instagram</li>
             <li class="js-secretbtn" data-i18n="msc">secretos</li>
             <li class="js-lightboxbtn" data-i18n="mlb">lightbox</li>
@@ -84,12 +84,11 @@
         <!-- Projetos Page -->
       <div class="projetos js-projetos ff js-vis">
         <div class="infodecor js-idecor">
+          <h1 class="infodecorx">x</h1>
           <section>
             <figure id='id1' class="idimg"><img src="./img/simetricas.jpg" alt=""></figure>
-            <break></break>
             <figure id='id2' class="idimg"><img src="./img/apoiadas.jpg" alt=""></figure>
             <figure id='id3' class="idimg"><img src="./img/assimetricas.jpg" alt=""></figure>
-            <break></break>
             <figure id='id4' class="idimg"><img src="./img/elegantes.jpg" alt=""></figure>
             <figure id='id5' class="idimg"><img src="./img/penduradas.jpg" alt=""></figure>
           </section>
@@ -140,10 +139,10 @@
           <div class="lbmini ff"></div>
           <div class='setinha js-slb js-vis'></div>
         </div>
-        <section class="lbmain js-vis">
+        <section class="lbmain js-vis" tabindex='0'>
           <div class="lbfoto lbfotopv js-vis">
-            <div class="prev"></div>
-            <div class="next"></div>
+            <div class="prev js-lbprev"></div>
+            <div class="next js-lbnext"></div>
           </div>
           <div class="lbfoto js-lbfoto js-vis">
           </div>
@@ -216,7 +215,7 @@
               <input type="text" id="lbemail" placeholder="  johns@domain.com" required>
               <textarea placeholder="  Insert Your Message.." name="messagebox" id="lbmessage"></textarea>
               <div class="lbsend js-lbsendx">
-                <h1 data-i18n='lbmessageok'>Send Nudes</h1>
+                <h1 data-i18n='lbmessageok'>Send</h1>
               </div>
             </div>
             <div class="lbsendok js-lbfootvis">
@@ -265,8 +264,8 @@
         </div>
         <section class="mainfoto displaytoggle js-vis">
           <div class="foto">
-            <div class="prev"></div>
-            <div class="next"></div>
+            <div class="prev js-prev"></div>
+            <div class="next js-next"></div>
             <div class="addbox"></div>
             <div class="boxmessage js-add" data-i18n='addboxmessage'></div>
             <div class="boxmessage js-rem" data-i18n='remboxmessage'></div>
@@ -279,7 +278,6 @@
           <div class="carregando">
           <div id="progress-bar-pages"></div>
           </div>
-          <div class="gload"><h3 data-i18n="gloading">loading</h3></div>
         </section>
         <div class="footer">
           <div class="fotomenu">
