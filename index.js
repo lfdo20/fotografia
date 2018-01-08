@@ -147,6 +147,7 @@ $(document).ready(function() {
         $(".switch-locale").append(locs[3]);
         loadinfopanel();
         slideSub();
+        lbSubs();
         break;
       case "es":
         local = localchange;
@@ -155,6 +156,7 @@ $(document).ready(function() {
         $(".switch-locale").append(locs[2]);
         loadinfopanel();
         slideSub();
+        lbSubs();
         break;
       case "en":
         local = localchange;
@@ -163,6 +165,7 @@ $(document).ready(function() {
         $(".switch-locale").append(locs[1]);
         loadinfopanel();
         slideSub();
+        lbSubs();
         break;
       default:
         $.i18n().locale = navigator.language || navigator.userLanguage;
@@ -173,6 +176,7 @@ $(document).ready(function() {
         $("body").i18n();
         loadinfopanel();
         slideSub();
+        lbSubs();
         //console.log("from nav", local, $.i18n().locale);
         break;
     }
@@ -1834,7 +1838,7 @@ pagessec */
   ███████ ██  ██████  ██   ██    ██    ██████   ██████  ██   ██
   lbsec */
 
-  // list selected photos and prepare format choices
+// list selected photos and prepare format choices
   var rxlb = /^([a-z]+)(\d+)([a-z]+)(\d+)/;
   var lbcat, lbpj, lbft, lbsetupchoices=[];
   function listSelected(){
@@ -1888,12 +1892,7 @@ pagessec */
       // Info panel with photo thumbs
       function lblist(){
         $.when(getCaptions()).done(function(){
-          $('#lb--tx').text($.i18n('lb-tx'));
-          $('#lb--stt').text($.i18n('lb-stt'));
-          $('#lb--p1').text($.i18n('lb-p1'));
-          $('#lb--p2').text($.i18n('lb-p2'));
-          $('#lb--p3').text($.i18n('lb-p3'));
-          $('#lb--p4').text($.i18n('lb-p4'));
+          lbSubs();
           $('.js-slb').css({left: '-48%'});
           $('.js-slb').css({visibility: 'visible'});
           $('.lblist').delay(100).animate({
@@ -2217,6 +2216,15 @@ pagessec */
     }
   }
 
+// load subs for lightbox panel
+  function lbSubs(){
+    $('#lb--tx').text($.i18n('lb-tx'));
+    $('#lb--stt').text($.i18n('lb-stt'));
+    $('#lb--p1').text($.i18n('lb-p1'));
+    $('#lb--p2').text($.i18n('lb-p2'));
+    $('#lb--p3').text($.i18n('lb-p3'));
+    $('#lb--p4').text($.i18n('lb-p4'));
+  }
 /*
 ███████ ████████  ██████  ██████   █████   ██████  ███████
 ██         ██    ██    ██ ██   ██ ██   ██ ██       ██
