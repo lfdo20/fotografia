@@ -1,21 +1,25 @@
 $(document).ready(function() {
   // Globalvar setup
   var cfolder=[], lbselected=[], lbSelectedLinks=[], lbverlinks='', configfile, ff, ffv;
-  let lbuser={
+  var lbuser ={
     'name': '',
     'email': '',
     'message': ''
   };
 
-// NOTE: > getcaptions() fazendo 2 requestes, como fazer a função aguardar pelo termino da outra?
+  // Responsive queries
+  var maw640= window.matchMedia( "(max-width: 680px)" );
+  var mlands= window.matchMedia( "(orientation: landscape)" );
+  var maw361= window.matchMedia( "(max-width: 385px)" );
 
 
+  // Navigator checker
   if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
     ffv = true;
-    console.log("ix ffox");
+    //console.log("ffox system");
     }else{
     ffv= false;
-    console.log("no ffox");
+    //console.log("no ffox");
   }
 
   /*
@@ -45,14 +49,6 @@ $(document).ready(function() {
       $("body").i18n();
     });
 
-  $(".switch-locale").on("click", "a", function(e) {
-    e.preventDefault();
-    $.i18n().locale = $(this).data("locale");
-    local = $(this).data("locale");
-    checkloc(local[0] + local[1]);
-    $("body").i18n();
-  });
-
   // Languages Handling order: pt > en > es > de
   var locxx = ["pt", "en", "es", "de"],
     locnow,
@@ -77,22 +73,68 @@ $(document).ready(function() {
     }
   }
 
-  $(".js-locale").on("mouseenter", function() {
-    var par = $(this).parents();
-    var nl = "";
-    for (i = 0; i <= locs.length; i++) {
-      if (i != locnow) {
-        nl += locs[i];
-      }
-    }
-    $(nl).insertAfter("." + par[0].className + " #js-loc" + locxx[locnow]);
-    //console.log(locxx[locnow], nl);
-  });
 
-  $(".js-locale").on("mouseleave", function() {
-    $(".switch-locale").empty();
-    $(".switch-locale").append(locs[locnow]);
-  });
+  if (maw640.matches && mlands.matches||maw361.matches) {
+    $(".js-locale").one("click","a", function(){
+      localeMobIn();
+    });
+
+    function localeMobIn() {
+      var par = $(".js-locale").parents();
+      var nl="";
+      for (i = 0; i <= locs.length; i++) {
+        if (i != locnow) {
+          nl += locs[i];
+        }
+      }
+      $(nl).insertAfter(".switch-locale"+" #js-loc" + locxx[locnow]);
+      //console.log(par[0], locxx[locnow], nl);
+      $(".switch-locale").one("click", "a", function(){
+        var local = $(this).data("locale");
+        $.i18n().locale = $(this).data("locale");
+        localeMobOut(local);
+      });
+    }
+
+    function localeMobOut(local){
+      console.log('New Language: '+local);
+      checkloc(local[0] + local[1]);
+      $("body").i18n();
+      //console.log(locs[locnow]);
+      $(".switch-locale").empty();
+      $(".switch-locale").append(locs[locnow]);
+      $(".switch-locale").one("click", "a", function(){
+        localeMobIn()
+      });
+    }
+
+  }else{
+    $(".js-locale").on("mouseenter", function() {
+      var par = $(this).parents();
+      var nl = "";
+      for (i = 0; i <= locs.length; i++) {
+        if (i != locnow) {
+          nl += locs[i];
+        }
+      }
+      $(nl).insertAfter("." + par[0].className + " #js-loc" + locxx[locnow]);
+      //console.log(locxx[locnow], nl);
+    });
+
+    $(".js-locale").on("mouseleave", function() {
+      $(".switch-locale").empty();
+      $(".switch-locale").append(locs[locnow]);
+    });
+
+    $(".switch-locale").on("click", "a", function(e) {
+      e.preventDefault();
+      $.i18n().locale = $(this).data("locale");
+      local = $(this).data("locale");
+      console.log('New Language: '+local);
+      checkloc(local[0] + local[1]);
+      $("body").i18n();
+    });
+  }
 
   function checkloc(localchange) {
     checkstored();
@@ -246,7 +288,8 @@ $(document).ready(function() {
   }
 
   // Initialize Masonry Projetos Page
-  let $grid = $("#projetosgrid").masonry({
+  let $grid = $("#projetosgrid");
+  $grid.masonry({
     columnWidth: 420,
     initLayout: false,
     itemSelector: ".item",
@@ -283,8 +326,9 @@ $(document).ready(function() {
 
   $(".projetosgrid").on("scroll.pjgrid", function() {
     var container = $('.projetosgrid');
-
-    timeoutdiscard(container, 100, scrollend);
+    if (ffv!==true){
+      timeoutdiscard(container, 100, scrollend);
+    }
     // if (timergridsc) {
     //   window.clearTimeout(timergridsc);
     // }
@@ -361,7 +405,9 @@ colecoessec */
 
   $(".colecoesgrid").on("scroll.ccgrid", function() {
     var container = $('.colecoesgrid');
-    timeoutdiscard(container, 100, scrollend);
+      if (ffv!==true){
+      timeoutdiscard(container, 100, scrollend);
+      }
     // if (timergridsc) {
     //   window.clearTimeout(timergridsc);
     // }
@@ -419,7 +465,7 @@ colecoessec */
           $(".js-vis").css("visibility", "hidden");
           $(".instagrid, .topbar, .insta").css("visibility", "visible");
           $("#instafeed")
-            .delay(10)
+            .delay(02)
             .animate({ opacity: "1" }, "slow");
             if (ffv===true){
               ffoxscrollinsta('.instagrid');
@@ -564,9 +610,10 @@ colecoessec */
       progressbar(".carregando #progress-bar-pages", 10);
       loadProjImages();
       $(".projetosgrid, .topbar, .projetos, #projetosgrid").css("visibility", "visible");
-      console.log(ftlist, !(lbselected.length>0));
+      //console.log(ftlist, !(lbselected.length>0));
       if (!(lbselected.length > 0)) {
         $('.js-idecor').fadeIn('slow');
+        $('.js-idecor').css({display: 'flex'});
       }
     } else {
       //$(".js-vis").css("visibility", "hidden");
@@ -596,11 +643,12 @@ colecoessec */
 
   function insta() {
     var msnry = $("#instafeed").data("masonry");
+    $(".js-vis").css("visibility", "hidden");
+    $(".instagrid, .topbar, .insta").css("visibility", "visible");
     if (msnry._isLayoutInited !== true) {
       feed.run();
     } else {
-      $(".js-vis").css("visibility", "hidden");
-      $(".instagrid, .topbar, .insta").css("visibility", "visible");
+
     }
   }
 
@@ -613,7 +661,7 @@ colecoessec */
 
   function bio() {
     $(".menupage").css("visibility", "hidden");
-    $(".js-vis").css("visibility", "hidden");
+    //$(".js-vis").css("visibility", "hidden");
     $(".topbar").css("visibility", "hidden");
     $(".bio").css("visibility", "visible");
     langcolor();
@@ -627,8 +675,13 @@ colecoessec */
         .css({ display: "none" });
       $(".maingrid, #grid" + cat + pj).css({
         display: "flex",
-        visible: "visible"
+        visible: "visible",
+        opacity: '0'
       });
+      $(".maingrid, #grid" + cat + pj).delay(02)
+      .animate({ opacity: "1" }, 400);
+
+
       $(".fotopage, .topbar, .maingrid, #grid" + cat + pj).css(
         "visibility",
         "visible"
@@ -661,6 +714,7 @@ colecoessec */
 
   function showPlate(url, cat, pj, plate, title) {
     $(".menupage").css("visibility", "hidden");
+    $(document).off('keydown');
     //console.log("Teste Hist :", url, cat, pj, plate, title);
     if (title === "Photo") {
 
@@ -735,11 +789,8 @@ colecoessec */
 
   // Logo TOP Click
   $(".logotop").click(function() {
-    //$('.itemgallery').removeClass('hovereffect').queue(function(){
       $(".menupage").css("visibility", "hidden");
       $(".topbar").css("visibility", "visible");
-    //});
-
     enterpage();
   });
 
@@ -810,7 +861,7 @@ colecoessec */
 
   //bio back
   $(".js-biobtnx").click(function() {
-    $(".menupage").css("visibility", "visible");
+    $(".menupage").css({visibility: "visible"});
     $(".bio").css("visibility", "hidden");
     langcolor();
   });
@@ -976,7 +1027,7 @@ colecoessec */
         "&fields=nextPageToken, files(id, name, webContentLink, webViewLink)" +
         "&key=AIzaSyA80wjGa_zI6ta134FRmLvS4cHUpsjgVDE";
       var promise = $.getJSON(urlfolders, function(data, status) {
-        console.log("Configuring Project Folders... ");
+        //console.log("Configuring Project Folders... ");
         var regpj = /(\w\w)([0-9])(\s\w*)/;
         var configpj1a = [], configpj1b = [], configpj1c = [], configpjb = [];
         for (var i = 0; i < data.files.length; i++) {
@@ -1024,13 +1075,11 @@ colecoessec */
         configpj1b.sort((a, b) => a.pj - b.pj);
         configpj1c.sort((a, b) => a.pj - b.pj);
         cfolder = configpjb.concat(configpj1a, configpj1b, configpj1c);
-        console.log("Gapi Folders Retrieve", cfolder);
+        console.log("Gapi Folders Retrieve");
         self.resolve();
       });
     });
   }
-
-  // NOTE: Pesquisar sobre async / await
 
   // Captions from Drive
   function getCaptions() {
@@ -1040,11 +1089,12 @@ colecoessec */
       "https://www.googleapis.com/drive/v3/files?q=" +
       cfolder[3].id + "&fields=" + fields + "&key=" + api_key;
     var promise = $.getJSON(urlcaptions, function(data, status) {
-      console.log("Gapi Retrieve Captions");
+      console.log("Gapi Captions Retrieve ");
     });
     promise.done(function(data) {
       var datacaptions = data.files;
       var corsop = [
+          "https://lffotoapp.herokuapp.com/",
           "https://galvanize-cors-proxy.herokuapp.com/",
           "https://proxy-sauce.glitch.me/",
           "https://cors.io/?"
@@ -1066,7 +1116,7 @@ colecoessec */
               break;
             case "config.json":
              var conf = corsop[cp] + datacaptions[i].webContentLink;
-             console.log(conf);
+             //console.log(conf);
              fetch(conf).then((resp) => resp.json()).then(function(dat){
                configfile = dat;
                //console.log(configfile);
@@ -1154,8 +1204,8 @@ colecoessec */
         //console.log(cat);
         $('.item[data-'+cat+'="'+pj+'"][data-cat="'+cat+'"]').addClass('hovereffect');
       }, function() {
-        var pj= $(this).data('pj');
         var cat= $(this).data('cat');
+        var pj= $(this).data(cat);
         setTimeout(function(){
           $('.item[data-'+cat+'="'+pj+'"][data-cat="'+cat+'"]').removeClass('hovereffect');
         },300);
@@ -1165,7 +1215,7 @@ colecoessec */
   }
 
   function createGallery(pj, cat, container, data) {
-    console.log("T2 : ", pj, cat, container);
+    //console.log("T2 : ", pj, cat, container);
     progressbar(".carregando #progress-bar-pages", 5);
     window["$grid" + cat + pj] = $(container).imagesLoaded(function() {
       window["$grid" + cat + pj].masonry({
@@ -1191,7 +1241,7 @@ colecoessec */
       $(container).css("opacity", "0");
       $(container).append(itemsproj);
       $(".foto").append(itemsfoto);
-      gslides();
+      gslides(0);
       addbox(cat);
       //console.log('T4 :',pj,cat, container, itemsproj);
       $(container)
@@ -1217,7 +1267,7 @@ colecoessec */
           $(container)
             .delay(10)
             .animate({ opacity: "1" }, "slow");
-            checkbfscroll(pj, cat, container);
+            loadMoreGallery(pj, cat, container);
             checkSecretOut(cat, pj);
         });
     });
@@ -1244,22 +1294,21 @@ colecoessec */
     }
   }
 
-  function checkbfscroll(pj, cat, container){
+  function loadMoreGallery(pj, cat, container){
     //var $maing = $('.maingrid');
     //var gridsh = $("#grid"+cat+pj)[0].clientHeight;
     //var maingh = $maing.height();
-
-    //if (maingh > gridsh-80){
-      var fckh, i = 0;
+      var fckh, turn=1;
       function ckheight() {
         //gridsh = $("#grid"+cat+pj)[0].clientHeight;
         //console.log(pj,cat,container, maingh, gridsh);
         if (ftcount[cat+pj] < ftlist[cat+pj].g.length){
-          pjgridReveal(pj, cat, container);
+          pjgridReveal(pj, cat, container, turn);
         //}
         //if (i<3){
-        //  i++;
+          turn++;
         }else{
+          resMobile(pj,cat);
           clearInterval(fckh);
         }
       }
@@ -1269,7 +1318,6 @@ colecoessec */
       } else{
         scrollpjgrid(pj, cat, container);
       }
-  //  }
   }
 
   var timergridsc;
@@ -1288,7 +1336,7 @@ colecoessec */
         //   pjgridReveal(pj, cat, container);
         //   //console.log(pj,cat,container);
         // }, 80);
-        console.log(ftcount[cat+pj], ftlist[cat+pj].g.length);
+        //console.log(ftcount[cat+pj], ftlist[cat+pj].g.length);
         if (ftcount[cat+pj] >= ftlist[cat+pj].g.length) {
 
           //var container = $('.colecoesgrid');
@@ -1300,17 +1348,7 @@ colecoessec */
 
 
 
-  function pjgridReveal(pj, cat, container) {
-    // if(ftcount[cat+pj] < ftlist[cat+pj].g.length){
-    //
-    //   console.log(ftcount[cat+pj], ftlist[cat+pj].g.length);
-    //   $('.gload').fadeIn(200, function(){
-    //     window.setTimeout(function(){
-    //         $('.gload').fadeOut();
-    //     }, 400);
-    //   })
-    //
-    // }
+  function pjgridReveal(pj, cat, container, turn) {
     $.when(listGalleryFiles(pj, cat, container)).done(function(
       itemsproj, itemsfoto) {
       //convertpjgridData = itemsproj;
@@ -1321,7 +1359,7 @@ colecoessec */
       //let $itemsproj = convertItemsPjGrid();
       window["$grid" + cat + pj].pjgridReveal($itemsproj);
       $(".foto").append(itemsfoto);
-      gslides();
+      gslides(turn);
     });
   }
 
@@ -1341,6 +1379,7 @@ colecoessec */
     return this;
   };
 
+  var glrx = /([a-z]+)(\d+)(\F\T)(\d+)(.jpg)/gi;
   var ftcount = {}, ftlist={}, loadnumber=5, gOrder;
   function listGalleryFiles(pj, cat, container, data) {
     return $.Deferred(function() {
@@ -1382,14 +1421,15 @@ colecoessec */
         });
         promise.done(function(data) {
             var dataprojetos = data.files.sort((a, b) => a.name - b.name);
-            //console.log(data.files, nextPageToken);
+            //console.log(data.files);
             let items;
             let img1 = "", img2 = "";
             let tproj = dataprojetos.length;
             let fig = $(container).length;
             for (var i = 0; i < dataprojetos.length; i++) {
               //ftcount[cat + pj]++;
-              let figimg = '<figure class="itemgallery js-slide item' + cat + pj + ' " data-pjcatft="' + pj + cat + (i+1) + '"><img src="';
+              let nameft = parseInt(dataprojetos[i].name.replace(glrx, '$4'),10);
+              let figimg = '<figure class="itemgallery js-slide item' + cat + pj + ' " data-pjcatft="' + pj + cat + (i+1) + '" data-nameft="'+nameft+'"><img src="';
               cap = '<figcaption data-i18n="' + cat + pj + "ft" + (i+1) + 'leg">Olár <figcaption>';
               img1 = figimg + dataprojetos[i].webContentLink + endimg + endfig;
               ftlist[cat + pj].g.push(img1);
@@ -1574,11 +1614,12 @@ colecoessec */
       });
   }
 
+  var respPanelWidth=350, respPanelPadd=3;
   function firstLoadAnimation(){
     $('.projdescription').css({width:'0%', color: 'rgba(0,0,0,0)'});
     $('.projdescription').delay(100).animate({
-      padding: '3em 0 0 3em',
-      width: '+=350px'
+      padding: respPanelPadd.toString()+'em 0 0 '+respPanelPadd.toString()+'em',
+      width: '+='+respPanelWidth.toString()+'px'
     },500).animate({
         color:  'rgba(0, 0, 0, 0.84)'
     },5);
@@ -1587,8 +1628,8 @@ colecoessec */
   function infopanelOpenClose(){
     var box = $('.projdescription');
     var setinha = $('.setinha');
-    var targetWidth = box.width() > 0 ? 0 : 350;
-    var tp = box.width() > 0 ? 0.5 : 3;
+    var targetWidth = box.width() > 0 ? 0 : respPanelWidth;
+    var tp = box.width() > 0 ? 0.5 : respPanelPadd;
     var cor = box.width() > 0 ? 0.0 : 0.84;
     var scor = box.width() > 0 ? 0.8 : 0.0;
     setinha.css({ visibility: 'visible', background: 'rgba(255, 255, 255, '+scor+')'});
@@ -1643,7 +1684,7 @@ colecoessec */
 
   var lastVisible = [[],[],[],[]];
   function photoManager(orig, dest, cat, pj, ft) {
-    console.log('Tmanager 1 ',orig, dest, cat, pj, lastVisible);
+    //console.log('Tmanager 1 ',orig, dest, cat, pj, ft, lastVisible);
     var mcat,mpj;
     if ( !cat && !pj ){
       cat = lastVisible[1];
@@ -1667,8 +1708,7 @@ colecoessec */
     } else if (orig==='load'&& dest==='slide'){
       dest= 'grid';
     }
-
-    console.log('Tmanager 2 ',orig, dest, cat, pj, lastVisible);
+    //console.log('Tmanager 2 ',orig, dest, cat, pj, lastVisible);
       switch (dest) {
         case 'slide':
         $(".maingrid").css({visibility: "hidden" }); //display: "none",
@@ -1718,11 +1758,12 @@ colecoessec */
       }
   }
 
-  var rxgrid = /^(\d+)([a-z]+)(\d+)/;
-  var ggcat, ggpj, ggft;
-  function gslides() {
-    $('.js-slide, .prev, .next').off();
 
+
+  var rxgrid = /^(\d+)([a-z]+)(\d+)/;
+  var ggcat, ggpj, ggft, ggnameft;
+  function gslides(turn) {
+    $('.js-slide, .prev, .next').off();
     $( ".js-slide" ).hover(
       function() {
         var foto = $(this).data('pjcatft');
@@ -1737,8 +1778,6 @@ colecoessec */
       }
     );
 
-
-
     $(".js-slide").click(function() {
       ggcat = $(this).data('pjcatft').replace(rxgrid, "$2");
       ggpj = $(this).data('pjcatft').replace(rxgrid, "$1");
@@ -1747,30 +1786,74 @@ colecoessec */
       $(".maingrid").css({visibility: "hidden" });// display: "none",
       $(this).removeClass('hovereffect');
       $(".gridpj, .js-gridg").css({ visibility: "hidden" });
-      $(".mainfoto").css({ display: "block", visibility: "visible" });
+      $(".mainfoto").css({ display: "block", visibility: "visible", opacity: '0' });
       var allslides = $(".gSlides");
       for (i = 0; i < allslides.length; i++) {
         allslides[i].style.display = "none";
       }
       currentSlide(ft);
+      showslideclicks('.foto');
     });
 
-    // auto click if load slide from url
-    if (lastVisible[0] === 'load' && lastVisible[3] !== undefined){
-      setTimeout(function() {
-        $(".fotopage, .topbar, .mainfoto, .maingrid, #grid" + lastVisible[1] + lastVisible[2]).css({visibility: "visible"});
-        $('.item'+lastVisible[1]+lastVisible[2]).eq(lastVisible[3]).trigger('click');
-      }, 50);
+
+
+    //$('.foto, .lbmain').off();
+    //$('.foto').focus();
+    $(document).off();
+    $(document).keydown(function(e){
+      setTimeout(function(){
+        if (e.keyCode === 27){
+          infopanelOpenClose();
+        }
+        if ($('.mainfoto').css('visibility')==='visible') {
+          if (e.keyCode === 40 && (ggcat === undefined || ggcat === 'sc')){
+            return false;
+          }
+          var key = e.keyCode;
+          switch (key) {
+            case 37:
+              plusSlides(-1);
+              break;
+            case 39:
+              plusSlides(+1);
+              break;
+            case 40:
+               if ($('.addbox').hasClass('lightboxadd')){
+                 storageAdd(ggcat,ggpj,ggft, ggnameft);
+               } else if($('.addbox').hasClass('lightboxrem')){
+                 storageDel(ggcat,ggpj,ggft, ggnameft);
+               }
+              break;
+            default: return;
+          }
+        }
+      },200);
+
+    });
+
+    loadSlide(turn);
+//auto click if load slide from url
+    function loadSlide() {
+
+      if (url('?page') === 'slide' && (url('?ft') > turn*5 && url('?ft') < (turn+1)*5)){
+        $(".fotopage, .topbar, .maingrid, #grid" + lastVisible[1] + lastVisible[2]).css({visibility: "visible"});
+        $('.foto').imagesLoaded().done(function(){
+            setTimeout(function() {
+              $('.item'+lastVisible[1]+lastVisible[2]).eq(url('?ft')).trigger('click');
+            }, 50);
+        });
+      }
     }
 
-    $(".prev").click(function() {
+
+    $(".js-prev").click(function() {
       plusSlides(-1);
     });
 
-    $(".next").click(function() {
+    $(".js-next").click(function() {
       plusSlides(+1);
     });
-
+    resMobile();
     function plusSlides(n) {
       slideIndex = Number(slideIndex);
       showSlides(slideIndex+=n);
@@ -1782,7 +1865,6 @@ colecoessec */
     }
 
     function showSlides(n) {
-
       var slides = $(".foto" + ggcat+ggpj);
       //$('.gSlides'); / +cat+pj
       //myImage= $('.gslides > figure');
@@ -1793,17 +1875,20 @@ colecoessec */
       if (n < 1) {
         slideIndex = slides.length;
       }
+      //console.log(slides.length, slideIndex);
       ggft= slideIndex;
       for (var i = 0; i < slides.length; i++) {
         slides[i].style.display = "none";
       }
       slides[slideIndex - 1].style.display = "block";
+      $(".mainfoto")
+        .delay(02)
+        .animate({ opacity: "1" }, "slow");
       $('.slcaption').text($.i18n(ggcat + ggpj +'ft'+ ggft +'leg'));
-      var x = (ggcat + ggpj +'ft'+ ggft).toString();
+      ggnameft = $('.itemgallery[data-pjcatft="'+ggpj+ggcat+ggft+'"]').data('nameft');
+      var x = (ggcat + ggpj +'ft'+ ggnameft).toString();
       lastVisible[3] = ggft;
-      var foto = $('.gSlides').children().eq([slideIndex - 1]).attr('src');
-      $('.imagebk').css({background: 'url('+foto+') center'});
-
+      console.log(ggft, ggnameft, x, lbselected);
       //console.log('Slide :', slideIndex, ggpj+ggcat+ggft);
       if (lbselected.indexOf(x) === -1){
         $(".addbox").removeClass("lightboxrem");
@@ -1813,40 +1898,6 @@ colecoessec */
         $(".addbox").removeClass("lightboxadd");
       }
     }
-
-
-    $(document).off('keypress');
-    $(document).keypress(function(e){
-      setTimeout(function(){
-        console.log(ggcat);
-        if (e.keyCode === 40 && (ggcat === undefined || ggcat === 'sc')){
-          return false;
-        }
-        var key = e.keyCode;
-        switch (key) {
-          case 37:
-            plusSlides(-1);
-            break;
-          case 39:
-            plusSlides(+1);
-            break;
-          case 40:
-             if ($('.addbox').hasClass('lightboxadd')){
-               //console.log(ggcat, ggpj, ggft);
-               storageAdd(ggcat,ggpj,ggft);
-             } else if($('.addbox').hasClass('lightboxrem')){
-               storageDel(ggcat,ggpj,ggft);
-             }
-            break;
-        }
-      },200);
-    });
-    $(document).keypress(function(e){
-      if (e.keyCode === 27){
-        //console.log('teste');
-        infopanelOpenClose();
-      }
-    });
 }
 
     function addbox(ggcat){
@@ -1858,14 +1909,19 @@ colecoessec */
         $('.addbox, .lightboxadd, .lightboxrem, .foto').off();
         return;
       }
+      // if (ggcat === 'cc') {
+      //   ggfttemp = ggnameft;
+      // }else{
+      //   ggfttemp = ggft;
+      // }
       //console.log('não foi sc');
       $('.foto').off();
       $('.addbox').removeAttr('style');
       $('.foto').on('click', '.lightboxadd', function(){
-        storageAdd(ggcat,ggpj,ggft);
+        storageAdd(ggcat,ggpj,ggft, ggnameft);
       });
       $('.foto').on('click', '.lightboxrem', function(){
-        storageDel(ggcat,ggpj,ggft);
+        storageDel(ggcat,ggpj,ggft, ggnameft);
       });
     }
 
@@ -2047,12 +2103,11 @@ function listSelected(){
     });
 
     $('.lbmini').imagesLoaded().done(function(){
-        //console.log('Fois?!');
+      showslideclicks('.lbfotopv');
       $('.lbmini').animate({
         opacity: '1'
       },200);
 
-      //if(ffv === true){
         var cmini = document.querySelectorAll('.lblist')[0];
         cmini.addEventListener("wheel", function(event) {
           if (event.deltaY > 0){
@@ -2061,16 +2116,7 @@ function listSelected(){
             cmini.scrollBy({ top: -380, left: 0, behavior: "smooth" });
           }
           });
-      //}else{
-        // console.log('teste?');
-        // $('.lbmini').scroll(function(){
-        //   console.log('teste scrol lb');
-        // });
-      //}
 
-
-    //  $('.js-lbmini').scroll('mini',function(){
-    //  });
 
       $(".js-lbmini").click(function() {
         var n = $(this).data('lbminift');
@@ -2082,37 +2128,42 @@ function listSelected(){
       });
     });
 
-    $(".prev").click(function() {
+    $(".js-lbprev").click(function() {
       // $('.lbfotomenu').remove('figure');
       // $('.lbfotovers').remove();
       lbplusSlides(-1);
     });
 
-    $(".next").click(function() {
+    $(".js-lbnext").click(function() {
       // $('.lbfotomenu').remove('figure');
       // $('.lbfotovers').remove();
       lbplusSlides(+1);
     });
 
-    $(document).off('keypress');
-    $(document).keypress(function(e){
-      setTimeout(function(){
-        var key = e.keyCode;
-        switch (key) {
-          case 37:
-            lbplusSlides(-1);
-            break;
-          case 39:
-            lbplusSlides(+1);
-            break;
-        }
-      },200);
-    });
+    $(document).off();
+    $(document).keydown(function(e){
+      //e.preventDefault();
+      console.log($('.lightbox').css('visibility')==='visible');
+      if ($('.lightbox').css('visibility')==='visible') {
 
-    $(document).keypress(function(e){
-      if (e.keyCode === 27){
-        console.log('teste');
-        listshowhide();
+
+        console.log('lightbox', e);
+        setTimeout(function(){
+          var key = e.keyCode;
+          switch (key) {
+            case 37:
+              lbplusSlides(-1);
+              break;
+            case 39:
+              lbplusSlides(+1);
+              break;
+            case 27:
+              listshowhide();
+              break;
+            default:
+              return;
+          }
+        },200);
       }
     });
 
@@ -2153,6 +2204,7 @@ function listSelected(){
       lbcat = lbselected[slideIndex].replace(rxlb, "$1");
       lbpj = lbselected[slideIndex].replace(rxlb, "$2");
       lbft = lbselected[slideIndex].replace(rxlb, "$4");
+      console.log(lbselected[slideIndex], lbcat, lbpj, lbft);
       //console.log(n, lbselected[slideIndex], lbsetupchoices);
       getversions();
       //console.log(lbsetupchoices);
@@ -2223,6 +2275,10 @@ function listSelected(){
     });
 
       $('.js-lbdel').click(function(){
+        if (lbselected.length === 1) {
+          $('.js-lbfootvis, .lbfooter').css({visibility: 'hidden'});
+          $('.js-noselected').css({visibility: 'visible'});
+        }
       console.log(lbcat,lbpj,lbft);
       console.log(slideIndex);
       $('.lbmini figure[data-lbpjcatft="'+lbpj+lbcat+lbft+'"]').remove();
@@ -2230,8 +2286,9 @@ function listSelected(){
       $('.js-lbfoto figure[data-lbpjcatft="'+lbpj+lbcat+lbft+'"]').remove();
       lbsetupchoices.splice(slideIndex, 1);
       console.log(lbsetupchoices);
-      storageDel(lbcat, lbpj, lbft, '0');
+      storageDel(lbcat, lbpj, lbft, 'lbox');
       lbplusSlides(+1);
+      console.log(lbselected);
     });
 
       function getversions(){
@@ -2341,7 +2398,7 @@ storagesec */
     }
     if (!localStorage.userSetup === false){
       lbsetupchoices = JSON.parse(localStorage.getItem("userSetup"));
-      console.log(lbsetupchoices);
+      console.log('User choices loaded');
     }
   }
 
@@ -2354,31 +2411,38 @@ storagesec */
     var ggcat = arguments[0];
     var ggpj = arguments[1];
     var ggft = arguments[2];
+    var ggnameft;
+    if (arguments[3] !== undefined) {
+      ggnameft = arguments[3];
+    }else{
+      ggnameft=ggft;
+    }
+    console.log(ggcat,ggpj, ggft, ggnameft);
     if (localStorage){
       if ( !localStorage.selected === false){
         var selected =[], itemLinks=[];
         selected = JSON.parse(localStorage.getItem("selected"));
         itemsLinks = JSON.parse(localStorage.getItem("selectedLinks"));
-        selected.push(ggcat + ggpj +'ft'+ ggft);
-        lbselected.push(ggcat + ggpj +'ft'+ ggft);
+        selected.push(ggcat + ggpj +'ft'+ ggnameft);
+        lbselected.push(ggcat + ggpj +'ft'+ ggnameft);
         itemsLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
         lbSelectedLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
         localStorage.setItem("selected", JSON.stringify(selected));
         localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxrem");
         $(".addbox").removeClass("lightboxadd");
-        console.log('Image Saved : ', lbselected)
+        console.log('Image Saved : ', lbselected, lbSelectedLinks)
       }else{
         var selected =[], itemsLinks=[];
-        selected.push(ggcat + ggpj +'ft'+ ggft);
-        lbselected.push(ggcat + ggpj +'ft'+ ggft);
+        selected.push(ggcat + ggpj +'ft'+ ggnameft);
+        lbselected.push(ggcat + ggpj +'ft'+ ggnameft);
         lbSelectedLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
         itemsLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
         localStorage.setItem("selected", JSON.stringify(selected));
         localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxrem");
         $(".addbox").removeClass("lightboxadd");
-        console.log('Image Saved : ', lbselected)
+        console.log('Image Saved : ', lbselected, lbSelectedLinks)
       }
       $('.js-add').fadeIn('quick').delay(120).fadeOut('quick');
     } else if (sessionStorage){
@@ -2386,8 +2450,8 @@ storagesec */
           var selected =[], itemsLinks=[];
           selected = JSON.parse(sessionStorage.getItem("selected"));
           itemsLinks = JSON.parse(localStorage.getItem("selectedLinks"));
-          selected.push(ggcat + ggpj +'ft'+ ggft);
-          lbselected.push(ggcat + ggpj +'ft'+ ggft);
+          selected.push(ggcat + ggpj +'ft'+ ggnameft);
+          lbselected.push(ggcat + ggpj +'ft'+ ggnameft);
           itemsLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
           lbSelectedLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
           sessionStorage.setItem("selected", JSON.stringify(selected));
@@ -2397,8 +2461,8 @@ storagesec */
           console.log('Image Saved : ', lbselected)
         }else{
           var selected =[], itemsLinks=[] ;
-          selected.push(ggcat + ggpj +'ft'+ ggft);
-          lbselected.push(ggcat + ggpj +'ft'+ ggft);
+          selected.push(ggcat + ggpj +'ft'+ ggnameft);
+          lbselected.push(ggcat + ggpj +'ft'+ ggnameft);
           itemsLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
           lbSelectedLinks.push($('#grid'+ggcat+ggpj+' >figure:nth-child('+ggft+') > img').attr('src'));
           sessionStorage.setItem("selected", JSON.stringify(selected));
@@ -2417,41 +2481,47 @@ storagesec */
     var ggcat = arguments[0];
     var ggpj = arguments[1];
     var ggft = arguments[2];
-    var lb = arguments[3];
+    var ggnameft = arguments[3];
+    if (arguments[3] === 'lbox') {
+      ggnameft=ggft;
+    }
+    console.log(arguments, ggnameft);
     if (localStorage){
       if ( !localStorage.selected === false){
-        var remove = ggcat + ggpj +'ft'+ ggft;
+        var removename = ggcat + ggpj +'ft'+ ggnameft;
+        ///var removepos = ggcat + ggpj +'ft'+ ggft;
         var selected =[], itemLinks=[];
         selected = JSON.parse(localStorage.getItem("selected"));
         itemsLinks = JSON.parse(localStorage.getItem("selectedLinks"));
-        selected.splice(selected.indexOf(remove), 1);
-        itemLinks.splice(selected.indexOf(remove), 1);
-        lbselected.splice(lbselected.indexOf(remove), 1);
-        lbSelectedLinks.splice(lbSelectedLinks.indexOf(remove), 1);
+        itemLinks.splice(selected.indexOf(removename), 1);
+        selected.splice(selected.indexOf(removename), 1);
+        lbSelectedLinks.splice(lbselected.indexOf(removename), 1);
+        lbselected.splice(lbselected.indexOf(removename), 1);
         localStorage.setItem("selected", JSON.stringify(selected));
         localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxadd");
         $(".addbox").removeClass("lightboxrem");
-        console.log('Image Removed : ', JSON.parse(localStorage.getItem("selected")));
+        console.log('Image Removed : ', lbselected, lbSelectedLinks);
       }
     }else if(sessionStorage){
       if ( !sessionStorage.selected === false){
-        var remove = ggcat + ggpj +'ft'+ ggft;
+        var removename = ggcat + ggpj +'ft'+ ggnameft;
+        //var removepos = ggcat + ggpj +'ft'+ ggft;
         var selected =[], itemLinks=[];
         selected = JSON.parse(sessionStorage.getItem("selected"));
         itemsLinks = JSON.parse(sessionStorage.getItem("selectedLinks"));
-        selected.splice(selected.indexOf(remove), 1);
-        itemLinks.splice(selected.indexOf(remove), 1);
-        lbselected.splice(lbselected.indexOf(remove), 1);
-        lbSelectedLinks.splice(lbSelectedLinks.indexOf(remove), 1);
+        itemLinks.splice(selected.indexOf(removename), 1);
+        selected.splice(selected.indexOf(removename), 1);
+        lbSelectedLinks.splice(lbselected.indexOf(removename), 1);
+        lbselected.splice(lbselected.indexOf(removename), 1);
         sessionStorage.setItem("selected", JSON.stringify(selected));
         sessionStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxadd");
         $(".addbox").removeClass("lightboxrem");
-        console.log('Image Removed : ', JSON.parse(sessionStorage.getItem("selected")));
+        console.log('Image Removed : ', lbselected, lbSelectedLinks);
       }
     }
-    if (lb === undefined){
+    if (arguments[3] !== 'lbox'){
       $('.js-rem').fadeIn('quick').delay(120).fadeOut('quick');
     }
   }
@@ -2514,6 +2584,41 @@ utilsec */
       centergrid=0;
       $(parent).css("align-items", "flex-start");
       $(child).css("align-self", "flex-start");
+    }
+  }
+
+
+// Cursor image support alternative
+  function showslideclicks(container){
+    if(!CSS.supports('cursor','url("cursor.png") 5 8, auto')) {
+        $(container+'> .next').css({
+          background: 'url("./img/chevron-thin-right.svg") center no-repeat',
+          'background-color': 'rgba(0,0,0,0.3)',
+          opacity: 1,
+          cursor: 'pointer',
+          'z-index': 25
+        });
+        $(container+'> .prev').css({
+          background: 'url("./img/chevron-thin-left.svg") center no-repeat',
+          'background-color': 'rgba(0,0,0,0.3)',
+          opacity: 1,
+          cursor: 'pointer',
+          'z-index': 25
+        });
+        $(container+'> .addbox').css({
+          background: 'url("./img/lightboxadd.svg") center no-repeat',
+          'background-color': 'rgba(0,0,0,0.3)',
+          opacity: 1,
+          display: 'visible',
+          cursor: 'pointer',
+          'z-index': 25
+        });
+        $(container).one('click', function(){
+          $(container+'> .prev').css({opacity:'0'});
+          $(container+'> .next').css({opacity:'0'});
+          $(container+'> .addbox').css({opacity:'0'});
+        });
+
     }
   }
 
@@ -2592,11 +2697,13 @@ utilsec */
   //var lastScrollTop = 0;
   var lastScrollTop = 0;
   function scrollend(container){
-    //console.log(container, centergrid);
     var st = container.scrollTop();
-    if (st > lastScrollTop){
+    //console.log(st, lastScrollTop, container, centergrid);
+    if (st > lastScrollTop && (container[0].scrollTop + container[0].clientHeight +90) >= container[0].scrollHeight){
+    //console.log(container[0].scrollTop, container[0].clientHeight, container[0].scrollHeight);
+    //if ((container[0].scrollTop + container[0].clientHeight +90) >= container[0].scrollHeight) {
         if (centergrid===0 || centergrid===undefined) {
-          timeoutdiscard(':', 100, scrollback);
+          timeoutdiscard(':', 200, scrollback);
           function resolveAfter(x) {
             return new Promise(resolve => {
               setTimeout(() => {
@@ -2677,8 +2784,8 @@ function ffoxscrollend(event, container){
         }else{
           container.scrollBy({ top: -380, left: 0, behavior: "smooth" });
         }
-    },false);
-  }
+      },false);
+    }
   }
 
   var oldinstafeedffox;
@@ -2732,6 +2839,30 @@ function ffoxscrollend(event, container){
       func(id);
       reserter=0;
     }, timer);
+
+  }
+
+
+
+resMobile();
+function resMobile(ggpj,ggcat){
+  if (maw640.matches && mlands.matches||maw361.matches) {
+    console.log('teste resp 1');
+    $('.js-lightboxbtn').hide();
+    $('.js-slide, .js-prev, .js-next').off();
+    $('.js-slide').css({cursor: 'inherit'});
+    $(".js-gridbtn").off();
+    $(".js-gridbtn").hide();
+    respPanelWidth=250;
+    respPanelPadd=2;
+    if (ggpj!== undefined) {
+      for (var i = 0; i < ftcount[ggcat+ggpj]; i++) {
+        ggfti=i+1;
+        $('.itemgallery[data-pjcatft="'+ggpj+ggcat+ggfti+'"]').append('<figcaption id="mobilecaption" data-pjcatft="'+ggpj+ggcat+ggfti+'" class="slcaption"> Photo Page </figcaption>');
+        $('.slcaption[data-pjcatft="'+ggpj+ggcat+ggfti+'"]').text($.i18n(ggcat + ggpj +'ft'+ ggfti +'leg'));
+      }
+    }
+    }
 
   }
 
