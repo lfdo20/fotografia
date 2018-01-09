@@ -75,39 +75,38 @@ $(document).ready(function() {
   }
 
 // locale selector setup for responsivity
+  function localeMobIn() {
+    var par = $(".js-locale").parents();
+    var nl="";
+    for (i = 0; i <= locs.length; i++) {
+      if (i != locnow) {
+        nl += locs[i];
+      }
+    }
+    $(nl).insertAfter(".switch-locale"+" #js-loc" + locxx[locnow]);
+    //console.log(par[0], locxx[locnow], nl);
+    $(".switch-locale").one("click", "a", function(){
+      var local = $(this).data("locale");
+      $.i18n().locale = $(this).data("locale");
+      localeMobOut(local);
+    });
+  }
+
+  function localeMobOut(local){
+    console.log('New Language: '+local);
+    checkloc(local[0] + local[1]);
+    $("body").i18n();
+    //console.log(locs[locnow]);
+    $(".switch-locale").empty();
+    $(".switch-locale").append(locs[locnow]);
+    $(".switch-locale").one("click", "a", function(){
+      localeMobIn();
+    });
+  }
   if (maw640.matches && mlands.matches||maw361.matches) {
     $(".js-locale").one("click","a", function(){
       localeMobIn();
     });
-
-    function localeMobIn() {
-      var par = $(".js-locale").parents();
-      var nl="";
-      for (i = 0; i <= locs.length; i++) {
-        if (i != locnow) {
-          nl += locs[i];
-        }
-      }
-      $(nl).insertAfter(".switch-locale"+" #js-loc" + locxx[locnow]);
-      //console.log(par[0], locxx[locnow], nl);
-      $(".switch-locale").one("click", "a", function(){
-        var local = $(this).data("locale");
-        $.i18n().locale = $(this).data("locale");
-        localeMobOut(local);
-      });
-    }
-
-    function localeMobOut(local){
-      console.log('New Language: '+local);
-      checkloc(local[0] + local[1]);
-      $("body").i18n();
-      //console.log(locs[locnow]);
-      $(".switch-locale").empty();
-      $(".switch-locale").append(locs[locnow]);
-      $(".switch-locale").one("click", "a", function(){
-        localeMobIn()
-      });
-    }
 
     }else {
       $(".js-locale").on("mouseenter", function() {
@@ -198,7 +197,7 @@ $(document).ready(function() {
         break;
       case "lightbox":
         History.pushState(
-          { state: 5, plate: ".lightbox", rand: Math.random() },
+          { state: 5, plate: ".lightbox", title:"lightbox", rand: Math.random() },
           "Lightbox",
           "?locale=" + $.i18n().locale + "&page=lightbox"
         );
@@ -223,8 +222,8 @@ $(document).ready(function() {
         break;
       case "secret":
       History.pushState(
-        { state: 9, plate: ".private", rand: Math.random() },
-        "Secret",
+        { state: 9, plate: ".private", title:"Secret", rand: Math.random() },
+        "Leandro LFdo Fotografia - Privados",
         "?locale=" + $.i18n().locale + "&page=secret"
       );
         break;
@@ -241,7 +240,7 @@ $(document).ready(function() {
     History.log("statechange:", State.data, State.title, State.url);
     var plate = State.data.plate;
     var title = State.title;
-    showPlate("." + url("?page"), State.data.cat, State.data.pj, plate, title);
+    showPlate("." + url("?page"), State.data.cat, State.data.pj, plate, State.data.title);
     langcolor();
   });
 
@@ -552,8 +551,8 @@ pagessec */
 // Pages load functions
   function enterpage() {
     History.pushState(
-      { state: 1, plate: ".enterpage", rand: Math.random() },
-      "Home",
+      { state: 1, plate: ".enterpage", title:"Home", rand: Math.random() },
+      "Leandro LFdO Fotografia - Home",
       "?locale=" + $.i18n().locale + "&page=enterpage"
     );
       getHomePhoto();
@@ -570,7 +569,7 @@ pagessec */
       loadProjImages();
       $(".projetosgrid, .topbar, .projetos, #projetosgrid").css("visibility", "visible");
       //console.log(ftlist, !(lbselected.length>0));
-      if (!(lbselected.length > 0)) {
+      if (lbselected.length !== 0) {
         $('.js-idecor').fadeIn('slow');
         $('.js-idecor').css({display: 'flex'});
       }
@@ -750,9 +749,10 @@ pagessec */
       {
         state: 2,
         plate: ".projetos, .projetosgrid, #projetosgrid",
+        title:"Projetos",
         rand: Math.random()
       },
-      "Projetos",
+      "Leandro LFdO Fotografia - Projetos",
       "?locale=" + $.i18n().locale + "&page=projetos"
     );
   });
@@ -764,9 +764,10 @@ pagessec */
       {
         state: 3,
         plate: ".colecoes, .colecoesgrid, #colecoesgrid",
+        title:"Coleções",
         rand: Math.random()
       },
-      "Coleções",
+      "Leandro LFdO Fotografia - Coleções",
       "?locale=" + $.i18n().locale + "&page=colecoes"
     );
   });
@@ -775,8 +776,8 @@ pagessec */
   $(".js-instabtn").click(function() {
     ff = ".gridinsta";
     History.pushState(
-      { state: 4, plate: ".insta, .instagrid", rand: Math.random() },
-      "Instagram",
+      { state: 4, plate: ".insta, .instagrid", title:"Instagram", rand: Math.random() },
+      "Leandro LFdO Fotografia - Instagram",
       "?locale=" + $.i18n().locale + "&page=insta"
     );
   });
@@ -784,8 +785,8 @@ pagessec */
 // Lightbox Click
   $(".js-lightboxbtn").click(function() {
     History.pushState(
-      { state: 5, plate: ".lightbox", rand: Math.random() },
-      "Lightbox",
+      { state: 5, plate: ".lightbox", title:"Lightbox", rand: Math.random() },
+      "Leandro LFdO Fotografia - Lightbox",
       "?locale=" + $.i18n().locale + "&page=lightbox"
     );
   });
@@ -793,8 +794,8 @@ pagessec */
 // Secret Click
   $(".js-secretbtn").click(function() {
     History.pushState(
-      { state: 9, plate: ".private", rand: Math.random() },
-      "Secret",
+      { state: 9, plate: ".private", title:"Secret", rand: Math.random() },
+      "Leandro LFdO Fotografia - Privados",
       "?locale=" + $.i18n().locale + "&page=secret"
     );
   });
@@ -802,8 +803,8 @@ pagessec */
 // bio click
   $(".js-biobtn").click(function() {
     History.pushState(
-      { state: 6, plate: ".bio", rand: Math.random() },
-      "Biografia",
+      { state: 6, plate: ".bio", title:"Biografia", rand: Math.random() },
+      "Leandro LFdO Fotografia - Biografia",
       "?locale=" + $.i18n().locale + "&page=bio"
     );
   });
@@ -959,24 +960,24 @@ pagessec */
           var pj = data.files[i].name.replace(regpj, "$2");
           var cat = data.files[i].name.replace(regpj, "$1").toLowerCase();
           if (cat === "cc" || cat === "pj" || cat==="sc") {
-            var ca = data.files[i].name.replace(regpj, "$1").toLowerCase();
+            //var ca = data.files[i].name.replace(regpj, "$1").toLowerCase();
             if (cat === "cc") {
               configpj1a.push({
-                category: ca,
+                category: cat,
                 pj: pj,
                 name: data.files[i].name,
                 id: '"' + data.files[i].id + '" in parents'
               });
             } else if (cat ==='pj'){
               configpj1b.push({
-                category: ca,
+                category: cat,
                 pj: pj,
                 name: data.files[i].name,
                 id: '"' + data.files[i].id + '" in parents'
               });
             }else{
               configpj1c.push({
-                category: ca,
+                category: cat,
                 pj: pj,
                 name: data.files[i].name,
                 id: '"' + data.files[i].id + '" in parents'
@@ -985,9 +986,9 @@ pagessec */
           } else {
             if (data.files[i].name !== "00.00") {
               var srt = data.files[i].name.replace(/(\d\d).(\w*)/, "$1");
-              var ca = "00";
+              cat = "00";
               configpjb.push({
-                category: ca,
+                category: cat,
                 pj: srt,
                 name: data.files[i].name,
                 id: '"' + data.files[i].id + '" in parents'
@@ -1023,29 +1024,33 @@ pagessec */
           "https://cors.io/?"
         ];
       promise.done(function() {
+        var capen, capes, capde, cappt, conf;
         for (var i = 0; i < datacaptions.length; i++) {
           switch (datacaptions[i].name) {
             case "en.json":
-              var capen = corsop[0] + datacaptions[i].webContentLink;
+              capen = corsop[0] + datacaptions[i].webContentLink;
               break;
             case "es.json":
-              var capes = corsop[0] + datacaptions[i].webContentLink;
+              capes = corsop[0] + datacaptions[i].webContentLink;
               break;
             case "de.json":
-              var capde = corsop[0] + datacaptions[i].webContentLink;
+              capde = corsop[0] + datacaptions[i].webContentLink;
               break;
             case "pt.json":
-              var cappt = corsop[0] + datacaptions[i].webContentLink;
+              cappt = corsop[0] + datacaptions[i].webContentLink;
               break;
             case "config.json":
-             var conf = corsop[0] + datacaptions[i].webContentLink;
-             //console.log(conf);
-             fetch(conf).then((resp) => resp.json()).then(function(dat){
-               configfile = dat;
-               //console.log(configfile);
-             });
+              conf = corsop[0] + datacaptions[i].webContentLink;
+              //console.log(conf);
+              getConfJson();
              break;
           }
+        }
+        function getConfJson(){
+          fetch(conf).then((resp) => resp.json()).then(function(dat){
+            configfile = dat;
+            //console.log(configfile);
+          });
         }
         $.i18n()
           .load({
@@ -1085,11 +1090,12 @@ pagessec */
           {
             state: 7,
             plate: ".fotopage, .maingrid, .gridpj",
+            title: "Projetos Galeria",
             cat: "pj",
             pj: pj,
             rand: Math.random()
           },
-          "Projetos Galeria",
+          "Leandro LFdO Fotografia - Galeria de Projetos",
           "?locale=" + $.i18n().locale + "&page=photo" + "&cat=pj" + "&pj=" + pj
         );
         e.handled = true;
@@ -1108,11 +1114,12 @@ pagessec */
           {
             state: 8,
             plate: ".fotopage, .maingrid, .gridcc",
+            title:"Coleções Galeria",
             cat: "cc",
             pj: cc,
             rand: Math.random()
           },
-          "Coleções Galeria",
+          "Leandro LFdO Fotografia - Galeria de Coleções",
           "?locale=" + $.i18n().locale + "&page=photo" + "&cat=cc" + "&pj=" + cc
         );
         e.handled = true;
@@ -1211,7 +1218,7 @@ pagessec */
         delete ftlist[cat+pj];
         delete ftcount[cat+pj];
         $('.menupage').off();
-      })
+      });
     }
   }
 
@@ -1256,7 +1263,7 @@ pagessec */
       itemsproj, itemsfoto) {
       let $itemsproj = new function(){
         return $(itemsproj);
-      }
+      };
       window["$grid" + cat + pj].pjgridReveal($itemsproj);
       $(".foto").append(itemsfoto);
       gslides(turn);
@@ -1298,7 +1305,7 @@ pagessec */
         if (cat==='cc') {
           gOrder = 'recency';
         }else{
-          gOrder = 'name'
+          gOrder = 'name';
         }
         //console.log('order : '+gOrder);
         var urlgapi =
@@ -1415,9 +1422,10 @@ pagessec */
               History.pushState({
                  state: 2,
                   plate: ".projetos, .projetosgrid, #projetosgrid",
+                  title:"Projetos",
                   rand: Math.random()
                 },
-                "Projetos",
+                "Leandro LFdO Fotografia - Projetos",
                 "?locale=" + $.i18n().locale + "&page=projetos"
               );
             });
@@ -1555,7 +1563,7 @@ pagessec */
     var mcat,mpj;
     if ( !cat && !pj ){
       cat = lastVisible[1];
-      pj = lastVisible[2]
+      pj = lastVisible[2];
     }else if (orig==='load' && dest==='slide'){
       lastVisible[0] = orig;
       lastVisible[1] = cat;
@@ -1601,9 +1609,10 @@ pagessec */
             {
               state: 2,
               plate: ".projetos, .projetosgrid, #projetosgrid",
+              title:"Projetos",
               rand: Math.random()
             },
-            "Projetos",
+            "Leandro LFdO Fotografia - Projetos",
             "?locale=" + $.i18n().locale + "&page=projetos"
           );
           dest='pj';
@@ -1613,9 +1622,10 @@ pagessec */
             {
               state: 3,
               plate: ".colecoes, .colecoesgrid, #colecoesgrid",
+              title:"Coleções",
               rand: Math.random()
             },
-            "Coleções",
+            "Leandro LFdO Fotografia - Coleções",
             "?locale=" + $.i18n().locale + "&page=colecoes"
           );
           dest='cc';
@@ -1653,38 +1663,50 @@ pagessec */
       }
       currentSlide(ft);
       showslideclicks('.foto');
+      slideNavigation();
     });
 
-    $(document).off();
-    $(document).keydown(function(e){
-      setTimeout(function(){
-        if (e.keyCode === 27){
-          infopanelOpenClose();
-        }
-        if ($('.mainfoto').css('visibility')==='visible') {
-          if (e.keyCode === 40 && (ggcat === undefined || ggcat === 'sc')){
-            return false;
+    slideNavigation();
+    function slideNavigation(){
+      $(document).off();
+      $(document).keydown(function(e){
+        setTimeout(function(){
+          if (e.keyCode === 27){
+            infopanelOpenClose();
           }
-          var key = e.keyCode;
-          switch (key) {
-            case 37:
-              plusSlides(-1);
-              break;
-            case 39:
-              plusSlides(+1);
-              break;
-            case 40:
-               if ($('.addbox').hasClass('lightboxadd')){
-                 storageAdd(ggcat,ggpj,ggft, ggnameft);
-               } else if($('.addbox').hasClass('lightboxrem')){
-                 storageDel(ggcat,ggpj,ggft, ggnameft);
-               }
-              break;
-            default: return;
+          if ($('.mainfoto').css('visibility')==='visible') {
+            if (e.keyCode === 40 && (ggcat === undefined || ggcat === 'sc')){
+              return false;
+            }
+            var key = e.keyCode;
+            switch (key) {
+              case 37:
+                plusSlides(-1);
+                break;
+              case 39:
+                plusSlides(+1);
+                break;
+              case 40:
+                 if ($('.addbox').hasClass('lightboxadd')){
+                   storageAdd(ggcat,ggpj,ggft, ggnameft);
+                 } else if($('.addbox').hasClass('lightboxrem')){
+                   storageDel(ggcat,ggpj,ggft, ggnameft);
+                 }
+                break;
+              default: return;
+            }
           }
-        }
-      },200);
-    });
+        },200);
+      });
+
+      $(".js-prev").click(function() {
+        plusSlides(-1);
+      });
+
+      $(".js-next").click(function() {
+        plusSlides(+1);
+      });
+    }
 
     // auto click if load slide from url
     loadSlide(turn);
@@ -1698,14 +1720,6 @@ pagessec */
         });
       }
     }
-
-    $(".js-prev").click(function() {
-      plusSlides(-1);
-    });
-
-    $(".js-next").click(function() {
-      plusSlides(+1);
-    });
 
     resMobile();
     function plusSlides(n) {
@@ -1906,38 +1920,6 @@ pagessec */
             opacity: 1
           },100);
         });
-      }
-
-      function listshowhide(){
-        var setinha = $('.js-slb');
-        var box = $('.lblist');
-        var min = $('.lbmini');
-        var inf = $('.lbinfo');
-        var targetWidth = box.width() > 0 ? 0 : 350;
-        var targetWidthinfo = box.width() > 0 ? 0 : 100;
-        var tp = box.width() > 0 ? 0.5 : 0;
-        var tpinfo = box.width() > 0 ? 0 : 1.5;
-        var cor = box.width() > 0 ? 0.0 : 0.84;
-        var op = box.width() > 0 ? 0.0 : 1.0;
-        var scor = box.width() > 0 ? 0.8 : 0.0;
-        var oflow = box.width() > 0 ? 'visible' : 'hidden';
-        box.css({'overflow-y': oflow});
-        box.animate({
-          color:  'rgba(0, 0, 0, '+cor+')',
-          width: targetWidth + "px",
-          padding: '0em 0em 0em '+tp+'em'
-        },100);
-        min.animate({
-          opacity:  op,
-
-        },100);
-        setinha.css({ visibility: 'visible', background: 'rgba(255, 255, 255, '+scor+')'});
-        inf.animate({
-          opacity:  op,
-          color:  'rgba(0, 0, 0, '+cor+')',
-          width: (targetWidthinfo-8) + "%",
-          padding: tpinfo+'em 0em 0em '+tpinfo+'em'
-        },100);
       }
 
       $('.lblist').off('click');
@@ -2216,6 +2198,38 @@ pagessec */
     }
   }
 
+  function listshowhide(){
+    var setinha = $('.js-slb');
+    var box = $('.lblist');
+    var min = $('.lbmini');
+    var inf = $('.lbinfo');
+    var targetWidth = box.width() > 0 ? 0 : 350;
+    var targetWidthinfo = box.width() > 0 ? 0 : 100;
+    var tp = box.width() > 0 ? 0.5 : 0;
+    var tpinfo = box.width() > 0 ? 0 : 1.5;
+    var cor = box.width() > 0 ? 0.0 : 0.84;
+    var op = box.width() > 0 ? 0.0 : 1.0;
+    var scor = box.width() > 0 ? 0.8 : 0.0;
+    var oflow = box.width() > 0 ? 'visible' : 'hidden';
+    box.css({'overflow-y': oflow});
+    box.animate({
+      color:  'rgba(0, 0, 0, '+cor+')',
+      width: targetWidth + "px",
+      padding: '0em 0em 0em '+tp+'em'
+    },100);
+    min.animate({
+      opacity:  op,
+
+    },100);
+    setinha.css({ visibility: 'visible', background: 'rgba(255, 255, 255, '+scor+')'});
+    inf.animate({
+      opacity:  op,
+      color:  'rgba(0, 0, 0, '+cor+')',
+      width: (targetWidthinfo-8) + "%",
+      padding: tpinfo+'em 0em 0em '+tpinfo+'em'
+    },100);
+  }
+
 // load subs for lightbox panel
   function lbSubs(){
     $('#lb--tx').text($.i18n('lb-tx'));
@@ -2226,7 +2240,7 @@ pagessec */
     $('#lb--p4').text($.i18n('lb-p4'));
   }
 /*
-███████ ████████  ██████  ██████   █████   ██████  ███████
+███████ ████████  ██████   █████   ██████  ███████
 ██         ██    ██    ██ ██   ██ ██   ██ ██       ██
 ███████    ██    ██    ██ ██████  ███████ ██   ███ █████
      ██    ██    ██    ██ ██   ██ ██   ██ ██    ██ ██
@@ -2269,6 +2283,7 @@ storagesec */
     }
     //console.log(ggcat,ggpj, ggft, ggnameft);
     if (localStorage){
+      console.log(!localStorage.selected, localStorage.selected);
       if ( !localStorage.selected === false){
         var selected =[], itemLinks=[];
         selected = JSON.parse(localStorage.getItem("selected"));
@@ -2281,7 +2296,7 @@ storagesec */
         localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxrem");
         $(".addbox").removeClass("lightboxadd");
-        console.log('Image Saved : ', lbselected, lbSelectedLinks)
+        console.log('Image Saved : ', lbselected, lbSelectedLinks);
       }else{
         var selected =[], itemsLinks=[];
         selected.push(ggcat + ggpj +'ft'+ ggnameft);
@@ -2292,7 +2307,7 @@ storagesec */
         localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxrem");
         $(".addbox").removeClass("lightboxadd");
-        console.log('Image Saved : ', lbselected, lbSelectedLinks)
+        console.log('Image Saved : ', lbselected, lbSelectedLinks);
       }
       $('.js-add').fadeIn('quick').delay(120).fadeOut('quick');
     } else if (sessionStorage){
@@ -2308,7 +2323,7 @@ storagesec */
           sessionStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
           $(".addbox").addClass("lightboxrem");
           $(".addbox").removeClass("lightboxadd");
-          console.log('Image Saved : ', lbselected)
+          console.log('Image Saved : ', lbselected);
         }else{
           var selected =[], itemsLinks=[] ;
           selected.push(ggcat + ggpj +'ft'+ ggnameft);
@@ -2319,7 +2334,7 @@ storagesec */
           sessionStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
           $(".addbox").addClass("lightboxrem");
           $(".addbox").removeClass("lightboxadd");
-          console.log('Image Saved : ', lbselected)
+          console.log('Image Saved : ', lbselected);
         }
         $('.js-add').fadeIn('quick').delay(120).fadeOut('quick');
     } else {
@@ -2484,10 +2499,10 @@ storagesec */
 // Firefox extra setup
   if (ffv === true) {
     $(".ff").css("overflow-y", "hidden");
-    $('.projetos').css('overflow-x', 'hidden')
+    $('.projetos').css('overflow-x', 'hidden');
   }
 
-  var timergridffsc
+  var timergridffsc;
 
 // firefox scroll for gallery
   function ffoxscrollgrid(pj, cat, ff){
@@ -2532,7 +2547,7 @@ storagesec */
                 resolve(x);
               }, 80);
             });
-          }
+          };
           async function scrollback() {
             //console.log(container[0].offsetHeight, container[0].offsetHeight-80);
             container.animate({
@@ -2544,7 +2559,7 @@ storagesec */
               "scrollTop": container.scrollTop() - 90
             });
             //console.log('foi 4');
-          }
+          };
         }
     }
     lastScrollTop = st;
@@ -2565,7 +2580,7 @@ storagesec */
                 resolve(x);
               }, 200);
             });
-          }
+          };
 
           async function scrollback() {
             //console.log('foi1', id);
@@ -2578,7 +2593,7 @@ storagesec */
             container.scrollBy({ top: -80, left: 0, behavior: "smooth" });
             //console.log(pg.offsetHeight, pg.style.height);
             //console.log('foi 4');
-          }
+          };
         }
       }
     }
@@ -2665,7 +2680,7 @@ storagesec */
       respPanelPadd=2;
       if (ggpj!== undefined) {
         for (var i = 0; i < ftcount[ggcat+ggpj]; i++) {
-          ggfti=i+1;
+          var ggfti=i+1;
           $('.itemgallery[data-pjcatft="'+ggpj+ggcat+ggfti+'"]').append('<figcaption id="mobilecaption" data-pjcatft="'+ggpj+ggcat+ggfti+'" class="slcaption"> Photo Page </figcaption>');
           $('.slcaption[data-pjcatft="'+ggpj+ggcat+ggfti+'"]').text($.i18n(ggcat + ggpj +'ft'+ ggfti +'leg'));
         }
