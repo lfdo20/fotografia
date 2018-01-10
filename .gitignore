@@ -12,6 +12,10 @@ yarn-error.log*
 .bkp
 .eslintrc.js
 
+index.max.html
+index.min.css
+index.min.js
+
 # Runtime data
 pids
 *.pid
