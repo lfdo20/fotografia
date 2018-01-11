@@ -11,6 +11,7 @@ yarn-error.log*
 
 .bkp
 .eslintrc.js
+index.max.html
 
 index.max.html
 index.min.css
