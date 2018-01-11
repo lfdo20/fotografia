@@ -197,7 +197,7 @@ $(document).ready(function() {
         break;
       case "lightbox":
         History.pushState(
-          { state: 5, plate: ".lightbox", title:"lightbox", rand: Math.random() },
+          { state: 5, plate: ".lightbox", title:"Lightbox", rand: Math.random() },
           "Lightbox",
           "?locale=" + $.i18n().locale + "&page=lightbox"
         );
@@ -714,11 +714,11 @@ pagessec */
   $(".js-menubtnx").click(function() {
     $(".menupage").css("visibility", "hidden");
     $(".topbar").css("visibility", "visible");
-    if (history.state === null) {
+    if (history.state === null || History.getStateByIndex(-2) === undefined) {
       enterpage();
       langcolor();
     } else {
-      if (History.getStateByIndex(-1).title !== "Biografia") {
+      if (History.getStateByIndex(-1).data.title !== "Biografia") {
         $(".menupage").css("visibility", "hidden");
         langcolor();
       } else {
@@ -2022,19 +2022,18 @@ pagessec */
         lbcat = lbselected[slideIndex].replace(rxlb, "$1");
         lbpj = lbselected[slideIndex].replace(rxlb, "$2");
         lbft = lbselected[slideIndex].replace(rxlb, "$4");
-        console.log(lbselected[slideIndex], lbcat, lbpj, lbft);
+        //console.log(lbselected[slideIndex], lbcat, lbpj, lbft);
         //console.log(n, lbselected[slideIndex], lbsetupchoices);
-        getversions();
+        getversions(n);
         //console.log(lbsetupchoices);
         storageAdd(lbsetupchoices);
       }
 
       // Format Select Configuration
       $('.js-lbfoto').imagesLoaded().done(function(){
-
         $(".lbfoto").css({ display: "block", visibility: "visible" });
         $('.lbmain').css({display: 'inline-flex'}).animate({visibility: 'visible'},50);
-
+        
         $('.js-lbsend').one('click',function(){
           $('.js-lbfootvis').css({display: 'none',visibility: 'hidden'});
           $('.lbsendmenu').css({display: 'flex', visibility: 'visible'});
@@ -2111,7 +2110,7 @@ pagessec */
       });
 
       // Load versions user definef dormats of selected photos
-      function getversions(){
+      function getversions(primeiraFoto){
         let lbver =['pb','low','vivid','crazy'];
         let lbverf=['_b.jpg', '_l.jpg', '_v.jpg', '_c.jpg'];
         let lbverlink =[], lbimg='', lbfotover='', disabled='';
@@ -2129,6 +2128,9 @@ pagessec */
 
         $('.lbfotomenu').prepend(lbimg);
         $('.ver').prepend(lbfotover);
+         if (primeiraFoto===0) {
+           $(".lbfotomenu").css({ display: "flex", visibility: "visible" });
+         }
         $('.lbfotomenu > figure').css({opacity: '0'});
         $('.lbfotomenu, .lbfooter').css({visibility: 'visible'});
         $('.lbfotomenu').imagesLoaded().progress(function(){
