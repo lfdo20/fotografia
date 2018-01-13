@@ -575,6 +575,7 @@ pagessec */
       }
     } else {
       $(".projetosgrid, .topbar, .projetos, #projetosgrid").css("visibility", "visible");
+      $("#projetosgrid").css({ opacity: "0" }).delay(02).animate({ opacity: "1" }, "slow");
     }
   }
 
@@ -589,12 +590,12 @@ pagessec */
       progressbar(".carregando #progress-bar-pages", 10);
       loadColecImages();
     } else {
-      $(".js-vis").css("visibility", "hidden");
       $(".carregando").css({display: 'none'});
       $(".colecoesgrid, .topbar, .colecoes, #colecoesgrid").css(
         "visibility",
         "visible"
       );
+      $("#colecoesgrid").css({ opacity: "0" }).delay(02).animate({ opacity: "1" }, "slow");
     }
   }
 
@@ -864,7 +865,7 @@ pagessec */
       let figdata = ' data-pj="';
       let figcat = '" data-cat="pj';
       let imgsrc = '"><img src="';
-      var promise = $.getJSON(urlgapi, function(data, status) {console.log("Gapi Projeto Retrieve"); });
+      var promise = $.getJSON(urlgapi, function(data, status) { console.log("Gapi Projeto Retrieve"); });
 
       promise.done(function(data) {
           //console.log(data.nextPageToken);
@@ -1453,7 +1454,7 @@ pagessec */
     });
     promise.done(function(data) {
       lbverlinks = data.files;
-      console.log(lbverlinks);
+      //console.log(lbverlinks);
       self.resolve();
       });
     });
@@ -1535,16 +1536,22 @@ pagessec */
   }
 
   $(".js-gridbtn").click(function() {
+    gridBtn();
+  });
+
+  function gridBtn(){
     var $main = $(".maingrid");
     var atualgrid = $('.foto'+lastVisible[1]+lastVisible[2]).prop('style');
+    $('.js-slide').removeClass('hovereffect');
     //console.log(atualgrid.display, ggcat);
     if (atualgrid.display === '' || ggcat === undefined){
+
       setTimeout(function() {
         $('.item'+lastVisible[1]+lastVisible[2]).first().trigger('click');
       }, 100);
       return;
     }else{
-      console.log($main.css("visibility") === "hidden");
+      //console.log($main.css("visibility") === "hidden");
       if ($main.css("visibility") === "hidden") {
         //console.log(lastVisible[1], lastVisible[2]);
         photoManager('slide', 'grid', '', '');
@@ -1555,7 +1562,55 @@ pagessec */
         photoManager('grid', 'slide', '', '');
       }
     }
-  });
+  }
+
+  function slideKeysNavigation(){
+    $(document).off();
+    $(document).keydown(function(e){
+      var key = e.keyCode;
+      setTimeout(function(){
+        if (key === 27){
+          infopanelOpenClose();
+        }
+        var mfvis = $('.mainfoto').css('visibility')==='visible' ? true:false;
+        var mgvis = $('.maingrid').css('visibility')==='visible' ? true:false;
+        //var pjvis = $('.projetosgrid').css('visibility')==='visible' ? true:false;
+        //console.log(mfvis, mgvis, !mgvis);
+        if (mfvis||mgvis) {
+          if (key === 40 && (ggcat === undefined || ggcat === 'sc' || mgvis)){
+            return false;
+          }
+          if (mgvis && (key===37||key===38)) {
+            return false;
+          }
+          switch (key) {
+            case 37:
+              plusSlides(-1);
+              break;
+            case 39:
+              plusSlides(+1);
+              break;
+            case 32:
+              gridBtn();
+              break;
+            case 9:
+              $(".js-vis").css({ visibility: "hidden" });
+              $('.js-slide').removeClass('hovereffect');
+              photoManager('backbtn', 'projeto', '', '');
+              break;
+            case 40:
+               if ($('.addbox').hasClass('lightboxadd')){
+                 storageAdd(ggcat,ggpj,ggft, ggnameft);
+               } else if($('.addbox').hasClass('lightboxrem')){
+                 storageDel(ggcat,ggpj,ggft, ggnameft);
+               }
+              break;
+            default: return;
+          }
+        }
+      },200);
+    });
+  }
 
   var lastVisible = [[],[],[],[]];
   function photoManager(orig, dest, cat, pj, ft) {
@@ -1591,11 +1646,13 @@ pagessec */
         $(".mainfoto").css({ display: "block", visibility: "visible" });
           break;
         case 'grid':
+        slideKeysNavigation();
         if (orig === 'load' && lastVisible[3]!==undefined) {
         }else{
           $(".gridpj").css({ display: "none", visibility: "hidden" });
           $(".mainfoto").css({ display: "none", visibility: "hidden" });
           $(".maingrid").css({ display: "flex", visibility: "visible" });
+          $(".maingrid").css({ opacity: "0" }).delay(02).animate({ opacity: "1" }, "slow");
         }
         if (orig === 'slide'){
           $("#grid"+cat+pj).css({ display: "block", visibility: "visible" });
@@ -1636,7 +1693,7 @@ pagessec */
   var rxgrid = /^(\d+)([a-z]+)(\d+)/;
   var ggcat, ggpj, ggft, ggnameft;
   function gslides(turn) {
-    $('.js-slide, .prev, .next').off();
+    $('.js-slide, .js-prev, .js-next').off();
     $( ".js-slide" ).hover(function() {
         var foto = $(this).data('pjcatft');
         $('.js-slide[data-pjcatft="'+foto+'"]').addClass('hovereffect');
@@ -1663,41 +1720,9 @@ pagessec */
       }
       currentSlide(ft);
       showslideclicks('.foto');
-      slideNavigation();
     });
 
-    slideNavigation();
-    function slideNavigation(){
-      $(document).off();
-      $(document).keydown(function(e){
-        setTimeout(function(){
-          if (e.keyCode === 27){
-            infopanelOpenClose();
-          }
-          if ($('.mainfoto').css('visibility')==='visible') {
-            if (e.keyCode === 40 && (ggcat === undefined || ggcat === 'sc')){
-              return false;
-            }
-            var key = e.keyCode;
-            switch (key) {
-              case 37:
-                plusSlides(-1);
-                break;
-              case 39:
-                plusSlides(+1);
-                break;
-              case 40:
-                 if ($('.addbox').hasClass('lightboxadd')){
-                   storageAdd(ggcat,ggpj,ggft, ggnameft);
-                 } else if($('.addbox').hasClass('lightboxrem')){
-                   storageDel(ggcat,ggpj,ggft, ggnameft);
-                 }
-                break;
-              default: return;
-            }
-          }
-        },200);
-      });
+    //slideKeysNavigation();
 
       $(".js-prev").click(function() {
         plusSlides(-1);
@@ -1706,60 +1731,62 @@ pagessec */
       $(".js-next").click(function() {
         plusSlides(+1);
       });
-    }
 
-    // auto click if load slide from url
+    slideKeysNavigation();
     loadSlide(turn);
-    function loadSlide() {
-      if (url('?page') === 'slide' && (url('?ft') > turn*5 && url('?ft') < (turn+1)*5)){
-        $(".fotopage, .topbar, .maingrid, #grid" + lastVisible[1] + lastVisible[2]).css({visibility: "visible"});
-        $('.foto').imagesLoaded().done(function(){
-            setTimeout(function() {
-              $('.item'+lastVisible[1]+lastVisible[2]+'[data-nameft="'+url('?ft')+'"]').trigger('click');
-            }, 50);
-        });
-      }
-    }
 
-    resMobile();
-    function plusSlides(n) {
-      slideIndex = Number(slideIndex);
-      showSlides(slideIndex+=n);
-    }
+  }
 
-    function currentSlide(n) {
-      n= Number(n);
-      showSlides(slideIndex = n);
+  // auto click if load slide from url
+  function loadSlide() {
+    if (url('?page') === 'slide' && (url('?ft') > turn*5 && url('?ft') < (turn+1)*5)){
+      $(".fotopage, .topbar, .maingrid, #grid" + lastVisible[1] + lastVisible[2]).css({visibility: "visible"});
+      $('.foto').imagesLoaded().done(function(){
+          setTimeout(function() {
+            $('.item'+lastVisible[1]+lastVisible[2]+'[data-nameft="'+url('?ft')+'"]').trigger('click');
+          }, 50);
+      });
     }
+  }
 
-    function showSlides(n) {
-      var slides = $(".foto" + ggcat+ggpj);
-      if (n > slides.length) {
-        slideIndex = 1;
-      }
-      if (n < 1) {
-        slideIndex = slides.length;
-      }
-      //console.log(slides.length, slideIndex);
-      ggft= slideIndex;
-      for (var i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-      }
-      slides[slideIndex - 1].style.display = "block";
-      $(".mainfoto").delay(02).animate({ opacity: "1" }, "slow");
-      ggnameft = $('.itemgallery[data-pjcatft="'+ggpj+ggcat+ggft+'"]').data('nameft');
-      slideSub();
-      var x = (ggcat + ggpj +'ft'+ ggnameft).toString();
-      lastVisible[3] = ggft;
-      //console.log(ggft, ggnameft, x, lbselected);
-      //console.log('Slide :', slideIndex, ggpj+ggcat+ggft);
-      if (lbselected.indexOf(x) === -1){
-        $(".addbox").removeClass("lightboxrem");
-        $(".addbox").addClass("lightboxadd");
-      }else{
-        $(".addbox").addClass("lightboxrem");
-        $(".addbox").removeClass("lightboxadd");
-      }
+  resMobile();
+  function plusSlides(n) {
+    slideIndex = Number(slideIndex);
+    showSlides(slideIndex+=n);
+  }
+
+  function currentSlide(n) {
+    n= Number(n);
+    showSlides(slideIndex = n);
+  }
+
+  function showSlides(n) {
+    var slides = $(".foto" + ggcat+ggpj);
+    if (n > slides.length) {
+      slideIndex = 1;
+    }
+    if (n < 1) {
+      slideIndex = slides.length;
+    }
+    //console.log(slides.length, slideIndex);
+    ggft= slideIndex;
+    for (var i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    slides[slideIndex - 1].style.display = "block";
+    $(".mainfoto").delay(02).animate({ opacity: "1" }, "slow");
+    ggnameft = $('.itemgallery[data-pjcatft="'+ggpj+ggcat+ggft+'"]').data('nameft');
+    slideSub();
+    var x = (ggcat + ggpj +'ft'+ ggnameft).toString();
+    lastVisible[3] = ggft;
+    //console.log(ggft, ggnameft, x, lbselected);
+    //console.log('Slide :', slideIndex, ggpj+ggcat+ggft);
+    if (lbselected.indexOf(x) === -1){
+      $(".addbox").removeClass("lightboxrem");
+      $(".addbox").addClass("lightboxadd");
+    }else{
+      $(".addbox").addClass("lightboxrem");
+      $(".addbox").removeClass("lightboxadd");
     }
   }
 
@@ -1769,24 +1796,24 @@ pagessec */
   }
 
 // add photo to lightbox
-    function addbox(ggcat){
-      //console.log(ggcat);
-      if (ggcat === 'sc') {
-        //console.log('Foi SC');
-        $('.addbox').removeClass('.lightboxadd, .lightboxrem');
-        $('.addbox').css({cursor: 'auto'});
-        $('.addbox, .lightboxadd, .lightboxrem, .foto').off();
-        return;
-      }
-      $('.foto').off();
-      $('.addbox').removeAttr('style');
-      $('.foto').on('click', '.lightboxadd', function(){
-        storageAdd(ggcat,ggpj,ggft, ggnameft);
-      });
-      $('.foto').on('click', '.lightboxrem', function(){
-        storageDel(ggcat,ggpj,ggft, ggnameft);
-      });
+  function addbox(ggcat){
+    //console.log(ggcat);
+    if (ggcat === 'sc') {
+      //console.log('Foi SC');
+      $('.addbox').removeClass('.lightboxadd, .lightboxrem');
+      $('.addbox').css({cursor: 'auto'});
+      $('.addbox, .lightboxadd, .lightboxrem, .foto').off();
+      return;
     }
+    $('.foto').off();
+    $('.addbox').removeAttr('style');
+    $('.foto').on('click', '.lightboxadd', function(){
+      storageAdd(ggcat,ggpj,ggft, ggnameft);
+    });
+    $('.foto').on('click', '.lightboxrem', function(){
+      storageDel(ggcat,ggpj,ggft, ggnameft);
+    });
+  }
 
     /*
   ██████  ██████  ██ ██    ██  █████  ████████ ███████
@@ -1820,7 +1847,7 @@ pagessec */
             scpj = scdata.replace(rxsc, '$2');
             var pj =scpj;
             scdata = configfile.secrets[scpj.replace(rxsc, '$1'+'$2')];
-            console.log(sccat, scpj);
+            //console.log(sccat, scpj);
             photoManager('secret','grid', sccat, scpj);
           }else {
             wrongpass();
@@ -1943,7 +1970,7 @@ pagessec */
         });
 
         $(".js-lbmini").click(function() {
-          var n = $(this).data('lbminift');
+          var n = $(this).index();
           lbcat = $(this).data('lbpjcatft').replace(rxgrid, "$2");
           lbpj = $(this).data('lbpjcatft').replace(rxgrid, "$1");
           lbft = $(this).data('lbpjcatft').replace(rxgrid, "$3");
@@ -1978,6 +2005,9 @@ pagessec */
                 break;
               case 27:
                 listshowhide();
+                break;
+              case 46:
+                savedDelete();
                 break;
               default:
                 return;
@@ -2033,7 +2063,7 @@ pagessec */
       $('.js-lbfoto').imagesLoaded().done(function(){
         $(".lbfoto").css({ display: "block", visibility: "visible" });
         $('.lbmain').css({display: 'inline-flex'}).animate({visibility: 'visible'},50);
-        
+
         $('.js-lbsend').one('click',function(){
           $('.js-lbfootvis').css({display: 'none',visibility: 'hidden'});
           $('.lbsendmenu').css({display: 'flex', visibility: 'visible'});
@@ -2056,7 +2086,6 @@ pagessec */
             var rxlbsc2 = /(\W{2}\w+\W+)(.*?)(\W{3}\w+\W{3})(.*?)(\W{3}\w+\W{2})("(.*?)"})/;
             for(var i=0; i<lbsetupchoices.length-1; i++){
               var o = JSON.stringify(lbsetupchoices[i]);
-              console.log(o);
               k += o.replace(rxlbsc, '$2 : '+'$4'+'\n'+'$10 : '+'$12 / '+'$6 :  '+'$8'+ '\n'+'\n');
             }
             var p = JSON.stringify(lbsetupchoices[lbsetupchoices.length-1]);
@@ -2093,21 +2122,32 @@ pagessec */
 
       // Saved images delete
       $('.js-lbdel').click(function(){
-        if (lbselected.length === 1) {
-          $('.js-lbfootvis, .lbfooter').css({visibility: 'hidden'});
-          $('.js-noselected').css({visibility: 'visible'});
-        }
+        savedDelete();
+      });
+      function savedDelete(){
         //console.log(lbcat,lbpj,lbft);
         //console.log(slideIndex);
+        var index = $('.lbmini figure[data-lbpjcatft="'+lbpj+lbcat+lbft+'"]').index();
         $('.lbmini figure[data-lbpjcatft="'+lbpj+lbcat+lbft+'"]').remove();
         $('.ver').children().remove();
         $('.js-lbfoto figure[data-lbpjcatft="'+lbpj+lbcat+lbft+'"]').remove();
         lbsetupchoices.splice(slideIndex, 1);
         //console.log(lbsetupchoices);
         storageDel(lbcat, lbpj, lbft, 'lbox');
-        lbplusSlides(+1);
-        //console.log(lbselected);
-      });
+        if ($('.lbmini figure').length === 0) {
+          $('.js-lbfootvis, .lbfooter').css({visibility: 'hidden'});
+          $('.js-noselected').css({cursor: 'auto',display: 'flex', visibility: 'visible'});
+          localStorage.removeItem('selected');
+          localStorage.removeItem('selectedLinks');
+          localStorage.removeItem('userSetup');
+          sessionStorage.removeItem('selected');
+          sessionStorage.removeItem('slectedLinks');
+          sessionStorage.removeItem('userSetup');
+        }else{
+          lbcurrentSlide(index);
+        }
+      }
+
 
       // Load versions user definef dormats of selected photos
       function getversions(primeiraFoto){
@@ -2285,7 +2325,7 @@ storagesec */
     }
     //console.log(ggcat,ggpj, ggft, ggnameft);
     if (localStorage){
-      console.log(!localStorage.selected, localStorage.selected);
+      //console.log(!localStorage.selected, localStorage.selected);
       if ( !localStorage.selected === false){
         var selected =[], itemLinks=[];
         selected = JSON.parse(localStorage.getItem("selected"));
@@ -2298,7 +2338,7 @@ storagesec */
         localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxrem");
         $(".addbox").removeClass("lightboxadd");
-        console.log('Image Saved : ', lbselected, lbSelectedLinks);
+        console.log('Image Saved : ', lbselected);
       }else{
         var selected =[], itemsLinks=[];
         selected.push(ggcat + ggpj +'ft'+ ggnameft);
@@ -2309,7 +2349,7 @@ storagesec */
         localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxrem");
         $(".addbox").removeClass("lightboxadd");
-        console.log('Image Saved : ', lbselected, lbSelectedLinks);
+        console.log('Image Saved : ', lbselected);
       }
       $('.js-add').fadeIn('quick').delay(120).fadeOut('quick');
     } else if (sessionStorage){
@@ -2353,7 +2393,7 @@ storagesec */
     if (arguments[3] === 'lbox') {
       ggnameft=ggft;
     }
-    console.log(arguments, ggnameft);
+    //console.log(arguments, ggnameft);
     if (localStorage){
       if ( !localStorage.selected === false){
         var removename = ggcat + ggpj +'ft'+ ggnameft;
@@ -2369,7 +2409,7 @@ storagesec */
         localStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxadd");
         $(".addbox").removeClass("lightboxrem");
-        console.log('Image Removed : ', lbselected, lbSelectedLinks);
+        console.log('Image Removed : ', lbselected);
       }
     }else if(sessionStorage){
       if ( !sessionStorage.selected === false){
@@ -2386,7 +2426,7 @@ storagesec */
         sessionStorage.setItem("selectedLinks", JSON.stringify(lbSelectedLinks));
         $(".addbox").addClass("lightboxadd");
         $(".addbox").removeClass("lightboxrem");
-        console.log('Image Removed : ', lbselected, lbSelectedLinks);
+        console.log('Image Removed : ', lbselected);
       }
     }
     if (arguments[3] !== 'lbox'){
@@ -2672,7 +2712,6 @@ storagesec */
   resMobile();
   function resMobile(ggpj,ggcat){
     if (maw640.matches && mlands.matches||maw361.matches) {
-      console.log('teste resp 1');
       $('.js-lightboxbtn').hide();
       $('.js-slide, .js-prev, .js-next').off();
       $('.js-slide').css({cursor: 'inherit'});
